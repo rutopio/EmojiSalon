@@ -1,30 +1,37 @@
 # Emoji Salon - Coloring Your Emoji
 
+https://chingru.me/EmojiSalon
+
 ![](src/image/social.png)
 
 **Emoji Salon** is a project that allows you to customize the colors of emojis, just like dressing them up by various cosmetics or coloring them by different paints.
 
 ## Emoji Series
 
-- [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji)
-- [Twemoji-colr / Twitter & Mozilla](https://github.com/mozilla/twemoji-colr)
+- [Twemoji-colr / Twitter & Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
+- [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji): `COLR/CPAL v1`
 
 
-## Support Browser
+## Compatibility
 
-- Have been tested:
+- Have been tested on my own devices:
 
-| | Format | Chrome | Edge | FireFox | Brave | Safari | 
-| ---:|:---:|:----:|:----:|:----:|:----:|:----:|
-|Twemoji|COLR/CPAL v0| ✅ | ✅ | ✅ | ✅ | ✅ |
-|Noto Color Emoji|COLR/CPAL v1| ✅ | ✅ | ✅ | ✅ | ❌ |
+|   | Chrome | Edge | FireFox | Safari | Brave |
+| ---:|:----:|:----:|:----:|:----:|:----:|
+| Version  | 117.0 | 117.0 | 117.0.1 | 16.0 | 1.58.131 |
+|Twemoji| ✅ | ✅ | 🟠 * | ✅ | ✅ |
+|Noto Color Emoji| ✅ | ✅ | 🟠 * | ❌ ** | ✅ | 
 
-| | Format |Chrome on iOS | Safari on iOS | Chrome on Android |
-| ---:|:---:|:----:|:----:|:----:|
-|Twemoji|COLR/CPAL v0| ✅ | ✅ | ✅ |
-|Noto Color Emoji|COLR/CPAL v1| ❌ | ❌ | ✅ |
+| |Chrome on iOS | Safari on iOS | Chrome on Android |
+| ---:|:----:|:----:|:----:|
+|Version| 100.0 / iOS 16.5 | 16.5 / iOS 16.5| 104.0 / Android 12|
+|Twemoji| ✅ | ✅ | ✅ |
+|Noto Color Emoji| ❌ ** | ❌ ** | ✅ |
 
-- You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support COLR/CPAL v0 and COLR/CPAL v1 format.
+- `*`: In Firefox, both rendering and coloring functions are available. However, when downloading the creation, it will be the original version and not the color overridden one.
+- `**`: Safari and any browser on iOS/iPadOS cannot render `COLR/CPAL v1` color fonts. Therefore, the link open via these browsers will be redirected to use Twemoji.
+- You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
+
 
 ### COLR/CPAL v0 - Twemoji
 
@@ -57,18 +64,18 @@
 ## Build
 
 ```
-# develop on local machine
+# develop on local
 npm install
 npm start
 
 # build a single html page
-# if failed, delete public and .parcel-cache folder and retry
+# if failed or miss files, delete `public` and `.parcel-cache` folder and retry
 npm run build
 ```
 
-## How it works?
+## How does it work?
 
-`COLR` (Color) and `CPAL` (Color Palette) are OpenType technologies introduced by Microsoft to enable the use of multi-colored glyphs and emoji in fonts. These technologies are used to create fonts that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
+`COLR` (Color) and `CPAL` (Color Palette) are OpenType technologies to enable the use of multi-colored glyphs and emoji in fonts. Designer can create color font that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
 
 For example:
 
