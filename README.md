@@ -62,19 +62,20 @@ npm install
 npm start
 
 # build a single html page
+# if failed, delete public and .parcel-cache folder and retry
 npm run build
 ```
 
 ## How it works?
 
-COLR (Color) and CPAL (Color Palette) are font technologies introduced by Microsoft to enable the use of multi-colored glyphs and emoji in fonts. These technologies are used to create fonts that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
+`COLR` (Color) and `CPAL` (Color Palette) are OpenType technologies introduced by Microsoft to enable the use of multi-colored glyphs and emoji in fonts. These technologies are used to create fonts that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
 
 For example:
 
 ```
 @font-palette-values --overridePalette {
   font-family: "Noto Color Emoji";
-	base-palette: 0;
+  base-palette: 0;
   override-colors:
     0 #00ffbb,
     1 #007744;
@@ -85,9 +86,9 @@ For example:
 }
 ```
 
-COLR/CPAL v1 is an extended version of COLR/CPAL v0, designed to elevate the capabilities of color fonts, particularly in the realm of gradient colors.
+`COLR/CPAL v1` is an extended version of `COLR/CPAL v0`, designed to elevate the capabilities of color fonts, particularly in the realm of gradient colors.
 
-Currently, most modern web browsers support COLR/CPAL v0 font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for COLR/CPAL v1 fonts. 
+Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts. 
 
 
 ## See More...
@@ -95,5 +96,6 @@ Currently, most modern web browsers support COLR/CPAL v0 font format, however, W
 - [COLRv1 Color Gradient Vector Fonts in Chrome 98 - Chrome for Developers Blog](https://developer.chrome.com/blog/colrv1-fonts/)
 - [OpenType COLR (Color Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/colr)
 - [OpenType CPAL (Color Palette Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/cpal)
+- [\[webkit-dev\] Request for Position: COLR v1 Vector Color Fonts](https://lists.webkit.org/pipermail/webkit-dev/2021-May/031839.html)
 - [COLR/CPAL(v0) Font Formats - Can I USe...](https://caniuse.com/colr)
 - [COLR/CPAL(v1) Font Formats - Can I USe...](https://caniuse.com/colr-v1)

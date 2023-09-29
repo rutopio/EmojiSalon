@@ -3,7 +3,7 @@ var originalPalette = [];
 var customizedPalette = [];
 var originalPaletteIndex = []
 var paletteCode = "";
-var shareURL = window.location.href;
+var currentURL = window.location.href;
 var emojiStyle = "twemoji";
 
 
@@ -125,7 +125,7 @@ function updateEmojiAndURL() {
     const thisEmoji = document.getElementById("customized-emoji").innerHTML;
     setOverridePaletteStyle(overrideColors);
     window.location.hash = `${emojiStyle === "noto"? "n" : "t"}-${emojiToUnicode(thisEmoji)}-${encodeURIComponent(encodeURL(overrideColors))}`;
-    shareURL = window.location.href
+    currentURL = window.location.href
 }
 
 
@@ -277,7 +277,7 @@ function selectRandomColor() {
 
 
 function selectedFromPicker(thisEmoji) {
-    const emojiPickerContainer = document.getElementById("emoji-picker-container");
+    const emojiPickerContainer = document.getElementById("emoji-picker-mobile");
     if (emojiPickerContainer.style.display === "none") {
         emojiPickerContainer.style.display = "block";
     } else {
@@ -296,6 +296,7 @@ function loadEmojiPicker() {
             set: "twitter",
             emojiSize: 36,
             perLine: 8,
+            theme: "light",
         };
     } else if (emojiStyle === "noto") {
         emojiPickerOptions = {
@@ -303,11 +304,12 @@ function loadEmojiPicker() {
             set: "google",
             emojiSize: 36,
             perLine: 8,
+            theme: "light",
         };
     }
 
-    const emojiPickerDesktopContainer = document.getElementById("emoji-picker");
-    const emojiPickerMobileContainer = document.getElementById("emoji-picker-container");
+    const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
+    const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
 
     while (emojiPickerDesktopContainer.firstChild) {
         emojiPickerDesktopContainer.removeChild(emojiPickerDesktopContainer.firstChild);
@@ -328,7 +330,7 @@ function loadEmojiPicker() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const emojiPickerButton = document.getElementById("emoji-picker-button");
-    const emojiPickerMobileContainer = document.getElementById("emoji-picker-container");
+    const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
 
     emojiPickerButton.addEventListener("click", function() {
         if (emojiPickerMobileContainer.style.display === "none") {
@@ -393,7 +395,7 @@ Array.from(document.getElementsByClassName("share-button"))
 Array.from(document.getElementsByClassName("share-facebook"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            const facebookShareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareURL)}`;
+            const facebookShareURL = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(currentURL)}`;
             window.open(facebookShareURL, "_blank");
         });
     });
@@ -401,7 +403,7 @@ Array.from(document.getElementsByClassName("share-facebook"))
 Array.from(document.getElementsByClassName("share-twitter"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            const message = `#EmojiSalon ${shareURL}`
+            const message = `#EmojiSalon ${currentURL}`
             const twitterShareURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
             window.open(twitterShareURL, "_blank");
         });
@@ -411,7 +413,7 @@ Array.from(document.getElementsByClassName("share-twitter"))
 Array.from(document.getElementsByClassName("share-line"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            const lineShareURL = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareURL)}`;
+            const lineShareURL = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentURL)}`;
             window.open(lineShareURL, "_blank");
         });
     });
@@ -420,7 +422,7 @@ Array.from(document.getElementsByClassName("share-line"))
 Array.from(document.getElementsByClassName("share-linkedin"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            const lineShareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareURL)}`;
+            const lineShareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentURL)}`;
             window.open(lineShareURL, "_blank");
         });
     });
@@ -643,6 +645,7 @@ async function main() {
             updateEmoji(getRandomEmoji(), true);
         }
     } else {
+        document.getElementById("noto-emoji-share-notice").classList.add("d-none");
         console.log("→ Random select an emoji 🎰")
         const rndEmoji = getRandomEmoji()
         updateEmoji(rndEmoji, true);
