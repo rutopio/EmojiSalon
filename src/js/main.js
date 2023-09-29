@@ -12,6 +12,8 @@ var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
 })
 
 
+  
+
 // For example, converter rgba(67, 255, 100, 255) to #43ff64
 function rgbaToHexColor(rgbaColorArray) {
     return "#" + rgbaColorArray.slice(0, 3)
@@ -334,6 +336,32 @@ Array.from(document.getElementsByClassName("share-line"))
         });
     });
 
+function showSupportIssueModal() {
+    const modal = document.getElementById("supportIssue");
+    const closeButton = modal.querySelector(".close");
+  
+    modal.style.display = "block";
+  
+    closeButton.onclick = function () {
+      modal.style.display = "none";
+    };
+  
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  }
+  
+
+var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+if (isSafari){
+    showSupportIssueModal(); 
+    console.log("Oops, your browser seems to not support OpenType COLR/CPALv1 font, please change another browser such as Desktop Chrome or FireFox.")        
+} else{
+    console.log("Great, your browser support OpenType COLR/CPALv1 font!")
+}
 
 
 // default Emoji
@@ -348,6 +376,7 @@ function getRandomEmoji() {
 const originalCanvas = document.getElementById("reference-canvas");
 originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
 originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
+
 
 if (window.location.hash) {
     inputString = window.location.hash.substring(1)
@@ -364,3 +393,11 @@ if (window.location.hash) {
 } else {
     updateEmoji(getRandomEmoji(), true);
 }
+
+
+
+
+
+
+
+  

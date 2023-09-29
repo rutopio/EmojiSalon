@@ -1,5 +1,7 @@
 # Emoji Salon - Coloring Your Emoji
 
+![](src/image/social.png)
+
 **Emoji Salon** is a project that allows you to customize the colors of emojis, just like dressing them up by various cosmetics or coloring them by different paints.
 
 ## Support Browser
@@ -12,6 +14,7 @@
   - other Chromium-Based browsers...
 - Not Supported:
   - Safari
+  - Browser on iOS device - they are all based on Safari kernel
 - You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support COLRv1 format or not.
 - Reference: [Can I Use...](https://caniuse.com/colr-v1)
 
