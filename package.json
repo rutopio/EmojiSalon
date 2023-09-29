@@ -1,0 +1,16 @@
+{
+  "name": "Emoji OOTD",
+  "version": "1.0.0",
+  "author": "ChingRu <https://github.com/rutopio>",
+  "description": "Dress up Your Emoji. Based on Noto Sans Emoji (COLR/CPAL color font)",
+  "type": "module",
+  "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
+    "fontkit": "^2.0.0"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.9.3",
+    "@parcel/transformer-webmanifest": "^2.9.3",
+    "parcel": "^2.9.3"
+  }
+}
