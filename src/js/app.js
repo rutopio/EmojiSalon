@@ -397,6 +397,7 @@ Array.from(document.getElementsByClassName("share-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
             updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
+            document.getElementById("result-image").src = document.getElementById("result-canvas").toDataURL("image/png");
             showShareModal()
         });
     });
@@ -692,7 +693,8 @@ const observer = new MutationObserver((mutationsList) => {
                     showSupportIssueModal();
 
                     console.log("→ Oops, your browser seems to not support OpenType COLR/CPAL v1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
-
+                    document.getElementById("noto-emoji-share-notice").classList.add("d-none");
+                    
 
                     try {
                         updateEmoji(window.location.hash.substring(1).split("-")[1], true)
@@ -704,6 +706,7 @@ const observer = new MutationObserver((mutationsList) => {
                         updateEmoji(rndEmoji, true);
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
                     }
+                    updateCanvas("reference-canvas", thisEmoji)
                     observer.disconnect();
                 }
             }
