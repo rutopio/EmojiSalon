@@ -56,9 +56,8 @@ html, body {
     background-color: #FFFFFF;
     border-radius: 0.5em;
     box-shadow: 0 10px 20px rgba(black, 0.2);
-
-    margin: 15% auto;
-    padding: 20px;
+    margin: 5% auto;
+    padding: 1em;
     border: 1px solid #888888;
     width: 80% !important;
 }
@@ -79,7 +78,7 @@ html, body {
 }
 
 
-.model-text {
+.modal-text {
     font-family: 'Nunito', sans-serif;
 }
 

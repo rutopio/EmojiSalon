@@ -43,10 +43,19 @@ function emojiToUnicode(emoji) {
 
 
 function unicodeToEmoji(unicode) {
-    const codePoint = unicode.replace("U+", "");
-    const intCodePoint = parseInt(codePoint, 16);
-    const character = String.fromCodePoint(intCodePoint);
-    return character
+    try{
+        const codePoint = unicode.replace("U+", "");
+        const intCodePoint = parseInt(codePoint, 16);
+        const character = String.fromCodePoint(intCodePoint);
+        const emojisRegex = /\p{Extended_Pictographic}/u
+        if (emojisRegex.test(character)){
+            return character
+        } else{
+            throw err;
+        }
+    } catch (e){
+        throw err;
+    }
 }
 
 
@@ -387,6 +396,7 @@ Array.from(document.getElementsByClassName("download-button"))
 Array.from(document.getElementsByClassName("share-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
+            updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
             showShareModal()
         });
     });
@@ -614,7 +624,7 @@ async function main() {
     const originalCanvas = document.getElementById("reference-canvas");
     originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
     originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
-
+    var thisEmoji = ""
 
     if (window.location.hash) {
         try {
@@ -631,9 +641,11 @@ async function main() {
                 document.getElementById("noto-emoji-share-notice").classList.add("d-none");
 
             }
-            document.getElementById("customized-emoji").innerHTML = unicodeToEmoji(parts[1])
-            updateEmoji(unicodeToEmoji(parts[1]), true);
-            console.log(`→ Url Info: ${unicodeToEmoji(parts[1])} with ${emojiStyle} 🔗`)
+            thisEmoji = unicodeToEmoji(parts[1])
+
+            document.getElementById("customized-emoji").innerHTML = thisEmoji
+            updateEmoji(thisEmoji, true);
+            console.log(`→ Url Info: ${thisEmoji} with ${emojiStyle} 🔗`)
 
             // If url has palette info, use it
             if (parts.length > 2) {
@@ -641,17 +653,24 @@ async function main() {
                 setOverridePaletteStyle(paletteCode)
             }
         } catch (e) {
+            console.log("→ Get invalid url ❓")
+            document.getElementById("noto-emoji-share-notice").classList.add("d-none");
+            console.log("→ Random select an emoji 🎰")
+            thisEmoji = getRandomEmoji()
+            updateEmoji(thisEmoji, true);
             window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
-            updateEmoji(getRandomEmoji(), true);
         }
     } else {
+        console.log("→ Get home url 🏚")
         document.getElementById("noto-emoji-share-notice").classList.add("d-none");
         console.log("→ Random select an emoji 🎰")
-        const rndEmoji = getRandomEmoji()
-        updateEmoji(rndEmoji, true);
-        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
+        thisEmoji = getRandomEmoji()
+        updateEmoji(thisEmoji, true);
+        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
     }
     loadEmojiPicker()
+    updateCanvas("reference-canvas", thisEmoji)
+
 }
 
 
@@ -672,7 +691,7 @@ const observer = new MutationObserver((mutationsList) => {
                     checkbox.checked = false;
                     showSupportIssueModal();
 
-                    console.log("→ Oops, your browser seems to not support OpenType COLR/CPALv1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
+                    console.log("→ Oops, your browser seems to not support OpenType COLR/CPAL v1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
 
 
                     try {
