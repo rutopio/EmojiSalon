@@ -2,6 +2,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 
+.switch input {
+    position: absolute;
+    opacity: 0;
+  }
+  
+  /**
+   * 1. Adjust this to size
+   */
+  
+  .switch {
+    display: inline-block;
+    font-size: 1em; /* 1 */
+    height: 1.5em;
+    width: 3em;
+    background: #BDB9A6;
+    border-radius: 1.5em;
+  }
+  
+  .switch div {
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: 1.5em;
+    background: #FFF;
+    box-shadow: 0 0.1em 0.3em rgba(0,0,0,0.3);
+    -webkit-transition: all 300ms;
+       -moz-transition: all 300ms;
+            transition: all 300ms;
+  }
+  
+  .switch input:checked + div {
+    -webkit-transform: translate3d(100%, 0, 0);
+       -moz-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0);
+  }
+  
+.switch-label{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -50,12 +90,15 @@
     width: 100%;
 }
 
+
 body {
     background-color: #eeeeee !important;
 }
 
 #customized-emoji {
     font-family: "Noto Color Emoji";
+    /* font-family: "Twemoji"; */
+
     font-size: 16em;
     font-palette: --palette;
 }
