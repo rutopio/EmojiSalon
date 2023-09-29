@@ -1,44 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;700&display=swap');
+
 
 
 .switch input {
     position: absolute;
     opacity: 0;
-  }
-  
-  /**
-   * 1. Adjust this to size
-   */
-  
-  .switch {
+}
+
+.switch {
     display: inline-block;
-    font-size: 1em; /* 1 */
+    font-size: 1em;
     height: 1.5em;
     width: 3em;
     background: #BDB9A6;
     border-radius: 1.5em;
-  }
-  
-  .switch div {
+}
+
+.switch div {
     height: 1.5em;
     width: 1.5em;
     border-radius: 1.5em;
-    background: #FFF;
-    box-shadow: 0 0.1em 0.3em rgba(0,0,0,0.3);
+    background: #FFFFFF;
+    box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3);
     -webkit-transition: all 300ms;
-       -moz-transition: all 300ms;
-            transition: all 300ms;
-  }
-  
-  .switch input:checked + div {
+    -moz-transition: all 300ms;
+    transition: all 300ms;
+}
+
+.switch input:checked+div {
     -webkit-transform: translate3d(100%, 0, 0);
-       -moz-transform: translate3d(100%, 0, 0);
-            transform: translate3d(100%, 0, 0);
-  }
-  
-.switch-label{
-    font-family: 'Poppins', sans-serif;
+    -moz-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+}
+
+.switch-label {
+    font-family: 'Nunito', sans-serif;
     font-size: 1em;
 }
 
@@ -80,11 +77,16 @@
 }
 
 
+.model-text {
+    font-family: 'Nunito', sans-serif;
+}
+
 .jumbotron.vertical-center {
     margin-bottom: 0;
 }
 
 .vertical-center {
+    position: relative;
     min-height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -92,13 +94,11 @@
 
 
 body {
-    background-color: #eeeeee !important;
+    background-color: #EEEEEE !important;
 }
 
 #customized-emoji {
     font-family: "Noto Color Emoji";
-    /* font-family: "Twemoji"; */
-
     font-size: 16em;
     font-palette: --palette;
 }
@@ -107,16 +107,13 @@ body {
     font-palette: --palette;
 }
 
-.my-footer {
+
+#footer-content {
     font-size: 0.5em;
     font-family: 'Courier Prime', monospace;
 }
 
-.bottom-right {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
+
 
 .bottom-left {
     position: absolute;
@@ -159,7 +156,8 @@ body {
 .reset-button,
 .random-emoji-button,
 .random-color-button,
-.share-button {
+.share-button,
+.function-button {
     width: 2.5em;
     height: 2.5em;
     font-size: 1em;
@@ -169,6 +167,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0 !important;
+    color: #FFFFFF;
 }
 
 .download-button {

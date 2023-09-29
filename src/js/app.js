@@ -75,7 +75,7 @@ function getOverrideStyleString() {
     // ...
     // If customize colors are different from default colors, record them into overrides 
 
-    if (emojiStyle === "noto"){
+    if (emojiStyle === "noto") {
         return customizedPalette
             .map((rgbaColorArray, idx) => `${idx} rgba(${rgbaColorArray.join(", ")})`)
             .filter((_, idx) => !areColorsEqual(customizedPalette[idx], originalPalette[idx]))
@@ -92,7 +92,7 @@ function getOverrideStyleString() {
 
 // Update the CSS palette
 function setOverridePaletteStyle(overrideColors) {
-    if (emojiStyle === "noto"){
+    if (emojiStyle === "noto") {
         document.getElementById("palette-overrides-style").innerHTML = `
 		@font-palette-values --palette {
 			font-family: "Noto Color Emoji";
@@ -133,7 +133,7 @@ function updateEmojiAndURL() {
 async function updateEmoji(thisEmoji, keepPalette) {
     var fontStyle
 
-    if (emojiStyle === "noto"){
+    if (emojiStyle === "noto") {
         document.getElementById("customized-emoji").style.fontFamily = "Noto Color Emoji"
 
         // Fetch Google Font Noto Sans Emoji CSS
@@ -158,11 +158,11 @@ async function updateEmoji(thisEmoji, keepPalette) {
         `
         // fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
         originalPaletteIndex = []
-        twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _ ) =>{
+        twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _) => {
             const thisColor = layer.color
             originalPaletteIndex.push(twemojiFont.CPAL.colorRecords.indexOf(thisColor))
         })
-        originalPaletteIndex = [ ...new Set(originalPaletteIndex)]
+        originalPaletteIndex = [...new Set(originalPaletteIndex)]
         originalPalette = originalPaletteIndex.map(index => twemojiFont.CPAL.colorRecords[index]).map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
     }
 
@@ -223,7 +223,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
 
 
 function updateCanvas(domIdName, thisEmoji) {
-    console.log(`... ${thisEmoji} ...`)
+    console.log(`→ ${thisEmoji}`)
     const canvas = document.getElementById(domIdName);
     const ctx = canvas.getContext("2d")
     const scaleProp = 10
@@ -241,7 +241,7 @@ function updateCanvas(domIdName, thisEmoji) {
 
     // Set canvas
 
-    if (emojiStyle === "noto"){
+    if (emojiStyle === "noto") {
         ctx.font = `${realFontSizeEm}em "Noto Color Emoji"`;
     } else if (emojiStyle === "twemoji") {
         ctx.font = `${realFontSizeEm}em "Twemoji"`;
@@ -288,42 +288,62 @@ function selectedFromPicker(thisEmoji) {
 
 
 // See https://github.com/missive/emoji-mart for more info and settings
-document.addEventListener("DOMContentLoaded", function() {
-    const emojiPickerOptionsDesktop = {
-        onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
-        set: "twitter",
-        emojiSize: 36,
-        perLine: 8,
-    };
-    const emojiPickerDesktop = new EmojiMart.Picker(emojiPickerOptionsDesktop);
-    document.getElementById("emoji-picker").appendChild(emojiPickerDesktop);
+function loadEmojiPicker() {
+    var emojiPickerOptions
+    if (emojiStyle === "twemoji") {
+        emojiPickerOptions = {
+            onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
+            set: "twitter",
+            emojiSize: 36,
+            perLine: 8,
+        };
+    } else if (emojiStyle === "noto") {
+        emojiPickerOptions = {
+            onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
+            set: "google",
+            emojiSize: 36,
+            perLine: 8,
+        };
+    }
+
+    const emojiPickerDesktopContainer = document.getElementById("emoji-picker");
+    const emojiPickerMobileContainer = document.getElementById("emoji-picker-container");
+
+    while (emojiPickerDesktopContainer.firstChild) {
+        emojiPickerDesktopContainer.removeChild(emojiPickerDesktopContainer.firstChild);
+    }
+
+    while (emojiPickerMobileContainer.firstChild) {
+        emojiPickerMobileContainer.removeChild(emojiPickerMobileContainer.firstChild);
+    }
+
+    // Desktop Size
+    const emojiPickerDesktop = new EmojiMart.Picker(emojiPickerOptions);
+    emojiPickerDesktopContainer.appendChild(emojiPickerDesktop);
 
     // Mobile size
+    const emojiPickerMobile = new EmojiMart.Picker(emojiPickerOptions);
+    emojiPickerMobileContainer.appendChild(emojiPickerMobile);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
     const emojiPickerButton = document.getElementById("emoji-picker-button");
-    const emojiPickerContainer = document.getElementById("emoji-picker-container");
-    const emojiPickerOptionsMobile = {
-        onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
-        set: "twitter",
-        emojiSize: 36,
-        perLine: 8,
-    };
-    const emojiPickerMobile = new EmojiMart.Picker(emojiPickerOptionsMobile);
-    emojiPickerContainer.appendChild(emojiPickerMobile);
+    const emojiPickerMobileContainer = document.getElementById("emoji-picker-container");
 
     emojiPickerButton.addEventListener("click", function() {
-        if (emojiPickerContainer.style.display === "none") {
-            emojiPickerContainer.style.display = "block";
+        if (emojiPickerMobileContainer.style.display === "none") {
+            emojiPickerMobileContainer.style.display = "block";
         } else {
-            emojiPickerContainer.style.display = "none";
+            emojiPickerMobileContainer.style.display = "none";
         }
     });
-});
+})
 
 
 Array.from(document.getElementsByClassName("random-emoji-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            console.log("...🎲 Random Select an Emoji 🎲...")
+            console.log("→ Random Select an Emoji 🎲")
             updateEmoji(getRandomEmoji(), false);
         });
     });
@@ -331,7 +351,7 @@ Array.from(document.getElementsByClassName("random-emoji-button"))
 Array.from(document.getElementsByClassName("random-color-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            console.log("...🎨 Random Set Colors 🎨...")
+            console.log("→ Random Set Colors 🎨")
             selectRandomColor();
         });
     });
@@ -339,7 +359,7 @@ Array.from(document.getElementsByClassName("random-color-button"))
 Array.from(document.getElementsByClassName("reset-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            console.log("...🪄 Restore Palette 🪄...")
+            console.log("→ Restore Palette 🪄")
             const thisEmoji = document.getElementById("customized-emoji").innerHTML;
             updateEmoji(thisEmoji, false)
         });
@@ -352,12 +372,20 @@ Array.from(document.getElementsByClassName("download-button"))
             updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
             const dataURL = resultCanvas.toDataURL("image/png");
 
-            // Create an anchor element to trigger the download
+            // Create dummy element to trigger the download
             const downloadLink = document.createElement("a");
-            console.log(`...💾 Downloading Your ${document.getElementById("customized-emoji").innerHTML} 💾 ...`)
+            console.log(`→ Downloading Your ${document.getElementById("customized-emoji").innerHTML} 💾`)
             downloadLink.href = dataURL;
             downloadLink.download = `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`;
             downloadLink.click();
+        });
+    });
+
+
+Array.from(document.getElementsByClassName("share-button"))
+    .forEach(function(element) {
+        element.addEventListener("click", function() {
+            showShareModal()
         });
     });
 
@@ -389,6 +417,27 @@ Array.from(document.getElementsByClassName("share-line"))
     });
 
 
+Array.from(document.getElementsByClassName("share-linkedin"))
+    .forEach(function(element) {
+        element.addEventListener("click", function() {
+            const lineShareURL = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareURL)}`;
+            window.open(lineShareURL, "_blank");
+        });
+    });
+
+
+Array.from(document.getElementsByClassName("copy-link"))
+    .forEach(function(element) {
+        element.addEventListener("click", function() {
+            var dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+        });
+    });
+
 function showSupportIssueModal() {
     const modal = document.getElementById("supportIssue");
     const closeButton = modal.querySelector(".close");
@@ -406,6 +455,25 @@ function showSupportIssueModal() {
     };
 }
 
+function showShareModal() {
+    const modal = document.getElementById("shareBoard");
+    const closeButton = modal.querySelector(".close");
+
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const toggleSwitch = document.getElementById("emojiStyleSwitch");
@@ -413,10 +481,18 @@ document.addEventListener("DOMContentLoaded", function() {
     toggleSwitch.addEventListener("change", function() {
         if (!toggleSwitch.checked) {
             emojiStyle = "twemoji"
-            console.log("... Emoji: Change to Twemoji ...");
+            console.log("→ Emoji Style Change to Twemoji 👀");
+            document.getElementById("noto-emoji-share-notice").classList.remove("d-block")
+            document.getElementById("noto-emoji-share-notice").classList.add("d-none");
+            loadEmojiPicker()
+
         } else {
             emojiStyle = "noto"
-            console.log("... Emoji: Change to Noto Emoji ...");
+            console.log("→ Emoji Style Change to Noto Color Emoji 👀");
+            document.getElementById("noto-emoji-share-notice").classList.remove("d-none")
+            document.getElementById("noto-emoji-share-notice").classList.add("d-block");
+
+            loadEmojiPicker()
         }
     });
 });
@@ -432,7 +508,7 @@ function getRandomEmoji() {
 
 // Reference: https://github.com/RoelN/ChromaCheck
 function checkColorFontSupport() {
-    console.log("...🕵️ Check the compatibility of your browser 🕵️...")
+    console.log("→ Checking compatibility about color font of your browser 🕵️")
     var root = document.getElementById("opentype-support-detector"),
         cls = 'chromacheck-',
         runs = 20,
@@ -539,19 +615,23 @@ async function main() {
 
 
     if (window.location.hash) {
-        try{
+        try {
             const inputString = window.location.hash.substring(1)
             const parts = inputString.split("-");
             // If url has Emoji info, use it
-            if (parts[0] == "n"){
+            if (parts[0] == "n") {
                 emojiStyle = "noto"
+                document.getElementById("noto-emoji-share-notice").classList.add("d-block");
+
                 document.getElementById("emojiStyleSwitch").checked = true
             } else if (parts[0] == "t") {
                 emojiStyle = "twemoji"
+                document.getElementById("noto-emoji-share-notice").classList.add("d-none");
+
             }
             document.getElementById("customized-emoji").innerHTML = unicodeToEmoji(parts[1])
             updateEmoji(unicodeToEmoji(parts[1]), true);
-            console.log(`... Links: ${unicodeToEmoji(parts[1])} with ${emojiStyle} ...`)
+            console.log(`→ Url Info: ${unicodeToEmoji(parts[1])} with ${emojiStyle} 🔗`)
 
             // If url has palette info, use it
             if (parts.length > 2) {
@@ -560,43 +640,44 @@ async function main() {
             }
         } catch (e) {
             window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
-            updateEmoji(getRandomEmoji(), true);    
+            updateEmoji(getRandomEmoji(), true);
         }
     } else {
-        console.log("... Random initialize an emoji ...")
+        console.log("→ Random select an emoji 🎰")
         const rndEmoji = getRandomEmoji()
         updateEmoji(rndEmoji, true);
         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
     }
+    loadEmojiPicker()
 }
 
 
- // Listen opentype color font format support detector
- checkColorFontSupport()
- const targetElement = document.getElementById("opentype-support-detector");
- const observer = new MutationObserver((mutationsList) => {
+// Listen opentype color font format support detector
+checkColorFontSupport()
+const targetElement = document.getElementById("opentype-support-detector");
+const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
         if (mutation.type === "attributes" && mutation.attributeName === "class") {
             if (targetElement.classList.contains("chromacheck-colrv1-failed")) {
                 // hide the Twemoji and Noto Color Emoji selector
                 document.getElementById("emojiStyleSwitchArea").classList.remove("d-flex")
                 document.getElementById("emojiStyleSwitchArea").classList.add("d-none");
-                
-                if (window.location.hash.substring(1).split("-")[0] == "n"){
+
+                if (window.location.hash.substring(1).split("-")[0] == "n") {
                     emojiStyle = "twemoji"
                     const checkbox = document.getElementById("emojiStyleSwitch");
                     checkbox.checked = false;
                     showSupportIssueModal();
-                    
-                    console.log("Oops, your browser seems to not support OpenType COLR/CPALv1 font, you can only use Twemoji. If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
+
+                    console.log("→ Oops, your browser seems to not support OpenType COLR/CPALv1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
 
 
-                    try{
+                    try {
                         updateEmoji(window.location.hash.substring(1).split("-")[1], true)
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))}`;
 
                     } catch (e) {
-                        console.log("... Random initialize an emoji ...")
+                        console.log("→ Random select an emoji 🎰")
                         const rndEmoji = getRandomEmoji()
                         updateEmoji(rndEmoji, true);
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
@@ -606,10 +687,10 @@ async function main() {
             }
         }
     }
-    
- });
- observer.observe(targetElement, {
-     attributes: true
- });
+
+});
+observer.observe(targetElement, {
+    attributes: true
+});
 
 main()
