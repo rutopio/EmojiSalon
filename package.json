@@ -1,8 +1,13 @@
 {
-  "name": "Emoji OOTD",
+  "name": "Emoji Salon",
   "version": "1.0.0",
   "author": "ChingRu <https://github.com/rutopio>",
-  "description": "Dress up Your Emoji. Based on Noto Sans Emoji (COLR/CPAL color font)",
+  "description": "Coloring Your Emoji. Based on Noto Color Emoji (COLR/CPAL v1 color font)",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build --dist-dir public"
+  },
   "type": "module",
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",

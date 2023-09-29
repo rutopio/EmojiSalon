@@ -23,17 +23,18 @@
 - [Node.js](https://nodejs.org/)
 - [FontKit](https://github.com/foliojs/fontkit)
 - [Emoji Mart](https://github.com/missive/emoji-mart)
-- [parcel](https://www.npmjs.com/package/parcel)
+- [parcel](https://parceljs.org/)
+- [ChromaCheck](https://github.com/RoelN/ChromaCheck)
 
 ## Build
 
 ```
 # develop on local machine
 npm install
-npx parcel src/index.html
+npm start
 
 # build a single html page
-npx parcel build src/index.html
+npm run build
 ```
 
 ## How it works?

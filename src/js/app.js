@@ -12,13 +12,13 @@ var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
 })
 
 
-  
+
 
 // For example, converter rgba(67, 255, 100, 255) to #43ff64
 function rgbaToHexColor(rgbaColorArray) {
     return "#" + rgbaColorArray.slice(0, 3)
         .map(ele => ele.toString(16))
-        .map(ele => ele.length == 1 ? "0" + ele : ele) //padding zero to two digits
+        .map(ele => ele.length == 1 ? "0" + ele : ele) // Padding zero to two digits
         .join("");
 }
 
@@ -207,14 +207,16 @@ function updateCanvas(domIdName, thisEmoji) {
 }
 
 
-function getRandomColor() {
-    const minVal = 0
-    const maxVal = 255
-    return Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-}
 
 
 function selectRandomColor() {
+
+    function getRandomColor() {
+        const minVal = 0
+        const maxVal = 255
+        return Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+    }
+
     numPicker = document.querySelectorAll(".color-block").length;
     customizedPalette.forEach((_, idx) => {
         customizedPalette[idx] = [getRandomColor(), getRandomColor(), getRandomColor(), 255]
@@ -246,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const emojiPickerDesktop = new EmojiMart.Picker(emojiPickerOptionsDesktop);
     document.getElementById("emoji-picker").appendChild(emojiPickerDesktop);
 
-    // RWD
+    // Mobile size
     const emojiPickerButton = document.getElementById("emoji-picker-button");
     const emojiPickerContainer = document.getElementById("emoji-picker-container");
     const emojiPickerOptionsMobile = {
@@ -304,7 +306,7 @@ Array.from(document.getElementsByClassName("download-button"))
             const downloadLink = document.createElement("a");
             console.log(`...💾 Now Downloading Your ${document.getElementById("customized-emoji").innerHTML} 💾 ...`)
             downloadLink.href = dataURL;
-            downloadLink.download = `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiOOTD.png`;
+            downloadLink.download = `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`;
             downloadLink.click();
         });
     });
@@ -336,35 +338,27 @@ Array.from(document.getElementsByClassName("share-line"))
         });
     });
 
+
 function showSupportIssueModal() {
     const modal = document.getElementById("supportIssue");
     const closeButton = modal.querySelector(".close");
-  
+
     modal.style.display = "block";
-  
-    closeButton.onclick = function () {
-      modal.style.display = "none";
-    };
-  
-    window.onclick = function (event) {
-      if (event.target === modal) {
+
+    closeButton.onclick = function() {
         modal.style.display = "none";
-      }
     };
-  }
-  
 
-var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-if (isSafari){
-    showSupportIssueModal(); 
-    console.log("Oops, your browser seems to not support OpenType COLR/CPALv1 font, please change another browser such as Desktop Chrome or FireFox.")        
-} else{
-    console.log("Great, your browser support OpenType COLR/CPALv1 font!")
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
 }
 
 
-// default Emoji
+
+// Default Emoji List
 function getRandomEmoji() {
     const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🫁", "🦷", "🦴", "👀", "🚀", "👍", "🤟", "🤘", "🤙", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "🍀", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🏍️", "🛳️", "☃️", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🗃️", "🛋️", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪"];
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
@@ -372,32 +366,139 @@ function getRandomEmoji() {
 }
 
 
-// Set canvas dimensions based on customized-emoji size
-const originalCanvas = document.getElementById("reference-canvas");
-originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
-originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
+// Reference: https://github.com/RoelN/ChromaCheck
+function checkColorFontSupport() {
+    console.log("...🕵️ Check the compatibility of your browser 🕵️...")
+    var root = document.getElementById("opentype-support-detector"),
+        cls = 'chromacheck-',
+        runs = 20,
+        loop;
 
+    // Stick SVG on canvas and check control glyph to see if font rendered
+    function checkFontLoad() {
+        context.drawImage(img, 0, 0);
 
-if (window.location.hash) {
-    inputString = window.location.hash.substring(1)
-    const parts = inputString.split("-");
-    // If url has Emoji info, use it
-    document.getElementById("customized-emoji").innerHTML = unicodeToEmoji(parts[0])
-    updateEmoji(unicodeToEmoji(parts[0]), true);
-
-    // If irl has palette info, use it
-    if (parts.length > 1) {
-        paletteCode = decodeURIComponent(decodeURL(parts[1]));
-        setOverridePaletteStyle(paletteCode)
+        // Check Control glyph.
+        if (context.getImageData(10, 110, 1, 1).data[1] === 0) {
+            clearInterval(loop);
+            colorGlyphTest();
+            return true;
+        } else if (--runs <= 0) {
+            clearInterval(loop);
+            checkFailed();
+        }
     }
-} else {
-    updateEmoji(getRandomEmoji(), true);
+
+    // Canvas has been drawn, check for which color glyphs we see
+    function colorGlyphTest() {
+        var res = {};
+        res.cbdt = context.getImageData(10, 10, 1, 1).data[0] === 100; // CBDT/CBLC
+        res.colr = context.getImageData(10, 30, 1, 1).data[0] === 200; // COLR
+        res.sbix = context.getImageData(10, 50, 1, 1).data[0] === 150; // SBIX
+        res.svg = context.getImageData(10, 70, 1, 1).data[0] === 50; // OpenType-SVG
+        res.colrv1 = context.getImageData(10, 90, 1, 1).data[0] === 250; // COLRv1
+
+        // Add class to HTML tag for each supported color format
+        for (var key in res) {
+            if (res.hasOwnProperty(key)) {
+                if (res[key]) {
+                    root.className += ' ' + cls + key // success
+                } else {
+                    root.className += ' ' + cls + key + "-failed" //failed   
+                }
+            }
+        }
+    }
+
+    // Font, SVG, or canvas failed
+    function checkFailed() {
+        root.className += ' ' + cls + 'failed';
+    }
+
+    // Draw color glyphs to a canvas through SVG
+    try {
+        var canvas = document.createElement('canvas'),
+            context = canvas.getContext('2d'),
+            img = new Image(),
+            fontCBDT = 'd09GRgABAAAAAALkAAwAAAAAAxgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDQkRUAAACVAAAAGAAAABlKWauy0NCTEMAAAK0AAAALQAAAFDwVcDTT1MvMgAAAYAAAAA6AAAAYBf0J01jbWFwAAABxAAAACcAAAAsAAzpNmdseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLx0hoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C3AsWcG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAA4bSjsh/j+W2+MkizMIDApQVMAiD6Wm2DNYhmYQCLczAwgSgAAJIHngB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXzS2YWMB9IogMFBgYAAI4IegAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kvm//8hpNg/sDwDAFyDBygAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAFjYGBgYpBjYGZgZOFkYGRQAPIhbCYw25khg6GIIZ8hlyERzE5lSGbIZlAAsp0YXBhCAHWIBft4AWNgZsALAAB9AAR4AWNgYmAICAAhBoaIzgA/d14uKS4gm9fTwyUISAeAMCMzkNxyP+EdkGIO8AlxTWFgeLEkTg3IFfB0cQypYExeIC3BujhBBChfwMB4Z+L7yQxA4Onq57LOKaEJAK3VFft4AWNgYgABRiC2AGIJKJshAAhhAMEGyzIGBCgASbA6DiApCKRZoLKJAGrOAtkAAAA=',
+            fontCOLR = 'd09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==',
+            fontSBIX = 'd09GRgABAAAAAALkAAsAAAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABbAAAADoAAABgFxIli2NtYXAAAAGwAAAAJwAAACwADOk0Z2x5ZgAAAeAAAAAWAAAAFjdEBkBoZWFkAAABCAAAADAAAAA2C6KlkGhoZWEAAAE4AAAAFgAAACQGQQMiaG10eAAAAagAAAAGAAAABgMgAABsb2NhAAAB2AAAAAYAAAAGAAsAAG1heHAAAAFQAAAAGgAAACACDwAbbmFtZQAAAfgAAABDAAAATgSgDQdwb3N0AAACPAAAAAwAAAAgAAMAAHNiaXgAAAJIAAAAnAAAAQQlRrDFeAFjYGRgAGHhBIvaeH6brwzSzAoMQHBpAZMAiL62JcEZRDMrgMU5GJhAPADavQcJeAFjYGRgYFZgYECQQBFUwAgACqMAbQAAeAFjYGRgYGACQxBgBJNcDCCuBIgJAAHcAC0AAHgBY2BhVmCcwMDKwMA0k+kMAwNDP4RmfM1gzMjJgAoYBZA4CkDAcOAl40tGZgUQH0iiA6AIABEmCNMAAAMgAAAAAAAAeAFjYGBgZGAGYgYGHgYWBgUgzQKEQP5Lxv//IaQ4SA0QAABVYQYnAAAAAAAACwAAAAIAAAAAAyADIAAAAAEAADEBAyADIAAAeAEtxlUBgwAAQME3Q0IgEYiAFCAC7u7t0X3dAW9UPry+Mi8M+P993yVnI6bCoibAJyRjQsc5HWip8e/HhJQHAIYJsAB4AWNgZsALAAB9AAR4AWNgBEIGMOZh1GHwANICUPyDAQgK8tIVOgP83Hm5pLiAXF5PD5cgoHIdEOZgBor4La5zB1KSJa4RJcH5aSXliUWpDI4p+UmpCp65iempQamJKZWFJ1NtgIrYAnxCXKcxgEBehM9EkPGeLo4hFbfeHGQEuaBJ4f/6PA8HIJMW4EMeEw9DwmkGRotpVSIgAU9XP5d1TglNADtgJsU=',
+            fontSVG = 'd09GRgABAAAAAALoAAsAAAAAAxgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABcAAAADoAAABgF/MnTlNWRyAAAAJQAAAAlwAAAKrSQDCHY21hcAAAAbQAAAAtAAAANOkY6T1nbHlmAAAB7AAAAB4AAAA0KkgqRmhlYWQAAAEIAAAALwAAADYMS9SPaGhlYQAAATgAAAAVAAAAJAgBBAJobXR4AAABrAAAAAgAAAAIBAAAAGxvY2EAAAHkAAAACAAAAAgADQAabWF4cAAAAVAAAAAdAAAAIAIPAB1uYW1lAAACDAAAADcAAAA8ApwLJXBvc3QAAAJEAAAADAAAACAAAwAAeAFjYGRgAGFZjs2Z8fw2XxmkWRhA4NICJgEQfa22twlEszCAxTkYmEAUANtlBvoAeAFjYGRgYGEAAjgJFEEFjAABkQAQAAAAeAFjYGRgYGBmYAHTDFCSi4GBiYFBAsQEAAISAC8AAAB4AWNgYWFgnMDAysDANJPpDAMDQz+EZnzNYMzIyYAKGAWQOApAwHDgJdNLoAkgACTRgQIDAwAAjAh6AAAEAAAAAAAAAHgBJcU5AYBADACw3NeJuRrw76oi+MkSNEPDZtoRpqZXr3ld/OeVpwbcs+wKIQAAAAAAAAAADQAaeAFjYGQAAhYgZGBmYBBUFFRkYfjDAMK4ZQBZhAThAAB4AWNgYGBikGNgZmBk4WRgBLIYoGwmMNuZIYOhiCGfIZchEcxOZUhmyGZQYAhmCGNwBwBp2QXKAHgBY2BmwAsAAH0ABHgBHUw1dsRQDHTK4Bn+U1qzHdwP1WaDVaA2M7N9jFzYNGJpRtyGiz2f7cZxN2v8YzakCercqg7zjIAiyoDczM6dMPMJ/P68CI/AKK47H63ErCYQNE3xLEl934u9JuaVL6myLEsrA1DoEPCTsQgUoLgwmwB5YZIQuNU2zvp6vX/JgiKrerClP/lV7vZxAoni7QldAG/3K6oA',
+            fontCOLRv1 = 'd09GRgABAAAAAAKMAAwAAAAAArAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACWAAAAB8AAAA3CmUCEUNQQUwAAAJ4AAAAEgAAABL7AAAQT1MvMgAAAYAAAAA6AAAAYBf2J09jbWFwAAABxAAAACcAAAAsAAzpOGdseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANhOUtHxoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAPAAAAEIDGAuccG9zdAAAAkwAAAAMAAAAIAADAAB4AWNgZGAA4QZvhS/x/DZfGaRZGEDg0gImARB991huPohmYQCLczAwgSgA+bkHtQB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXrS1YWMB9IogMFBgYAAQYIfgAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kvW//8hpNgfsDwDAFytByoAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAFjYGBgYpBjYGZgZOFkYGRQAfIhbCYw25khg6GIIZ8hlyERzE5lSGbIZlAAsv0ZfBiCGMoYDAGREga9eAFjYGbACwAAfQAEeAFjYGRABUoMmIARrIqLi4GBjYGRiYHBgQEAB0EAgwAAAAABAAEAAQAAAA4AAAAA+v8AAA==',
+            svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="120" style="background:#fff;fill:#000;">' +
+            '<style type="text/css">' +
+            '@font-face{font-family:"chromacheck-cbdt";src:url(data:application/x-font-woff;base64,' + fontCBDT + ') format("woff");}' +
+            '@font-face{font-family:"chromacheck-colr";src:url(data:application/x-font-woff;base64,' + fontCOLR + ') format("woff");}' +
+            '@font-face{font-family:"chromacheck-sbix";src:url(data:application/x-font-woff;base64,' + fontSBIX + ') format("woff");}' +
+            '@font-face{font-family:"chromacheck-svg";src:url(data:application/x-font-woff;base64,' + fontSVG + ') format("woff");}' +
+            '@font-face{font-family:"chromacheck-colrv1";src:url(data:application/x-font-woff;base64,' + fontCOLRv1 + ') format("woff");}' +
+            '</style>' +
+            '<text x="0" y="0" font-size="20">' +
+            '<tspan font-family="chromacheck-cbdt" x="0" dy="20">&#xe903;</tspan>' + // CBDT/CBLC
+            '<tspan font-family="chromacheck-colr" x="0" dy="20">&#xe900;</tspan>' + // COLR
+            '<tspan font-family="chromacheck-sbix" x="0" dy="20">&#xe901;</tspan>' + // SBIX
+            '<tspan font-family="chromacheck-svg" x="0" dy="20">&#xe902;</tspan>' + // SVG
+            '<tspan font-family="chromacheck-colrv1" x="0" dy="20">&#xe905;</tspan>' + // COLRv1
+            '<tspan font-family="chromacheck-svg" x="0" dy="20">&#xe904;</tspan>' + // Control
+            '</text>' +
+            '</svg>';
+        canvas.width = 20;
+        canvas.height = 120;
+
+        img.onload = function() {
+            if (!checkFontLoad()) {
+                // Repeat the test to give Safari time to load the font
+                loop = window.setInterval(checkFontLoad, 1);
+            }
+        }
+
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    } catch (ex) {
+        checkFailed();
+    }
 }
 
 
+async function main() {
+    // Listen opentype color font format support detector
+    checkColorFontSupport()
+    const targetElement = document.getElementById("opentype-support-detector");
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === "attributes" && mutation.attributeName === "class") {
+                if (targetElement.classList.contains("chromacheck-colrv1-failed")) {
+                    showSupportIssueModal();
+                    console.log("Oops, your browser seems to not support OpenType COLR/CPALv1 font, please change another browser such as Desktop Chrome or FireFox.")
+                    observer.disconnect();
+                }
+            }
+        }
+    });
+    observer.observe(targetElement, {
+        attributes: true
+    });
+
+    // Set canvas dimensions based on customized-emoji size
+    const originalCanvas = document.getElementById("reference-canvas");
+    originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
+    originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
 
 
+    if (window.location.hash) {
+        inputString = window.location.hash.substring(1)
+        const parts = inputString.split("-");
+        // If url has Emoji info, use it
+        document.getElementById("customized-emoji").innerHTML = unicodeToEmoji(parts[0])
+        updateEmoji(unicodeToEmoji(parts[0]), true);
 
+        // If url has palette info, use it
+        if (parts.length > 1) {
+            paletteCode = decodeURIComponent(decodeURL(parts[1]));
+            setOverridePaletteStyle(paletteCode)
+        }
+    } else {
+        updateEmoji(getRandomEmoji(), true);
+    }
+}
 
-
-  
+main()
