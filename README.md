@@ -53,12 +53,13 @@ https://chingru.me/EmojiSalon
   - Browsers on iOS/iPadOS devices - they are all based on WebKit kernel
 
 
-## Packages / Related Dependencies
+## Related Packages and Repo
 
 - [Node.js](https://nodejs.org/)
 - [FontKit](https://github.com/foliojs/fontkit)
 - [Emoji Mart](https://github.com/missive/emoji-mart)
-- [parcel](https://parceljs.org/)
+- [Parcel](https://parceljs.org/)
+- [Bootstrap](https://getbootstrap.com/)
 - [ChromaCheck](https://github.com/RoelN/ChromaCheck)
 
 ## Build
