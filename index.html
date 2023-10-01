@@ -25,7 +25,7 @@
     <link rel="manifest" href="https://chingru.me/EmojiSalon/public/image/site.webmanifest">
     <style id="emoji-style"></style>
     <style id="palette-overrides-style"></style>
-    <link rel="stylesheet" href="https://chingru.me/EmojiSalon/public/index.b35fd246.css">
+    <link rel="stylesheet" href="https://chingru.me/EmojiSalon/public/index.1aa2447e.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.min.css">
@@ -40,7 +40,6 @@
     gtag('js', new Date());
 
     gtag('config', 'G-SYC5J76P2M');
-
 </script>
 
 <body> <span id="opentype-support-detector" style="display:none"></span>
@@ -65,11 +64,19 @@
     <div id="shareBoard" class="modal">
         <div class="modal-content"> <span class="close">&times;</span>
             <h3 class="modal-text text-center"><strong>Share With Friends!</strong></h3>
-            <hr> <span class="align-items-center d-flex justify-content-center"> <canvas id="result-canvas" style="display:none"></canvas> <img id="result-image" class="col-10 col-lg-3 col-md-6"> </span> <span id="noto-emoji-share-notice">
+            <hr> <span class="align-items-center d-flex justify-content-center"> <canvas id="result-canvas" style="display:none"></canvas> <img id="result-image" class="col-10 col-lg-3 col-md-6"> </span>
+            <div>
+                <p class="footer-content text-center"><svg width="12" height="12" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg> Free <svg width="12" height="12" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg> Personal & Commercial Use</p>
+            </div>
+            <div id="noto-emoji-share-notice">
                 <p class="modal-text text-start">Your creation is based on Noto Color Emoji (Google Style), but <strong> it can not display correctly on Desktop Safari and any browser on iPhone and iPad.</strong></p>
                 <p class="modal-text text-start">To ensure friends can enjoy it fully, we recommend they use browsers like Chrome or Edge on Desktop or Android devices.</p>
                 <p class="modal-text text-start">You can go back and <strong>switch to Twitter Style (Twemoji) as the base for wide compatibility</strong>, or you can save it as an image for sharing.</p>
-            </span>
+            </div>
             <div class="align-items-center d-flex justify-content-center">
                 <div class="mx-1"> <button type="button" class="function-button my-1 share-twitter" title="Twitter" style="background-color:#26b1e6"> <svg width="20" height="20" fill="currentColor" style="color:#fff" viewBox="0 0 16 16">
                             <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
@@ -159,7 +166,7 @@
             </div>
             <div id="row mt-5">
                 <div class="align-items-center col-12 d-flex justify-content-center mt-5">
-                    <p id="footer-content"> created by ChingRu (<a href="https://github.com/rutopio/EmojiSalon" target="_blank">source code</a>) </p>
+                    <p class="footer-content"> created by ChingRu (<a href="https://github.com/rutopio/EmojiSalon" target="_blank">source code</a>) </p>
                 </div>
             </div>
         </div>

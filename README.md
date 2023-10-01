@@ -103,6 +103,13 @@ For example:
 
 Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts. 
 
+## Copyright
+
+Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license under [MIT](http://opensource.org/licenses/MIT) [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), and [Noto Color Emoji](https://github.com/googlefonts/noto-emoji),  under the [Apache license](https://www.apache.org/licenses/LICENSE-2.0).
+
+You are free to use it for personal and commercial purposes. For more details and legal advices, please refer to the license of emoji sources.
+
+I don't claim any copyright over your creation.
 
 ## See More...
 
