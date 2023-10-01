@@ -33,7 +33,7 @@ function emojiToUnicode(emoji) {
         if (ele.length === 1) { // ZWJ, EMOJI MODIFIER FITZPATRICK
             res.push(ele.charCodeAt(0).toString("16").toUpperCase())
         } else if (ele.length === 2) {
-            comp = (
+            const comp = (
                 (ele.charCodeAt(0) - 0xD800) * 0x400 +
                 (ele.charCodeAt(1) - 0xDC00) + 0x10000
             );
