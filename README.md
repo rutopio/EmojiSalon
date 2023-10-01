@@ -1,10 +1,14 @@
-# Emoji Salon - Coloring Your Emoji
+<div align="center">
 
-https://chingru.me/EmojiSalon
+<h1>🪄 Emoji Salon - Coloring Your Emoji</h1>
+
+🔗 https://chingru.me/EmojiSalon 🔗
 
 ![](src/image/social.png)
 
-**Emoji Salon** allows you to customize the colors of emojis, just like dressing them up by various cosmetics or coloring them by different paints.
+**Emoji Salon** allows you to customize the colors of emojis,<br> just like dressing them up by various cosmetics or coloring them by different paints.
+
+</div>
 
 ## Emoji Series
 
@@ -12,7 +16,7 @@ https://chingru.me/EmojiSalon
 - [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji): `COLR/CPAL v1`
 
 
-## Compatibility
+## Browser Compatibility
 
 - Have been tested on my own devices:
 
@@ -68,6 +72,7 @@ https://chingru.me/EmojiSalon
 # develop on local
 npm install
 npm start
+# at http://localhost:1234
 
 # build a single html page
 # if failed or miss files, delete `public` and `.parcel-cache` folder and retry

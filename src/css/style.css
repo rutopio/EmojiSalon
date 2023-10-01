@@ -42,6 +42,10 @@ body {
     font-size: 1em;
 }
 
+.emoji-picker-button {
+    font-family: 'Nunito', sans-serif;
+}
+
 .modal {
     display: none;
     position: fixed;

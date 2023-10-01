@@ -27,33 +27,42 @@ function rgbaToHexColor(rgbaColorArray) {
 
 
 function emojiToUnicode(emoji) {
-    var comp;
-    if (emoji.length === 1) {
-        comp = emoji.charCodeAt(0);
-    }
-    comp = (
-        (emoji.charCodeAt(0) - 0xD800) * 0x400 +
-        (emoji.charCodeAt(1) - 0xDC00) + 0x10000
-    );
-    if (comp < 0) {
-        comp = emoji.charCodeAt(0);
-    }
-    return `U+${comp.toString("16").toUpperCase()}`;
+    var res = []
+    const rawEmoji = [...emoji]
+    rawEmoji.forEach((ele, _) => {
+        if (ele.length === 1) { // ZWJ, EMOJI MODIFIER FITZPATRICK
+            res.push(ele.charCodeAt(0).toString("16").toUpperCase())
+        } else if (ele.length === 2) {
+            comp = (
+                (ele.charCodeAt(0) - 0xD800) * 0x400 +
+                (ele.charCodeAt(1) - 0xDC00) + 0x10000
+            );
+            res.push(comp.toString("16").toUpperCase())
+        }
+    })
+    return `U+${res.join("+")}`
 }
 
 
-function unicodeToEmoji(unicode) {
+function unicodeToEmoji(urlCode) {
     try {
-        const codePoint = unicode.replace("U+", "");
-        const intCodePoint = parseInt(codePoint, 16);
-        const character = String.fromCodePoint(intCodePoint);
-        const emojisRegex = /\p{Extended_Pictographic}/u
+        var fin = []
+        const codes = urlCode.replace("U+", "").split("+");
+        codes.forEach((code, _) => {
+            const intCodePoint = parseInt(code, 16);
+            const character = String.fromCodePoint(intCodePoint);
+            console.log(character)
+
+            fin.push(character)
+        })
+        var character = fin.join("")
+        const emojisRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Component}|\p{Emoji})+$/u;
         if (emojisRegex.test(character)) {
             return character
         } else {
             throw err;
         }
-    } catch (e) {
+    } catch (err) {
         throw err;
     }
 }
@@ -66,12 +75,12 @@ function areColorsEqual(rgba1, rgba2) {
 
 
 function encodeURL(url) {
-    return (url.replaceAll(" ", "").replaceAll(",255)",")").replaceAll("rgba","").replaceAll(",","*"))
+    return (url.replaceAll(" ", "").replaceAll(",255)", ")").replaceAll("rgba", "").replaceAll(",", "*"))
 }
 
 
 function decodeURL(url) {
-    return (url.replaceAll(")","*255)").replaceAll("(", " rgba(").replaceAll("*", ","))
+    return (url.replaceAll(")", "*255)").replaceAll(")*", ")* ").replaceAll("(", " rgba(").replaceAll("*", ","))
 }
 
 
@@ -182,7 +191,6 @@ async function updateEmoji(thisEmoji, keepPalette) {
         document.getElementById("palette-overrides-style").innerHTML = "";
     }
 
-
     // Copy default palette to customized palette
     customizedPalette = originalPalette.map(rgbaColorArray => [...rgbaColorArray]);
 
@@ -197,9 +205,14 @@ async function updateEmoji(thisEmoji, keepPalette) {
     if (paletteCode.length !== 0) {
         paletteCode.split("), ").forEach((rgbColor, _) => {
             const match = rgbColor.match(/\d+/g).map((str) => parseInt(str));
-            modifiedColorPickers[match[0]] = [match[1], match[2], match[3], match[4]]
+            if (emojiStyle == "noto") {
+                modifiedColorPickers[match[0]] = [match[1], match[2], match[3], match[4]]
+            } else if (emojiStyle == "twemoji") {
+                modifiedColorPickers[originalPaletteIndex.indexOf(match[0])] = [match[1], match[2], match[3], match[4]]
+            }
         })
     }
+
 
     // Add each color picker under color-picker DOM
     customizedPalette.forEach((rgbaColorArray, idx) => {
@@ -307,6 +320,7 @@ function loadEmojiPicker() {
             perLine: 8,
             theme: "light",
             maxFrequentRows: 1,
+            exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
         };
     } else if (emojiStyle === "noto") {
         emojiPickerOptions = {
@@ -316,6 +330,7 @@ function loadEmojiPicker() {
             perLine: 8,
             theme: "light",
             maxFrequentRows: 1,
+            exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
         };
     }
 
@@ -700,19 +715,21 @@ async function main() {
                 document.getElementById("noto-emoji-share-notice").classList.add("d-none");
 
             }
-            thisEmoji = unicodeToEmoji(parts[1])
-
-            document.getElementById("customized-emoji").innerHTML = thisEmoji
-            updateEmoji(thisEmoji, true);
-            console.log(`→ Url Info: ${thisEmoji} with ${emojiStyle} 🔗`)
 
             // If url has palette info, use it
             if (parts.length > 2) {
                 paletteCode = decodeURIComponent(decodeURL(parts[2]));
                 setOverridePaletteStyle(paletteCode)
             }
+
+            thisEmoji = unicodeToEmoji(parts[1])
+            document.getElementById("customized-emoji").innerHTML = thisEmoji
+            updateEmoji(thisEmoji, true);
+            console.log(`→ Url Info: ${thisEmoji} with ${emojiStyle} 🔗`)
+
+
         } catch (e) {
-            console.log("→ Get invalid url ❓")
+            console.log("→ Get invalid url ❓", e)
             document.getElementById("noto-emoji-share-notice").classList.add("d-none");
             console.log("→ Random select an emoji 🎰")
             thisEmoji = getRandomEmoji()
