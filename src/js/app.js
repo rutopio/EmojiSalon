@@ -66,12 +66,12 @@ function areColorsEqual(rgba1, rgba2) {
 
 
 function encodeURL(url) {
-    return (url.replaceAll(" ", "").replaceAll("rgba", "").replaceAll(",", "*"))
+    return (url.replaceAll(" ", "").replaceAll(",255)",")").replaceAll("rgba","").replaceAll(",","*"))
 }
 
 
 function decodeURL(url) {
-    return (url.replaceAll("*", ", ").replaceAll("(", " rgba("))
+    return (url.replaceAll(")","*255)").replaceAll("(", " rgba(").replaceAll("*", ","))
 }
 
 
