@@ -26,11 +26,11 @@ function rgbaToHexColor(rgbaColorArray) {
 }
 
 
-function emojiToUnicode(emoji) {
+function emojiToUnicode(thisEmoji) {
     var res = []
-    const rawEmoji = [...emoji]
-    rawEmoji.forEach((ele, _) => {
-        if (ele.length === 1) { // ZWJ, EMOJI MODIFIER FITZPATRICK
+    const subEmojis = [...thisEmoji]
+    subEmojis.forEach((ele, _) => {
+        if (ele.length === 1) { // ZWJ or EMOJI MODIFIER FITZPATRICK
             res.push(ele.charCodeAt(0).toString("16").toUpperCase())
         } else if (ele.length === 2) {
             const comp = (
@@ -51,11 +51,10 @@ function unicodeToEmoji(urlCode) {
         codes.forEach((code, _) => {
             const intCodePoint = parseInt(code, 16);
             const character = String.fromCodePoint(intCodePoint);
-            console.log(character)
-
             fin.push(character)
         })
         var character = fin.join("")
+        // check is an emoji
         const emojisRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Component}|\p{Emoji})+$/u;
         if (emojisRegex.test(character)) {
             return character
@@ -154,7 +153,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
     if (emojiStyle === "noto") {
         document.getElementById("customized-emoji").style.fontFamily = "Noto Color Emoji"
 
-        // Fetch Google Font Noto Sans Emoji CSS
+        // Fetch Google Font Noto Color Emoji CSS
         const fontResponse = await fetch("https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&text=" + encodeURIComponent(thisEmoji));
         fontStyle = await fontResponse.text();
         const fontURL = fontStyle.split("\n").filter(ele => ele.indexOf("src:") != -1)[0].match(/src:\s+url\(([^)]+)\)/)[1];
@@ -244,12 +243,12 @@ async function updateEmoji(thisEmoji, keepPalette) {
 }
 
 
-function updateCanvas(domIdName, thisEmoji) {
-    console.log(`→ ${thisEmoji}`)
-    const canvas = document.getElementById(domIdName);
+function updateCanvas(canvasId, thisEmoji) {
+    console.log(`→ Render ${thisEmoji}`)
+    const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext("2d")
     const scaleProp = 10
-    if (domIdName == "result-canvas") {
+    if (canvasId == "result-canvas") {
         canvas.width = document.getElementById("customized-emoji").clientWidth * scaleProp;
         canvas.height = document.getElementById("customized-emoji").clientHeight * scaleProp;
         ctx.scale(scaleProp, scaleProp);
@@ -262,7 +261,6 @@ function updateCanvas(domIdName, thisEmoji) {
     const realFontSizeEm = childFontSizePx / parentFontSizePx
 
     // Set canvas
-
     if (emojiStyle === "noto") {
         ctx.font = `${realFontSizeEm}em "Noto Color Emoji"`;
     } else if (emojiStyle === "twemoji") {
@@ -271,7 +269,7 @@ function updateCanvas(domIdName, thisEmoji) {
 
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    if (domIdName == "result-canvas") {
+    if (canvasId == "result-canvas") {
         ctx.fillText(thisEmoji, canvas.width / (2 * scaleProp), canvas.height / (2 * scaleProp));
     } else {
         ctx.fillText(thisEmoji, canvas.width / 2, canvas.height / 2);
@@ -456,9 +454,6 @@ Array.from(document.getElementsByClassName("share-button"))
                 </svg>
         `)
             })
-
-
-
             showShareModal()
         });
     });
@@ -570,23 +565,20 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("→ Emoji Style Change to Twemoji 👀");
             document.getElementById("noto-emoji-share-notice").classList.remove("d-block")
             document.getElementById("noto-emoji-share-notice").classList.add("d-none");
-            loadEmojiPicker()
-
         } else {
             emojiStyle = "noto"
             console.log("→ Emoji Style Change to Noto Color Emoji 👀");
             document.getElementById("noto-emoji-share-notice").classList.remove("d-none")
             document.getElementById("noto-emoji-share-notice").classList.add("d-block");
-
-            loadEmojiPicker()
         }
+        loadEmojiPicker()
     });
 });
 
 
 // Default Emoji List
 function getRandomEmoji() {
-    const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🫁", "🦷", "🦴", "👀", "🚀", "👍", "🤟", "🤘", "🤙", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "🍀", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
+    const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🫁", "🦷", "🦴", "👀", "🚀", "👍", "🤟", "🤘", "🤙", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "☕️", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
     return defaultEmojis[randomIndex];
 }
@@ -745,8 +737,6 @@ async function main() {
         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
     }
     loadEmojiPicker()
-    updateCanvas("reference-canvas", thisEmoji)
-
 }
 
 
@@ -775,18 +765,13 @@ const observer = new MutationObserver((mutationsList) => {
                     try {
                         updateEmoji(window.location.hash.substring(1).split("-")[1], true)
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))}`;
-                        // document.getElementById("customized-emoji").innerHTML = emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))
 
                     } catch (e) {
                         console.log("→ Random select an emoji 🎰")
                         const rndEmoji = getRandomEmoji()
-                        // document.getElementById("customized-emoji").innerHTML = rndEmoji
                         updateEmoji(rndEmoji, true);
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
                     }
-
-                    const thisEmoji = document.getElementById("customized-emoji").innerHTML
-                    updateCanvas("reference-canvas", thisEmoji)
                     observer.disconnect();
                 }
             }
