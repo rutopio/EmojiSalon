@@ -766,6 +766,7 @@ const observer = new MutationObserver((mutationsList) => {
                     const checkbox = document.getElementById("emojiStyleSwitch");
                     checkbox.checked = false;
                     showSupportIssueModal();
+                    loadEmojiPicker()
 
                     console.log("→ Oops, your browser seems to not support OpenType COLR/CPAL v1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
                     document.getElementById("noto-emoji-share-notice").classList.add("d-none");
