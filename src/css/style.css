@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;700&display=swap');
 
-html, body {
+html,
+body {
     touch-action: manipulation;
-  }
+}
 
 .switch input {
     position: absolute;
@@ -116,12 +117,6 @@ body {
 
 
 
-.bottom-left {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
 .color-block {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -177,7 +172,7 @@ body {
 }
 
 .reset-button {
-    background-color: #cc7eb1;
+    background-color: #CC7EB1;
     color: #FFFFFF;
 }
 
@@ -198,13 +193,8 @@ body {
 
 
 #emoji-picker-button {
-    background-color: #339daf;
+    background-color: #339DAf;
     color: #FFFFFF;
-}
-
-
-
-#emoji-picker-button {
     width: 12em;
     height: 2.5em;
     font-size: 1em;
