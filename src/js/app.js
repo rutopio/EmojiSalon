@@ -389,7 +389,7 @@ Array.from(document.getElementsByClassName("random-color-button"))
 Array.from(document.getElementsByClassName("reset-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
-            console.log("→ Restore Palette 🪄")
+            console.log("→ Reset Palette 🪄")
             const thisEmoji = document.getElementById("customized-emoji").innerHTML;
             updateEmoji(thisEmoji, false)
             changeDownloadButtonIcon()
@@ -757,13 +757,17 @@ const observer = new MutationObserver((mutationsList) => {
                     try {
                         updateEmoji(window.location.hash.substring(1).split("-")[1], true)
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))}`;
+                        // document.getElementById("customized-emoji").innerHTML = emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))
 
                     } catch (e) {
                         console.log("→ Random select an emoji 🎰")
                         const rndEmoji = getRandomEmoji()
+                        // document.getElementById("customized-emoji").innerHTML = rndEmoji
                         updateEmoji(rndEmoji, true);
                         window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
                     }
+
+                    const thisEmoji = document.getElementById("customized-emoji").innerHTML
                     updateCanvas("reference-canvas", thisEmoji)
                     observer.disconnect();
                 }

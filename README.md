@@ -4,7 +4,7 @@ https://chingru.me/EmojiSalon
 
 ![](src/image/social.png)
 
-**Emoji Salon** is a project that allows you to customize the colors of emojis, just like dressing them up by various cosmetics or coloring them by different paints.
+**Emoji Salon** allows you to customize the colors of emojis, just like dressing them up by various cosmetics or coloring them by different paints.
 
 ## Emoji Series
 
@@ -28,7 +28,7 @@ https://chingru.me/EmojiSalon
 |Twemoji| ✅ | ✅ | ✅ |
 |Noto Color Emoji| ❌ ** | ❌ ** | ✅ |
 
-- `*`: In Firefox, both rendering and coloring functions are available. However, when downloading the creation, it will be the original version and not the color overridden one.
+- `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
 - `**`: Safari and any browser on iOS/iPadOS cannot render `COLR/CPAL v1` color fonts. Therefore, the link open via these browsers will be redirected to use Twemoji.
 - You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
 
@@ -42,7 +42,7 @@ https://chingru.me/EmojiSalon
 ### COLR/CPAL v1 - Noto Color Emoji
 
 - [COLR/CPAL(v1) Font Formats - Can I USe...](https://caniuse.com/colr-v1)
-- Technically Supported:
+- *Technically* Supported:
   - Chrome 98+
   - Edge 98+
   - FireFox 107+
@@ -50,7 +50,7 @@ https://chingru.me/EmojiSalon
   - other Chromium-Based browsers...
 - Unsupported:
   - Safari
-  - Browsers on iOS/iPadOS devices - they are all based on WebKit kernel
+  - Browsers on iPhone and iPad - they are all based on WebKit engine.
 
 
 ## Related Packages and Repo
