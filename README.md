@@ -2,7 +2,7 @@
 
 <h1>🪄 Emoji Salon - Coloring Your Emoji</h1>
 
-🔗 https://chingru.me/EmojiSalon 🔗
+🔗 https://emojisalon.art 🔗
 
 ![](src/image/social.png)
 
