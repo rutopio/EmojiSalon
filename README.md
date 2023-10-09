@@ -4,6 +4,8 @@
 
 🔗 https://emojisalon.art 🔗
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/875f191b-0b50-46c8-966a-49fa4f20b6fe/deploy-status)](https://app.netlify.com/sites/elegant-mccarthy-ce9195/deploys)
+
 ![](src/image/social.png)
 
 **Emoji Salon** allows you to customize the colors of emojis,<br> just like dressing them up by various cosmetics or coloring them by different paints.
@@ -12,8 +14,10 @@
 
 ## Emoji Series
 
-- [Twemoji-colr / Twitter & Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
+- [Twemoji-colr / Created by Twitter & Modified by Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
+  - *Stable.* Current website and `main` branch.
 - [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji): `COLR/CPAL v1`
+  - *Experimental.* Switch to `with-Noto-Emoji` branch.
 
 
 ## Browser Compatibility
