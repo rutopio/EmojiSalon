@@ -4,7 +4,6 @@ var customizedPalette = [];
 var originalPaletteIndex = []
 var paletteCode = "";
 var currentURL = window.location.href;
-var emojiStyle = "twemoji";
 
 
 var twemojiFontURL, twemojiFontBinary, twemojiFontBuffer, twemojiFont
@@ -40,14 +39,14 @@ function emojiToUnicode(thisEmoji) {
             res.push(comp.toString("16").toUpperCase())
         }
     })
-    return `U+${res.join("+")}`
+    return `U+${res.join("_")}`
 }
 
 
 function unicodeToEmoji(urlCode) {
     try {
         var fin = []
-        const codes = urlCode.replace("U+", "").split("+");
+        const codes = urlCode.replace("U+", "").split("_");
         codes.forEach((code, _) => {
             const intCodePoint = parseInt(code, 16);
             const character = String.fromCodePoint(intCodePoint);
@@ -91,33 +90,16 @@ function getOverrideStyleString() {
     // 1 #123456
     // ...
     // If customize colors are different from default colors, record them into overrides 
-
-    if (emojiStyle === "noto") {
-        return customizedPalette
-            .map((rgbaColorArray, idx) => `${idx} ${rgbaColorArray}`)
-            .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
-            .join(", ");
-    } else if (emojiStyle === "twemoji") {
-        return customizedPalette
+    return customizedPalette
             .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} ${rgbaColorArray}`)
             .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
             .join(", ");
-    }
 }
 
 
 
 // Update the CSS palette
 function setOverridePaletteStyle(overrideColors) {
-    if (emojiStyle === "noto") {
-        document.getElementById("palette-overrides-style").innerHTML = `
-		@font-palette-values --palette {
-			font-family: "Noto Color Emoji";
-			base-palette: 0;
-			override-colors: ${overrideColors};
-		}
-		`;
-    } else if (emojiStyle === "twemoji") {
         document.getElementById("palette-overrides-style").innerHTML = `
     @font-palette-values --palette {
         font-family: "Twemoji";
@@ -125,7 +107,6 @@ function setOverridePaletteStyle(overrideColors) {
         override-colors: ${overrideColors};
     }
     `;
-    }
 }
 
 
@@ -139,7 +120,7 @@ function updateEmojiAndURL() {
     const overrideColors = getOverrideStyleString()
     const thisEmoji = document.getElementById("customized-emoji").innerHTML;
     setOverridePaletteStyle(overrideColors);
-    window.location.hash = `${emojiStyle === "noto"? "n" : "t"}-${emojiToUnicode(thisEmoji)}-${encodeURIComponent(encodeURL(overrideColors))}`;
+    window.location.hash = `${emojiToUnicode(thisEmoji)}-${encodeURIComponent(encodeURL(overrideColors))}`;
     currentURL = window.location.href
 }
 
@@ -148,38 +129,20 @@ function updateEmojiAndURL() {
 async function updateEmoji(thisEmoji, keepPalette) {
     var fontStyle
 
-    if (emojiStyle === "noto") {
-        document.getElementById("customized-emoji").style.fontFamily = "Noto Color Emoji"
+    document.getElementById("customized-emoji").style.fontFamily = "Twemoji"
 
-        // Fetch Google Font Noto Color Emoji CSS
-        const fontResponse = await fetch("https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&text=" + encodeURIComponent(thisEmoji));
-        fontStyle = await fontResponse.text();
-        const fontURL = fontStyle.split("\n").filter(ele => ele.indexOf("src:") != -1)[0].match(/src:\s+url\(([^)]+)\)/)[1];
-        const fontBinary = await (await fetch(fontURL)).arrayBuffer();
-        const fontBuffer = new Buffer.from(fontBinary);
-        const thisFont = fontkit.create(fontBuffer);
+    fontStyle = `
+    @font-face {
+        font-family: "Twemoji";
+    `
+    originalPaletteIndex = []
 
-        originalPalette = thisFont.CPAL.colorRecords.slice(
-            thisFont.CPAL.colorRecordIndices[0],
-            thisFont.CPAL.colorRecordIndices[0] + thisFont.CPAL.numPaletteEntries
-        ).map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
-
-    } else if (emojiStyle === "twemoji") {
-        document.getElementById("customized-emoji").style.fontFamily = "Twemoji"
-
-        fontStyle = `
-        @font-face {
-            font-family: "Twemoji";
-        `
-        // fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
-        originalPaletteIndex = []
-        twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _) => {
-            const hexColor = layer.color
-            originalPaletteIndex.push(twemojiFont.CPAL.colorRecords.indexOf(hexColor))
-        })
-        originalPaletteIndex = [...new Set(originalPaletteIndex)]
-        originalPalette = originalPaletteIndex.map(index => twemojiFont.CPAL.colorRecords[index]).map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
-    }
+    twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _) => {
+        const hexColor = layer.color
+        originalPaletteIndex.push(twemojiFont.CPAL.colorRecords.indexOf(hexColor))
+    })
+    originalPaletteIndex = [...new Set(originalPaletteIndex)]
+    originalPalette = originalPaletteIndex.map(index => twemojiFont.CPAL.colorRecords[index]).map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
 
     // Reset CSS style
     document.getElementById("emoji-style").innerHTML = fontStyle;
@@ -187,6 +150,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
     if (!keepPalette) {
         document.getElementById("palette-overrides-style").innerHTML = "";
     }
+
 
     // Copy default palette to customized palette
     customizedPalette = []
@@ -199,7 +163,6 @@ async function updateEmoji(thisEmoji, keepPalette) {
     const colorPickers = document.getElementById("color-pickers");
     while (colorPickers.firstChild) {
         colorPickers.removeChild(colorPickers.firstChild);
-        console.log("reset!")
     }
 
     // Check if color picker should be override
@@ -208,12 +171,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
         paletteCode.split(", ").forEach((hexColorPair, _) => {
             const colorIdx = parseInt(hexColorPair.split("#")[0])
             const hexColor = "#" + hexColorPair.split("#")[1]
-            
-            if (emojiStyle == "noto") {
-                modifiedColorPickers[colorIdx] = hexColor
-            } else if (emojiStyle == "twemoji") {
-                modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
-            }
+            modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
         })
     }
 
@@ -241,7 +199,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
     await Promise.all(loadPromises);
 
     if (!keepPalette) {
-        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
+        window.location.hash = `${emojiToUnicode(thisEmoji)}`;
     }
     updateCanvas("reference-canvas", thisEmoji)
 }
@@ -265,12 +223,7 @@ function updateCanvas(canvasId, thisEmoji) {
     const realFontSizeEm = childFontSizePx / parentFontSizePx
 
     // Set canvas
-    if (emojiStyle === "noto") {
-        ctx.font = `${realFontSizeEm}em "Noto Color Emoji"`;
-    } else if (emojiStyle === "twemoji") {
-        ctx.font = `${realFontSizeEm}em "Twemoji"`;
-    }
-
+    ctx.font = `${realFontSizeEm}em "Twemoji"`;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     if (canvasId == "result-canvas") {
@@ -314,9 +267,7 @@ function selectedFromPicker(thisEmoji) {
 
 // See https://github.com/missive/emoji-mart for more info and settings
 function loadEmojiPicker() {
-    var emojiPickerOptions
-    if (emojiStyle === "twemoji") {
-        emojiPickerOptions = {
+    const emojiPickerOptions = {
             onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
             set: "twitter",
             emojiSize: 36,
@@ -325,17 +276,7 @@ function loadEmojiPicker() {
             maxFrequentRows: 1,
             exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
         };
-    } else if (emojiStyle === "noto") {
-        emojiPickerOptions = {
-            onEmojiSelect: (res, _) => selectedFromPicker(res["native"]),
-            set: "google",
-            emojiSize: 36,
-            perLine: 8,
-            theme: "light",
-            maxFrequentRows: 1,
-            exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
-        };
-    }
+
 
     const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
     const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
@@ -524,22 +465,6 @@ Array.from(document.getElementsByClassName("copy-link"))
         });
     });
 
-function showSupportIssueModal() {
-    const modal = document.getElementById("supportIssue");
-    const closeButton = modal.querySelector(".close");
-
-    modal.style.display = "block";
-
-    closeButton.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-}
 
 function showShareModal() {
     const modal = document.getElementById("shareBoard");
@@ -561,25 +486,6 @@ function showShareModal() {
 
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    const toggleSwitch = document.getElementById("emojiStyleSwitch");
-
-    toggleSwitch.addEventListener("change", function() {
-        if (!toggleSwitch.checked) {
-            emojiStyle = "twemoji"
-            console.log("→ Emoji Style Change to Twemoji 👀");
-            document.getElementById("noto-emoji-share-notice").classList.remove("d-block")
-            document.getElementById("noto-emoji-share-notice").classList.add("d-none");
-        } else {
-            emojiStyle = "noto"
-            console.log("→ Emoji Style Change to Noto Color Emoji 👀");
-            document.getElementById("noto-emoji-share-notice").classList.remove("d-none")
-            document.getElementById("noto-emoji-share-notice").classList.add("d-block");
-        }
-        loadEmojiPicker()
-    });
-});
-
 
 // Default Emoji List
 function getRandomEmoji() {
@@ -589,103 +495,12 @@ function getRandomEmoji() {
 }
 
 
-// Reference: https://github.com/RoelN/ChromaCheck
-function checkColorFontSupport() {
-    console.log("→ Checking compatibility about color font of your browser 🕵️")
-    var root = document.getElementById("opentype-support-detector"),
-        cls = 'chromacheck-',
-        runs = 20,
-        loop;
-
-    // Stick SVG on canvas and check control glyph to see if font rendered
-    function checkFontLoad() {
-        context.drawImage(img, 0, 0);
-
-        // Check Control glyph.
-        if (context.getImageData(10, 110, 1, 1).data[1] === 0) {
-            clearInterval(loop);
-            colorGlyphTest();
-            return true;
-        } else if (--runs <= 0) {
-            clearInterval(loop);
-            checkFailed();
-        }
-    }
-
-    // Canvas has been drawn, check for which color glyphs we see
-    function colorGlyphTest() {
-        var res = {};
-        res.cbdt = context.getImageData(10, 10, 1, 1).data[0] === 100; // CBDT/CBLC
-        res.colr = context.getImageData(10, 30, 1, 1).data[0] === 200; // COLR
-        res.sbix = context.getImageData(10, 50, 1, 1).data[0] === 150; // SBIX
-        res.svg = context.getImageData(10, 70, 1, 1).data[0] === 50; // OpenType-SVG
-        res.colrv1 = context.getImageData(10, 90, 1, 1).data[0] === 250; // COLRv1
-
-        // Add class to HTML tag for each supported color format
-        for (var key in res) {
-            if (res.hasOwnProperty(key)) {
-                if (res[key]) {
-                    root.className += ' ' + cls + key // success
-                } else {
-                    root.className += ' ' + cls + key + "-failed" //failed   
-                }
-            }
-        }
-    }
-
-    // Font, SVG, or canvas failed
-    function checkFailed() {
-        root.className += ' ' + cls + 'failed';
-    }
-
-    // Draw color glyphs to a canvas through SVG
-    try {
-        var canvas = document.createElement('canvas'),
-            context = canvas.getContext('2d'),
-            img = new Image(),
-            fontCBDT = 'd09GRgABAAAAAALkAAwAAAAAAxgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDQkRUAAACVAAAAGAAAABlKWauy0NCTEMAAAK0AAAALQAAAFDwVcDTT1MvMgAAAYAAAAA6AAAAYBf0J01jbWFwAAABxAAAACcAAAAsAAzpNmdseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLx0hoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C3AsWcG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAA4bSjsh/j+W2+MkizMIDApQVMAiD6Wm2DNYhmYQCLczAwgSgAAJIHngB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXzS2YWMB9IogMFBgYAAI4IegAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kvm//8hpNg/sDwDAFyDBygAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAFjYGBgYpBjYGZgZOFkYGRQAPIhbCYw25khg6GIIZ8hlyERzE5lSGbIZlAAsp0YXBhCAHWIBft4AWNgZsALAAB9AAR4AWNgYmAICAAhBoaIzgA/d14uKS4gm9fTwyUISAeAMCMzkNxyP+EdkGIO8AlxTWFgeLEkTg3IFfB0cQypYExeIC3BujhBBChfwMB4Z+L7yQxA4Onq57LOKaEJAK3VFft4AWNgYgABRiC2AGIJKJshAAhhAMEGyzIGBCgASbA6DiApCKRZoLKJAGrOAtkAAAA=',
-            fontCOLR = 'd09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==',
-            fontSBIX = 'd09GRgABAAAAAALkAAsAAAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABbAAAADoAAABgFxIli2NtYXAAAAGwAAAAJwAAACwADOk0Z2x5ZgAAAeAAAAAWAAAAFjdEBkBoZWFkAAABCAAAADAAAAA2C6KlkGhoZWEAAAE4AAAAFgAAACQGQQMiaG10eAAAAagAAAAGAAAABgMgAABsb2NhAAAB2AAAAAYAAAAGAAsAAG1heHAAAAFQAAAAGgAAACACDwAbbmFtZQAAAfgAAABDAAAATgSgDQdwb3N0AAACPAAAAAwAAAAgAAMAAHNiaXgAAAJIAAAAnAAAAQQlRrDFeAFjYGRgAGHhBIvaeH6brwzSzAoMQHBpAZMAiL62JcEZRDMrgMU5GJhAPADavQcJeAFjYGRgYFZgYECQQBFUwAgACqMAbQAAeAFjYGRgYGACQxBgBJNcDCCuBIgJAAHcAC0AAHgBY2BhVmCcwMDKwMA0k+kMAwNDP4RmfM1gzMjJgAoYBZA4CkDAcOAl40tGZgUQH0iiA6AIABEmCNMAAAMgAAAAAAAAeAFjYGBgZGAGYgYGHgYWBgUgzQKEQP5Lxv//IaQ4SA0QAABVYQYnAAAAAAAACwAAAAIAAAAAAyADIAAAAAEAADEBAyADIAAAeAEtxlUBgwAAQME3Q0IgEYiAFCAC7u7t0X3dAW9UPry+Mi8M+P993yVnI6bCoibAJyRjQsc5HWip8e/HhJQHAIYJsAB4AWNgZsALAAB9AAR4AWNgBEIGMOZh1GHwANICUPyDAQgK8tIVOgP83Hm5pLiAXF5PD5cgoHIdEOZgBor4La5zB1KSJa4RJcH5aSXliUWpDI4p+UmpCp65iempQamJKZWFJ1NtgIrYAnxCXKcxgEBehM9EkPGeLo4hFbfeHGQEuaBJ4f/6PA8HIJMW4EMeEw9DwmkGRotpVSIgAU9XP5d1TglNADtgJsU=',
-            fontSVG = 'd09GRgABAAAAAALoAAsAAAAAAxgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABcAAAADoAAABgF/MnTlNWRyAAAAJQAAAAlwAAAKrSQDCHY21hcAAAAbQAAAAtAAAANOkY6T1nbHlmAAAB7AAAAB4AAAA0KkgqRmhlYWQAAAEIAAAALwAAADYMS9SPaGhlYQAAATgAAAAVAAAAJAgBBAJobXR4AAABrAAAAAgAAAAIBAAAAGxvY2EAAAHkAAAACAAAAAgADQAabWF4cAAAAVAAAAAdAAAAIAIPAB1uYW1lAAACDAAAADcAAAA8ApwLJXBvc3QAAAJEAAAADAAAACAAAwAAeAFjYGRgAGFZjs2Z8fw2XxmkWRhA4NICJgEQfa22twlEszCAxTkYmEAUANtlBvoAeAFjYGRgYGEAAjgJFEEFjAABkQAQAAAAeAFjYGRgYGBmYAHTDFCSi4GBiYFBAsQEAAISAC8AAAB4AWNgYWFgnMDAysDANJPpDAMDQz+EZnzNYMzIyYAKGAWQOApAwHDgJdNLoAkgACTRgQIDAwAAjAh6AAAEAAAAAAAAAHgBJcU5AYBADACw3NeJuRrw76oi+MkSNEPDZtoRpqZXr3ld/OeVpwbcs+wKIQAAAAAAAAAADQAaeAFjYGQAAhYgZGBmYBBUFFRkYfjDAMK4ZQBZhAThAAB4AWNgYGBikGNgZmBk4WRgBLIYoGwmMNuZIYOhiCGfIZchEcxOZUhmyGZQYAhmCGNwBwBp2QXKAHgBY2BmwAsAAH0ABHgBHUw1dsRQDHTK4Bn+U1qzHdwP1WaDVaA2M7N9jFzYNGJpRtyGiz2f7cZxN2v8YzakCercqg7zjIAiyoDczM6dMPMJ/P68CI/AKK47H63ErCYQNE3xLEl934u9JuaVL6myLEsrA1DoEPCTsQgUoLgwmwB5YZIQuNU2zvp6vX/JgiKrerClP/lV7vZxAoni7QldAG/3K6oA',
-            fontCOLRv1 = 'd09GRgABAAAAAAKMAAwAAAAAArAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACWAAAAB8AAAA3CmUCEUNQQUwAAAJ4AAAAEgAAABL7AAAQT1MvMgAAAYAAAAA6AAAAYBf2J09jbWFwAAABxAAAACcAAAAsAAzpOGdseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANhOUtHxoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAPAAAAEIDGAuccG9zdAAAAkwAAAAMAAAAIAADAAB4AWNgZGAA4QZvhS/x/DZfGaRZGEDg0gImARB991huPohmYQCLczAwgSgA+bkHtQB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXrS1YWMB9IogMFBgYAAQYIfgAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kvW//8hpNgfsDwDAFytByoAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAFjYGBgYpBjYGZgZOFkYGRQAfIhbCYw25khg6GIIZ8hlyERzE5lSGbIZlAAsv0ZfBiCGMoYDAGREga9eAFjYGbACwAAfQAEeAFjYGRABUoMmIARrIqLi4GBjYGRiYHBgQEAB0EAgwAAAAABAAEAAQAAAA4AAAAA+v8AAA==',
-            svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="120" style="background:#fff;fill:#000;">' +
-            '<style type="text/css">' +
-            '@font-face{font-family:"chromacheck-cbdt";src:url(data:application/x-font-woff;base64,' + fontCBDT + ') format("woff");}' +
-            '@font-face{font-family:"chromacheck-colr";src:url(data:application/x-font-woff;base64,' + fontCOLR + ') format("woff");}' +
-            '@font-face{font-family:"chromacheck-sbix";src:url(data:application/x-font-woff;base64,' + fontSBIX + ') format("woff");}' +
-            '@font-face{font-family:"chromacheck-svg";src:url(data:application/x-font-woff;base64,' + fontSVG + ') format("woff");}' +
-            '@font-face{font-family:"chromacheck-colrv1";src:url(data:application/x-font-woff;base64,' + fontCOLRv1 + ') format("woff");}' +
-            '</style>' +
-            '<text x="0" y="0" font-size="20">' +
-            '<tspan font-family="chromacheck-cbdt" x="0" dy="20">&#xe903;</tspan>' + // CBDT/CBLC
-            '<tspan font-family="chromacheck-colr" x="0" dy="20">&#xe900;</tspan>' + // COLR
-            '<tspan font-family="chromacheck-sbix" x="0" dy="20">&#xe901;</tspan>' + // SBIX
-            '<tspan font-family="chromacheck-svg" x="0" dy="20">&#xe902;</tspan>' + // SVG
-            '<tspan font-family="chromacheck-colrv1" x="0" dy="20">&#xe905;</tspan>' + // COLRv1
-            '<tspan font-family="chromacheck-svg" x="0" dy="20">&#xe904;</tspan>' + // Control
-            '</text>' +
-            '</svg>';
-        canvas.width = 20;
-        canvas.height = 120;
-
-        img.onload = function() {
-            if (!checkFontLoad()) {
-                // Repeat the test to give Safari time to load the font
-                loop = window.setInterval(checkFontLoad, 1);
-            }
-        }
-
-        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-    } catch (ex) {
-        checkFailed();
-    }
-}
-
 
 async function main() {
 
     // loadTwemoji
-    twemojiFontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2";
+    twemojiFontURL = "https://emojisalon.art/src/font/twemoji.woff2"
+    // twemojiFontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2";
     twemojiFontBinary = await (await fetch(twemojiFontURL)).arrayBuffer();
     twemojiFontBuffer = new Buffer.from(twemojiFontBinary);
     twemojiFont = fontkit.create(twemojiFontBuffer);
@@ -701,28 +516,19 @@ async function main() {
         try {
             const inputString = window.location.hash.substring(1)
             const parts = inputString.split("-");
-            // If url has Emoji info, use it
-            if (parts[0] == "n") {
-                emojiStyle = "noto"
-                document.getElementById("noto-emoji-share-notice").classList.add("d-block");
 
-                document.getElementById("emojiStyleSwitch").checked = true
-            } else if (parts[0] == "t") {
-                emojiStyle = "twemoji"
-                document.getElementById("noto-emoji-share-notice").classList.add("d-none");
-
-            }
+            document.getElementById("noto-emoji-share-notice").classList.add("d-none");
 
             // If url has palette info, use it
-            if (parts.length > 2) {
-                paletteCode = decodeURIComponent(decodeURL(parts[2]));
+            if (parts.length > 1) {
+                paletteCode = decodeURIComponent(decodeURL(parts[1]));
                 setOverridePaletteStyle(paletteCode)
             }
 
-            thisEmoji = unicodeToEmoji(parts[1])
+            thisEmoji = unicodeToEmoji(parts[0])
             document.getElementById("customized-emoji").innerHTML = thisEmoji
             updateEmoji(thisEmoji, true);
-            console.log(`→ Url Info: ${thisEmoji} with ${emojiStyle} 🔗`)
+            console.log(`→ Url Info: ${thisEmoji} 🔗`)
 
 
         } catch (e) {
@@ -731,7 +537,7 @@ async function main() {
             console.log("→ Random select an emoji 🎰")
             thisEmoji = getRandomEmoji()
             updateEmoji(thisEmoji, true);
-            window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
+            window.location.hash = `${emojiToUnicode(thisEmoji)}`;
         }
     } else {
         console.log("→ Get home url 🏚")
@@ -739,53 +545,10 @@ async function main() {
         console.log("→ Random select an emoji 🎰")
         thisEmoji = getRandomEmoji()
         updateEmoji(thisEmoji, true);
-        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(thisEmoji)}`;
+        window.location.hash = `${emojiToUnicode(thisEmoji)}`;
     }
     loadEmojiPicker()
 }
 
-
-// Listen opentype color font format support detector
-checkColorFontSupport()
-const targetElement = document.getElementById("opentype-support-detector");
-const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === "attributes" && mutation.attributeName === "class") {
-            if (targetElement.classList.contains("chromacheck-colrv1-failed")) {
-                // hide the Twemoji and Noto Color Emoji selector
-                document.getElementById("emojiStyleSwitchArea").classList.remove("d-flex")
-                document.getElementById("emojiStyleSwitchArea").classList.add("d-none");
-
-                if (window.location.hash.substring(1).split("-")[0] == "n") {
-                    emojiStyle = "twemoji"
-                    const checkbox = document.getElementById("emojiStyleSwitch");
-                    checkbox.checked = false;
-                    showSupportIssueModal();
-                    loadEmojiPicker()
-
-                    console.log("→ Oops, your browser seems to not support OpenType COLR/CPAL v1 font, you can only use Twemoji.\n → If you want to use Noto Color Emoji, please change another browser such as Desktop Chrome or FireFox.")
-                    document.getElementById("noto-emoji-share-notice").classList.add("d-none");
-
-
-                    try {
-                        updateEmoji(window.location.hash.substring(1).split("-")[1], true)
-                        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(unicodeToEmoji(window.location.hash.substring(1).split("-")[1]))}`;
-
-                    } catch (e) {
-                        console.log("→ Random select an emoji 🎰")
-                        const rndEmoji = getRandomEmoji()
-                        updateEmoji(rndEmoji, true);
-                        window.location.hash = `${emojiStyle === "noto" ? "n" : "t"}-${emojiToUnicode(rndEmoji)}`;
-                    }
-                    observer.disconnect();
-                }
-            }
-        }
-    }
-
-});
-observer.observe(targetElement, {
-    attributes: true
-});
 
 main()
