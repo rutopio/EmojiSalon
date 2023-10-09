@@ -39,14 +39,14 @@ function emojiToUnicode(thisEmoji) {
             res.push(comp.toString("16").toUpperCase())
         }
     })
-    return `U+${res.join("+")}`
+    return `U+${res.join("_")}`
 }
 
 
 function unicodeToEmoji(urlCode) {
     try {
         var fin = []
-        const codes = urlCode.replace("U+", "").split("+");
+        const codes = urlCode.replace("U+", "").split("_");
         codes.forEach((code, _) => {
             const intCodePoint = parseInt(code, 16);
             const character = String.fromCodePoint(intCodePoint);
@@ -135,10 +135,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
     @font-face {
         font-family: "Twemoji";
     `
-    // fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
     originalPaletteIndex = []
-    
-    console.log(twemojiFont.layout(thisEmoji).glyphs)
 
     twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _) => {
         const hexColor = layer.color
@@ -154,16 +151,12 @@ async function updateEmoji(thisEmoji, keepPalette) {
         document.getElementById("palette-overrides-style").innerHTML = "";
     }
 
-    console.log(twemojiFont.CPAL.colorRecords[79], twemojiFont.CPAL.colorRecords[32])
 
     // Copy default palette to customized palette
     customizedPalette = []
     originalPalette.forEach((rbgaColor, _) =>{
         customizedPalette.push(rgbaToHexColor(rbgaColor));
     })
-
-    // console.log(customizedPalette[79], customizedPalette[32])
-
 
     
     // Reset color color-pickers
@@ -506,7 +499,8 @@ function getRandomEmoji() {
 async function main() {
 
     // loadTwemoji
-    twemojiFontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2";
+    twemojiFontURL = "https://emojisalon.art/src/font/twemoji.woff2"
+    // twemojiFontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2";
     twemojiFontBinary = await (await fetch(twemojiFontURL)).arrayBuffer();
     twemojiFontBuffer = new Buffer.from(twemojiFontBinary);
     twemojiFont = fontkit.create(twemojiFontBuffer);
