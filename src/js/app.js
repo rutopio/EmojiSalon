@@ -69,17 +69,17 @@ function unicodeToEmoji(urlCode) {
 
 // Check if two RGBA colors are equal
 function areColorsEqual(rgba1, rgba2) {
-    return rgba1.every((component, index) => component === rgba2[index]);
+    return rgba1 === rgba2 
 }
 
 
 function encodeURL(url) {
-    return (url.replaceAll(" ", "").replaceAll(",255)", ")").replaceAll("rgba", "").replaceAll(",", "*"))
+    return url.replaceAll(" ", "").replaceAll("#", "(").replaceAll(",", ")") + ")"
 }
 
 
 function decodeURL(url) {
-    return (url.replaceAll(")", "*255)").replaceAll(")*", ")* ").replaceAll("(", " rgba(").replaceAll("*", ","))
+    return url.substring(0, url.length-1).replaceAll(")", ", ").replaceAll("(", " #")
 }
 
 
@@ -87,20 +87,20 @@ function decodeURL(url) {
 function getOverrideStyleString() {
     // Format Example:
     // override-colors:
-    // 0 rgba(184, 126, 50, 255),
-    // 1 rgba(120, 8, 150, 255),
+    // 0 #FFFFFF
+    // 1 #123456
     // ...
     // If customize colors are different from default colors, record them into overrides 
 
     if (emojiStyle === "noto") {
         return customizedPalette
-            .map((rgbaColorArray, idx) => `${idx} rgba(${rgbaColorArray.join(", ")})`)
-            .filter((_, idx) => !areColorsEqual(customizedPalette[idx], originalPalette[idx]))
+            .map((rgbaColorArray, idx) => `${idx} ${rgbaColorArray}`)
+            .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
             .join(", ");
     } else if (emojiStyle === "twemoji") {
         return customizedPalette
-            .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} rgba(${rgbaColorArray.join(", ")})`)
-            .filter((_, idx) => !areColorsEqual(customizedPalette[idx], originalPalette[idx]))
+            .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} ${rgbaColorArray}`)
+            .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
             .join(", ");
     }
 }
@@ -129,10 +129,8 @@ function setOverridePaletteStyle(overrideColors) {
 }
 
 
-function getRGBAFromPicker(paletteIndex, rgbColor) {
-    [0, 1, 2].forEach(idx => {
-        customizedPalette[paletteIndex][idx] = parseInt(rgbColor.substring(idx * 2, idx * 2 + 2), 16);
-    });
+function getHexColorFromPicker(paletteIndex, hexColor) {
+    customizedPalette[paletteIndex] = hexColor
 }
 
 
@@ -176,8 +174,8 @@ async function updateEmoji(thisEmoji, keepPalette) {
         // fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
         originalPaletteIndex = []
         twemojiFont.layout(thisEmoji).glyphs[0].layers.forEach((layer, _) => {
-            const thisColor = layer.color
-            originalPaletteIndex.push(twemojiFont.CPAL.colorRecords.indexOf(thisColor))
+            const hexColor = layer.color
+            originalPaletteIndex.push(twemojiFont.CPAL.colorRecords.indexOf(hexColor))
         })
         originalPaletteIndex = [...new Set(originalPaletteIndex)]
         originalPalette = originalPaletteIndex.map(index => twemojiFont.CPAL.colorRecords[index]).map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
@@ -191,44 +189,50 @@ async function updateEmoji(thisEmoji, keepPalette) {
     }
 
     // Copy default palette to customized palette
-    customizedPalette = originalPalette.map(rgbaColorArray => [...rgbaColorArray]);
+    customizedPalette = []
+    originalPalette.forEach((rbgaColor, _) =>{
+        customizedPalette.push(rgbaToHexColor(rbgaColor));
+    })
 
+    
     // Reset color color-pickers
     const colorPickers = document.getElementById("color-pickers");
     while (colorPickers.firstChild) {
         colorPickers.removeChild(colorPickers.firstChild);
+        console.log("reset!")
     }
 
     // Check if color picker should be override
     var modifiedColorPickers = {}
     if (paletteCode.length !== 0) {
-        paletteCode.split("), ").forEach((rgbColor, _) => {
-            const match = rgbColor.match(/\d+/g).map((str) => parseInt(str));
+        paletteCode.split(", ").forEach((hexColorPair, _) => {
+            const colorIdx = parseInt(hexColorPair.split("#")[0])
+            const hexColor = "#" + hexColorPair.split("#")[1]
+            
             if (emojiStyle == "noto") {
-                modifiedColorPickers[match[0]] = [match[1], match[2], match[3], match[4]]
+                modifiedColorPickers[colorIdx] = hexColor
             } else if (emojiStyle == "twemoji") {
-                modifiedColorPickers[originalPaletteIndex.indexOf(match[0])] = [match[1], match[2], match[3], match[4]]
+                modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
             }
         })
     }
 
-
     // Add each color picker under color-picker DOM
-    customizedPalette.forEach((rgbaColorArray, idx) => {
+    customizedPalette.forEach((hexColor, idx) => {
         const picker = document.createElement("input");
         picker.setAttribute("class", "color-block");
         picker.setAttribute("id", `color-block-${idx}`);
         picker.type = "color";
 
         if (idx in modifiedColorPickers && keepPalette) {
-            picker.value = rgbaToHexColor(modifiedColorPickers[idx])
+            picker.value = modifiedColorPickers[idx]
         } else {
-            picker.value = rgbaToHexColor(rgbaColorArray)
+            picker.value = hexColor
         };
 
         colorPickers.appendChild(picker);
         picker.addEventListener("input", (event) => {
-            getRGBAFromPicker(idx, event.target.value.substring(1));
+            getHexColorFromPicker(idx, event.target.value);
             updateEmojiAndURL()
         });
     });
@@ -289,8 +293,9 @@ function selectRandomColor() {
 
     // const numPicker = document.querySelectorAll(".color-block").length;
     customizedPalette.forEach((_, idx) => {
-        customizedPalette[idx] = [getRandomColor(), getRandomColor(), getRandomColor(), 255]
-        document.getElementById(`color-block-${idx}`).value = rgbaToHexColor(customizedPalette[idx])
+        const hexRndColor = rgbaToHexColor([getRandomColor(), getRandomColor(), getRandomColor(), 255])
+        customizedPalette[idx] = hexRndColor
+        document.getElementById(`color-block-${idx}`).value = hexRndColor
     })
     updateEmojiAndURL()
 }
