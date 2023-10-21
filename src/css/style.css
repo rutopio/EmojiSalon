@@ -120,6 +120,19 @@ body {
     color: #FFFFFF;
 }
 
+.palette-button {
+    width: 2.8em;
+    height: 2.8em;
+    border: 0.5px solid black;
+    border-radius: 3em;
+    background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    color: #000000;
+}
+
 .download-button {
     background-color: #18518A;
     color: #FFFFFF;
@@ -173,3 +186,11 @@ body {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+
+.def-colors > span {
+    display: inline-block;
+    position: relative;
+    width: 2em;
+    height: 2em;
+  }

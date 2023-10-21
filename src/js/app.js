@@ -795,6 +795,8 @@ async function updateEmoji(thisEmoji, keepPalette) {
             modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
         })
     }
+
+
     // Add each color picker under color-picker DOM
     customizedPalette.forEach((hexColor, idx) => {
         const picker = document.createElement("input");
@@ -1036,6 +1038,15 @@ Array.from(document.getElementsByClassName("copy-link"))
         });
     });
 
+Array.from(document.getElementsByClassName("palette-button"))
+    .forEach(function(element) {
+        element.addEventListener("click", function() {
+            console.log("click?")
+            showPaletteModal()
+        });
+    });    
+
+
 function showShareModal() {
     const modal = document.getElementById("shareBoard");
     const closeButton = modal.querySelector(".close");
@@ -1049,6 +1060,22 @@ function showShareModal() {
         }
     };
 }
+
+function showPaletteModal() {
+    const modal = document.getElementById("paletteBoard");
+    const closeButton = modal.querySelector(".close");
+    modal.style.display = "block";
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+
+
 // Default Emoji List
 function getRandomEmoji() {
     const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🫁", "🦷", "🦴", "👀", "🚀", "👍", "🤟", "🤘", "🤙", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "☕️", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
