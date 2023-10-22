@@ -1,24 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,500&display=swap');
+
+:root {
+    --shadow-color: 0deg 0% 0%;
+    --shadow: .10px .5px 2.7px hsl(var(--shadow-color)/.14), .4px .8px 1px -3.2px hsl(var(--shadow-color)/.14), 1px 2px 2.5px -4.5px hsl(var(--shadow-color)/.14);
+    --default-background-color: #EEEEEE;
+    --dark-background-color: #222222;
+    --sans-serif-font: "Nunito Sans";
+    --monospaced-font: "Courier Prime";
+    --emoji-font: "Twemoji";
+}
+
+body {
+    background-color: var(--default-background-color) !important;
+}
 
 html,
 body {
     touch-action: manipulation;
 }
 
-.emoji-picker-button {
-    font-family: 'Nunito', sans-serif;
-}
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     background-color: rgba(0, 0, 0, 0.7);
+
 }
 
 .modal-content {
@@ -41,13 +53,13 @@ body {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #000000;
     text-decoration: none;
     cursor: pointer;
 }
 
-.modal-text {
-    font-family: 'Nunito', sans-serif;
+.sans-serif-text {
+    font-family: var(--sans-serif-font), sans-serif;
 }
 
 .jumbotron.vertical-center {
@@ -61,12 +73,8 @@ body {
     width: 100%;
 }
 
-body {
-    background-color: #EEEEEE !important;
-}
-
 #customized-emoji {
-    font-family: "Twemoji";
+    font-family: var(--emoji-font);
     font-size: 16em;
     font-palette: --palette;
 }
@@ -76,8 +84,8 @@ body {
 }
 
 .footer-content {
-    font-size: 0.5em;
-    font-family: 'Courier Prime', monospace;
+    font-size: 10pt;
+    font-family: var(--monospaced-font), monospace;
 }
 
 .color-block {
@@ -93,65 +101,30 @@ body {
 }
 
 .color-block::-webkit-color-swatch {
-    border-radius: 0.5em;
+    border-radius: 10px;
     border: 1px solid #000000;
 }
 
 .color-block::-moz-color-swatch {
-    border-radius: 0.5em;
+    border-radius: 10px;
     border: 1px solid #000000;
 }
 
-.download-button,
-.reset-button,
-.random-emoji-button,
-.random-color-button,
-.share-button,
-.function-button {
+.rect-btn {
+    width: 13em;
+    height: 2.5em;
+    font-size: 1em;
+}
+
+.square-btn {
     width: 2.5em;
     height: 2.5em;
     font-size: 1em;
+}
+
+.basic-btn {
     border: none;
-    border-radius: 0.3em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;
-    color: #FFFFFF;
-}
-
-.download-button {
-    background-color: #18518A;
-    color: #FFFFFF;
-}
-
-.reset-button {
-    background-color: #CC7EB1;
-    color: #FFFFFF;
-}
-
-.random-emoji-button {
-    background-color: #DB4D6D;
-    color: #FFFFFF;
-}
-
-.random-color-button {
-    background-color: #89916B;
-    color: #FFFFFF;
-}
-
-.share-button {
-    background-color: #C48055;
-    color: #FFFFFF;
-}
-
-#emoji-picker-button {
-    background-color: #339DAf;
-    color: #FFFFFF;
-    width: 12em;
-    height: 2.5em;
-    font-size: 1em;
-    border: none;
+    border-radius: 0.5em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,25 +140,25 @@ body {
 #emoji-picker-mobile {
     position: fixed;
     left: 50%;
-    top: 50%;
+    top: 45%;
     -ms-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
-.full {
+.clr-component {
     margin: 0.2em;
 }
 
-.full .clr-field button {
+.clr-component .clr-field button {
     width: 100%;
     height: 100%;
     border-radius: 0.5em;
     border: 1px solid black;
 }
 
-.full .clr-field button:after {
+.clr-component .clr-field button:after {
     border-radius: none !important;
 }
 
@@ -194,4 +167,130 @@ body {
     height: 3em;
     border-radius: 0.5em;
     box-sizing: border-box;
+    cursor: pointer;
+}
+
+.btn-icon {
+    width: 1.5em;
+    height: 1.5em;
+    fill: currentColor;
+    transition: 0.2s;
+}
+
+.btn-hover-color-1:hover {
+    color: #3b5998
+}
+
+.btn-hover-color-2:hover {
+    color: #55acee
+}
+
+.btn-hover-color-3:hover {
+    color: #dd4b39
+}
+
+.btn-hover-color-4:hover {
+    color: #bd081c
+}
+
+.btn-hover-color-5:hover {
+    color: #833ab4
+}
+
+.btn-hover-color-1:hover::after {
+    background: #3b5998
+}
+
+.btn-hover-color-2:hover::after {
+    background: #55acee
+}
+
+.btn-hover-color-3:hover::after {
+    background: #dd4b39
+}
+
+.btn-hover-color-4:hover::after {
+    background: #bd081c
+}
+
+.btn-hover-color-5:hover::after {
+    background: #833ab4
+}
+
+.home-btn {
+    position: relative;
+    color: #333333;
+    background-color: #FFFFFF;
+    box-shadow: var(--shadow);
+}
+
+.share-btn {
+    position: relative;
+    background-color: #444444;
+    color: #FFFFFF;
+    box-shadow: var(--shadow);
+}
+
+.square-btn:not(:last-of-type) {
+    margin-right: 15px;
+}
+
+.btn-tooltip::before,
+.btn-tooltip::after {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -10px);
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.btn-tooltip::after {
+    content: attr(aria-label);
+    font-family: var(--sans-serif-font), sans-serif;
+    width: 12em;
+    padding: .61em .93em;
+    font-size: 0.8em;
+    color: #FFFFFF;
+    border-radius: 3px;
+}
+
+.mobile-icon-desciption::after {
+    content: attr(aria-label);
+    font-family: var(--sans-serif-font), sans-serif;
+    top: calc(100% + 10px);
+    position: absolute;
+    font-size: 0.8em;
+    color: var(--dark-background-color);
+    border-radius: 3px;
+}
+
+.home-btn::after {
+    /* Tooltip from top */
+    top: calc(100% + 10px);
+}
+
+.share-btn::after {
+    /* Tooltip from buttom */
+    bottom: calc(100% + 10px);
+}
+
+.btn-tooltip:hover::before,
+.btn-tooltip:hover::after {
+    opacity: 1;
+    transform: translate(-50%);
+}
+
+/* Source Code  Theme */
+.code-area-background {
+    white-space: pre-wrap;
+    background: #dddddd;
+    line-height: 1rem;
+    border-radius: 5pt;
+    padding: 10pt;
+}
+
+.underline {
+    text-decoration-line: underline;
+    text-decoration-color: #d6d3d1;
 }
