@@ -173,3 +173,25 @@ body {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.full {
+    margin: 0.2em;
+}
+
+.full .clr-field button {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5em;
+    border: 1px solid black;
+}
+
+.full .clr-field button:after {
+    border-radius: none !important;
+}
+
+.desktop-picker-input {
+    width: 3em;
+    height: 3em;
+    border-radius: 0.5em;
+    box-sizing: border-box;
+}

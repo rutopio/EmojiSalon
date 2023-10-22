@@ -795,25 +795,68 @@ async function updateEmoji(thisEmoji, keepPalette) {
             modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
         })
     }
-    // Add each color picker under color-picker DOM
-    customizedPalette.forEach((hexColor, idx) => {
-        const picker = document.createElement("input");
-        picker.setAttribute("class", "color-block");
-        picker.setAttribute("id", `color-block-${idx}`);
-        picker.type = "color";
-        if (idx in modifiedColorPickers && keepPalette) {
-            picker.value = modifiedColorPickers[idx]
-        } else {
-            picker.value = hexColor
-        };
-        colorPickers.appendChild(picker);
-        picker.addEventListener("input", (event) => {
-            Array.from(colorPickers.children).forEach((picker, pickerIdx) => {
-                getHexColorFromPicker(pickerIdx, picker.value);
-            })
-            updateEmojiAndURL()
+    if (window.innerWidth >= 768) {
+        // Add each color picker under color-picker DOM
+        customizedPalette.forEach((hexColor, idx) => {
+            const pickerSpan = document.createElement("div");
+            pickerSpan.setAttribute("class", "full");
+            // pickerSpan.setAttribute("class", "mx-2");
+            const clrFieldDiv = document.createElement("div");
+            clrFieldDiv.setAttribute("class", "clr-field");
+            clrFieldDiv.setAttribute("id", `color-field-${idx}`);
+            const picker_des = document.createElement("input");
+            picker_des.setAttribute("id", `color-block-${idx}`);
+            picker_des.setAttribute("class", "desktop-picker-input");
+            picker_des.setAttribute("data-coloris", "");
+            picker_des.type = "text";
+            if (idx in modifiedColorPickers && keepPalette) {
+                picker_des.value = modifiedColorPickers[idx]
+                clrFieldDiv.style.color = modifiedColorPickers[idx]
+            } else {
+                picker_des.value = hexColor
+                clrFieldDiv.style.color = hexColor
+            };
+            const colorButton = document.createElement("button");
+            colorButton.type = "button";
+            colorButton.setAttribute("aria-labelledby", "clr-open-label");
+            clrFieldDiv.appendChild(colorButton);
+            clrFieldDiv.appendChild(picker_des);
+            pickerSpan.appendChild(clrFieldDiv);
+            colorPickers.appendChild(pickerSpan);
+            Coloris({
+                onChange: (color, input) => {
+                    const colorPickers = document.getElementById("color-pickers");
+                    const clrFields = colorPickers.querySelectorAll(".clr-field");
+                    clrFields.forEach((clrField, index) => {
+                        const style = window.getComputedStyle(clrField);
+                        const color = style.getPropertyValue("color");
+                        const rgbArray = color.match(/\d+/g).map(Number);
+                        getHexColorFromPicker(index, rgbaToHexColor(rgbArray))
+                    });
+                    updateEmojiAndURL();
+                }
+            });
         });
-    });
+    } else {
+        customizedPalette.forEach((hexColor, idx) => {
+            const picker = document.createElement("input");
+            picker.setAttribute("class", "color-block");
+            picker.setAttribute("id", `color-block-${idx}`);
+            picker.type = "color";
+            if (idx in modifiedColorPickers && keepPalette) {
+                picker.value = modifiedColorPickers[idx]
+            } else {
+                picker.value = hexColor
+            };
+            colorPickers.appendChild(picker);
+            picker.addEventListener("input", (event) => {
+                Array.from(colorPickers.children).forEach((picker, pickerIdx) => {
+                    getHexColorFromPicker(pickerIdx, picker.value);
+                })
+                updateEmojiAndURL()
+            });
+        });
+    };
     const loadPromises = Array.from(document.fonts.values()).map(fontFace => fontFace.load());
     await Promise.all(loadPromises);
     if (!keepPalette) {
@@ -858,6 +901,9 @@ function selectRandomColor() {
     customizedPalette.forEach((_, idx) => {
         const hexRndColor = rgbaToHexColor([getRandomColor(), getRandomColor(), getRandomColor(), 255])
         customizedPalette[idx] = hexRndColor
+        if (document.getElementById(`color-field-${idx}`) !== null) {
+            document.getElementById(`color-field-${idx}`).style.color = hexRndColor
+        }
         document.getElementById(`color-block-${idx}`).value = hexRndColor
     })
     updateEmojiAndURL()
@@ -1051,7 +1097,7 @@ function showShareModal() {
 }
 // Default Emoji List
 function getRandomEmoji() {
-    const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🫁", "🦷", "🦴", "👀", "🚀", "👍", "🤟", "🤘", "🤙", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "☕️", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
+    const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🦓", "🥵", "🦴", "👀", "🚀", "👍", "🪩", "🧚‍♀️", "🧚", "🧚‍♂️", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🧑‍🎓", "👨‍🎓", "👩‍🎓", "🧑‍🏫", "👨‍🏫", "👩‍🏫", "🧑‍⚖️", "👨‍⚖️", "👩‍⚖️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "☕️", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
     return defaultEmojis[randomIndex];
 }

@@ -66,6 +66,7 @@
 - [Node.js](https://nodejs.org/)
 - [FontKit](https://github.com/foliojs/fontkit)
 - [Emoji Mart](https://github.com/missive/emoji-mart)
+- [Coloris](https://github.com/mdbassit/Coloris)
 - [Parcel](https://parceljs.org/)
 - [Bootstrap](https://getbootstrap.com/)
 - [ChromaCheck](https://github.com/RoelN/ChromaCheck)
