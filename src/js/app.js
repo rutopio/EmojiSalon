@@ -1,3 +1,4 @@
+const fontkit = require("fontkit")
 var originalPalette = [];
 var customizedPalette = [];
 var originalPaletteIndex = []
@@ -5,6 +6,10 @@ var paletteCode = "";
 var currentURL = window.location.href;
 import emojiData from "./emojiData.json"
 import paletteData from "./paletteData.json"
+
+console.log(paletteData.length)
+console.log(Object.keys(emojiData).length)
+
 
 function rgbaToHexColor(rgbaColorArray) {
     return "#" + rgbaColorArray.slice(0, 3)
@@ -18,22 +23,22 @@ function emojiToUnicode(thisEmoji) {
     const subEmojis = [...thisEmoji]
     subEmojis.forEach((ele, _) => {
         if (ele.length === 1) { // ZWJ or EMOJI MODIFIER FITZPATRICK
-            res.push(ele.charCodeAt(0).toString("16").toUpperCase())
+            res.push(ele.charCodeAt(0).toString("16"))
         } else if (ele.length === 2) {
             const comp = (
                 (ele.charCodeAt(0) - 0xD800) * 0x400 +
                 (ele.charCodeAt(1) - 0xDC00) + 0x10000
             );
-            res.push(comp.toString("16").toUpperCase())
+            res.push(comp.toString("16"))
         }
     })
-    return `U+${res.join("_")}`
+    return `u${res.join("_")}`
 }
 
 function unicodeToEmoji(urlCode) {
     try {
         var fin = []
-        const codes = urlCode.replace("U+", "").split("_");
+        const codes = urlCode.replace("u", "").split("_");
         codes.forEach((code, _) => {
             const intCodePoint = parseInt(code, 16);
             const character = String.fromCodePoint(intCodePoint);
@@ -92,9 +97,15 @@ function getHexColorFromPicker(paletteIndex, hexColor) {
 }
 // Update a palette from input entry
 function updateEmojiAndURL() {
+    
     const overrideColors = getOverrideStyleString()
     const thisEmoji = document.getElementById("customized-emoji").innerHTML;
     setOverridePaletteStyle(overrideColors);
+
+    pathsToSVG()
+
+
+
     window.location.hash = `${emojiToUnicode(thisEmoji)}-${encodeURIComponent(encodeURL(overrideColors))}`;
     currentURL = window.location.href
 }
@@ -195,6 +206,11 @@ async function updateEmoji(thisEmoji, keepPalette) {
         window.location.hash = `${emojiToUnicode(thisEmoji)}`;
     }
     updateCanvas("reference-canvas", thisEmoji)
+    // tmp(thisEmoji)
+
+    getOutline(thisEmoji)
+    pathsToSVG()
+
 }
 
 function updateCanvas(canvasId, thisEmoji) {
@@ -511,7 +527,14 @@ function getRandomEmoji() {
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
     return defaultEmojis[randomIndex];
 }
-function main() {
+async function main() {
+    const fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
+
+    response = await fetch(fontURL);
+    arrayBuffer = await response.arrayBuffer();
+    theFont = fontkit.create(new Buffer(arrayBuffer))
+
+
     var thisEmoji = ""
     if (window.location.hash) {
         try {
@@ -544,5 +567,112 @@ function main() {
     originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
     originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
 }
+
+
+
+
+function svgPath(glyph) {
+    return glyph.path.toSVG();
+}
+
+// function rgbaToSvgColor({
+//     red,
+//     green,
+//     blue,
+//     alpha = 255
+// }) {
+//     return {
+//         fill: `rgb(${red}, ${green}, ${blue})`,
+//         opacity: (alpha / 255).toFixed(2),
+//     };
+// }
+
+function tmp(thisEmoji){
+    console.log(theFont.layout(thisEmoji).glyphs[0].layers)
+
+    lys = theFont.layout(thisEmoji).glyphs[0].layers
+    console.log(lys)
+    lys.forEach((comp, index) => {
+        console.log(index, comp)
+        console.log(comp.glyph, comp.color)
+    })
+
+
+    theFont.layout(thisEmoji).glyphs[0].layers.map(({glyph, color}) => {
+        console.log(glyph.id, color)
+    })
+
+}
+
+
+function getOutline(thisEmoji) {
+    emojiOutlines = []
+    colorData = []
+    colorIndex = []
+    // var run = theFont.layout(thisEmoji);
+
+    // console.log(theFont.layout(thisEmoji).glyphs[0].layers.length)
+    theFont.layout(thisEmoji).glyphs[0].layers.map(({glyph, color}) => {
+    // run.glyphs[0].layers.map(({glyph, color}) => {
+    // theFont.layout(thisEmoji).glyphs[0].layers.forEach((l, index) => {
+    //     glyph = l.glyph
+    //     color = l.color
+        // console.log(glyph, color)
+        colorData.push(color)
+        try{
+            var decoded = glyph._decode();
+            console.log("decoded", decoded)
+        
+    
+            var d =
+                decoded.numberOfContours === -1 ?
+                decoded.components
+                .map(({
+                    glyphID
+                }) => {
+                    font._glyphs[glyphID] = false; // EXPLICIT CACHE CLEAR FOR THIS GLYPH
+                    return svgPath(font._getBaseGlyph(glyphID))
+                })
+                .join(` `) :
+                svgPath(glyph);
+                emojiOutlines.push(d);
+        } catch(e){
+            console.log(index, e)
+        }
+        
+    
+    })
+    
+    colorData.forEach((color, index ) => {
+        var indexInCOlors = [... new Set(colorData)].indexOf(color)
+        colorIndex.push(indexInCOlors)
+    })
+}
+
+function pathsToSVG() {
+    var svgData = []
+    console.log(colorIndex)
+    emojiOutlines.forEach( (d, index) => {
+        svgData.push(`<path fill="${customizedPalette[colorIndex[index]]}" fill-opacity="${1}" d="${d}" />`)
+    })
+    const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g transform="translate(0,448) scale(1,-1)">
+  ${svgData.join(`\n`)}
+</g>
+</svg>
+`;
+    console.log(svg);
+}
+
+
+
+
+
+var response, arrayBuffer, theFont
+var emojiOutlines, colorIndex
+
+
+
 main()
 loadEmojiPicker()
