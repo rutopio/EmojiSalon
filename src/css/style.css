@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,500&display=swap');
 
+@font-face { 
+    font-family: Twemoji;
+    src: url("https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2") format("woff2");
+    font-display: swap;
+}
+
+
 :root {
     --shadow-color: 0deg 0% 0%;
     --shadow: .10px .5px 2.7px hsl(var(--shadow-color)/.14), .4px .8px 1px -3.2px hsl(var(--shadow-color)/.14), 1px 2px 2.5px -4.5px hsl(var(--shadow-color)/.14);
@@ -294,3 +301,7 @@ body {
     text-decoration-line: underline;
     text-decoration-color: #d6d3d1;
 }
+
+
+
+

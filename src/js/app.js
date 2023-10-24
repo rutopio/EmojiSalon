@@ -128,7 +128,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
             modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
         })
     }
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= 0) {
         customizedPalette.forEach((hexColor, idx) => {
             const pickerSpan = document.createElement("div");
             pickerSpan.setAttribute("class", "clr-component");
@@ -137,6 +137,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
             clrFieldDiv.setAttribute("id", `color-field-${idx}`);
             const picker_des = document.createElement("input");
             picker_des.setAttribute("id", `color-block-${idx}`);
+            picker_des.setAttribute("aria-label", `color block of layer ${idx}`);
             picker_des.setAttribute("class", "desktop-picker-input");
             picker_des.setAttribute("data-coloris", "");
             picker_des.type = "text";
@@ -280,7 +281,9 @@ function changeDownloadButtonIcon() {
         }
         element.insertAdjacentHTML("afterbegin", `
         <svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" />
-        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z" />
+        <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+        <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
+
 </svg> 
 `)
     })
@@ -440,14 +443,14 @@ Array.from(document.getElementsByClassName("copy-image"))
                 resultCanvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({
                     'image/png': blob
                 })]))
-            }
-            // change icon
-            while (element.firstChild) {
-                element.removeChild(element.firstChild);
-            }
-            element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" />
+                // change icon
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+                element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" />
             <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z" />
   </svg>`);
+            }
         });
     });
 Array.from(document.getElementsByClassName("share-linkedin"))
@@ -508,35 +511,38 @@ function getRandomEmoji() {
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
     return defaultEmojis[randomIndex];
 }
-const originalCanvas = document.getElementById("reference-canvas");
-originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
-originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
-var thisEmoji = ""
-if (window.location.hash) {
-    try {
-        const inputString = window.location.hash.substring(1)
-        const parts = inputString.split("-");
-        // If url has palette info, use it
-        if (parts.length > 1) {
-            paletteCode = decodeURIComponent(decodeURL(parts[1]));
-            setOverridePaletteStyle(paletteCode)
+function main() {
+    var thisEmoji = ""
+    if (window.location.hash) {
+        try {
+            const inputString = window.location.hash.substring(1)
+            const parts = inputString.split("-");
+            // If url has palette info, use it
+            if (parts.length > 1) {
+                paletteCode = decodeURIComponent(decodeURL(parts[1]));
+                setOverridePaletteStyle(paletteCode)
+            }
+            thisEmoji = unicodeToEmoji(parts[0])
+            document.getElementById("customized-emoji").innerHTML = thisEmoji
+            updateEmoji(thisEmoji, true);
+            console.log(`→ Url Get: ${thisEmoji}`)
+        } catch (e) {
+            console.log("→ Get Invalid Url ❓", e)
+            console.log("→ Random Select an Emoji 🎰")
+            thisEmoji = getRandomEmoji()
+            updateEmoji(thisEmoji, true);
+            window.location.hash = `${emojiToUnicode(thisEmoji)}`;
         }
-        thisEmoji = unicodeToEmoji(parts[0])
-        document.getElementById("customized-emoji").innerHTML = thisEmoji
-        updateEmoji(thisEmoji, true);
-        console.log(`→ Url Get: ${thisEmoji}`)
-    } catch (e) {
-        console.log("→ Get Invalid Url ❓", e)
+    } else {
+        console.log("→ Get Home URL 🏚")
         console.log("→ Random Select an Emoji 🎰")
         thisEmoji = getRandomEmoji()
         updateEmoji(thisEmoji, true);
         window.location.hash = `${emojiToUnicode(thisEmoji)}`;
     }
-} else {
-    console.log("→ Get Home URL 🏚")
-    console.log("→ Random Select an Emoji 🎰")
-    thisEmoji = getRandomEmoji()
-    updateEmoji(thisEmoji, true);
-    window.location.hash = `${emojiToUnicode(thisEmoji)}`;
+    const originalCanvas = document.getElementById("reference-canvas");
+    originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
+    originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
 }
+main()
 loadEmojiPicker()
