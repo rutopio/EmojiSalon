@@ -1,15 +1,15 @@
-const fontkit = require("fontkit")
 var originalPalette = [];
 var customizedPalette = [];
 var originalPaletteIndex = []
+var pathArray = []
+var paletteArray = []
 var paletteCode = "";
 var currentURL = window.location.href;
 import emojiData from "./emojiData.json"
 import paletteData from "./paletteData.json"
 
-console.log(paletteData.length)
-console.log(Object.keys(emojiData).length)
-
+console.log(`Loading palette data: ${paletteData.length}`)
+console.log(`Loading Emoji data: ${Object.keys(emojiData).length}`)
 
 function rgbaToHexColor(rgbaColorArray) {
     return "#" + rgbaColorArray.slice(0, 3)
@@ -32,6 +32,13 @@ function emojiToUnicode(thisEmoji) {
             res.push(comp.toString("16"))
         }
     })
+
+    if (res.length == 2){
+        if (res[res.length - 1] === "fe0f" || res[res.length - 1] === "fe0e") {
+            res.pop(); // Remove the last element
+        }
+    }
+
     return `u${res.join("_")}`
 }
 
@@ -56,7 +63,7 @@ function unicodeToEmoji(urlCode) {
         throw err;
     }
 }
-// Check if two RGBA colors are equal
+
 function areColorsEqual(rgba1, rgba2) {
     return rgba1 === rgba2
 }
@@ -68,58 +75,57 @@ function encodeURL(url) {
 function decodeURL(url) {
     return url.substring(0, url.length - 1).replaceAll(")", ", ").replaceAll("(", " #")
 }
-// Get the CSS override colors
+
 function getOverrideStyleString() {
-    // Format Example:
-    // override-colors:
-    // 0 #FFFFFF
-    // 1 #123456
-    // ...
-    // If customize colors are different from default colors, record them into overrides 
     return customizedPalette
         .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} ${rgbaColorArray}`)
         .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
         .join(", ");
 }
-// Update the CSS palette
-function setOverridePaletteStyle(overrideColors) {
-    document.getElementById("palette-overrides-style").innerHTML = `
-    @font-palette-values --palette {
-        font-family: "Twemoji";
-        base-palette: 0;
-        override-colors: ${overrideColors};
-    }
-    `;
-}
 
 function getHexColorFromPicker(paletteIndex, hexColor) {
     customizedPalette[paletteIndex] = hexColor
 }
-// Update a palette from input entry
+
 function updateEmojiAndURL() {
-    
     const overrideColors = getOverrideStyleString()
     const thisEmoji = document.getElementById("customized-emoji").innerHTML;
-    setOverridePaletteStyle(overrideColors);
-
-    pathsToSVG()
-
-
-
+    setCustomizedEmojiSVG(pathArray, paletteArray)
     window.location.hash = `${emojiToUnicode(thisEmoji)}-${encodeURIComponent(encodeURL(overrideColors))}`;
     currentURL = window.location.href
 }
+
 async function updateEmoji(thisEmoji, keepPalette) {
-    const glyphId = emojiToUnicode(thisEmoji).toLowerCase().replaceAll("u+", "u")
+    document.getElementById("customized-emoji").innerHTML = thisEmoji;
+
+    pathArray = {}
+    paletteArray = {}
+    const glyphId = emojiToUnicode(thisEmoji).toLowerCase()
+    console.log("glyphId", glyphId)
+    fetchEmojiData(thisEmoji).then(data => {
+        pathArray = data.path;
+        paletteArray = data.palette.map(str => parseInt(str));
+        setCustomizedEmojiSVG(pathArray, paletteArray);
+    }).catch(error => {
+        console.error("An error occurred during fetching:", error);
+    });
+
+    if (!keepPalette) {
+        paletteCode = "";
+        window.location.hash = `${emojiToUnicode(thisEmoji)}`;
+        setCustomizedEmojiSVG(pathArray, paletteArray)
+    }
+    setColorPickers(glyphId, keepPalette)
+    
+}
+
+function setColorPickers(glyphId, keepPalette) {
+
     originalPaletteIndex = [...new Set(emojiData[glyphId])]
     originalPalette = originalPaletteIndex
         .map(index => paletteData[index])
         .map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
-    // Reset CSS style
-    document.getElementById("customized-emoji").innerHTML = thisEmoji;
-    if (!keepPalette) {
-        document.getElementById("palette-overrides-style").innerHTML = "";
-    }
+
     // Copy default palette to customized palette
     customizedPalette = []
     originalPalette.forEach((rbgaColor, _) => {
@@ -139,104 +145,92 @@ async function updateEmoji(thisEmoji, keepPalette) {
             modifiedColorPickers[originalPaletteIndex.indexOf(colorIdx)] = hexColor
         })
     }
-    if (window.innerWidth >= 0) {
-        customizedPalette.forEach((hexColor, idx) => {
-            const pickerSpan = document.createElement("div");
-            pickerSpan.setAttribute("class", "clr-component");
-            const clrFieldDiv = document.createElement("div");
-            clrFieldDiv.setAttribute("class", "clr-field");
-            clrFieldDiv.setAttribute("id", `color-field-${idx}`);
-            const picker_des = document.createElement("input");
-            picker_des.setAttribute("id", `color-block-${idx}`);
-            picker_des.setAttribute("aria-label", `color block of layer ${idx}`);
-            picker_des.setAttribute("class", "desktop-picker-input");
-            picker_des.setAttribute("data-coloris", "");
-            picker_des.type = "text";
-            if (idx in modifiedColorPickers && keepPalette) {
-                picker_des.value = modifiedColorPickers[idx]
-                clrFieldDiv.style.color = modifiedColorPickers[idx]
-            } else {
-                picker_des.value = hexColor
-                clrFieldDiv.style.color = hexColor
-            };
-            const colorButton = document.createElement("button");
-            colorButton.type = "button";
-            colorButton.setAttribute("aria-labelledby", "clr-open-label");
-            clrFieldDiv.appendChild(colorButton);
-            clrFieldDiv.appendChild(picker_des);
-            pickerSpan.appendChild(clrFieldDiv);
-            colorPickers.appendChild(pickerSpan);
-            Coloris({
-                onChange: (color, input) => {
-                    const colorPickers = document.getElementById("color-pickers");
-                    const clrFields = colorPickers.querySelectorAll(".clr-field");
-                    clrFields.forEach((clrField, index) => {
-                        const style = window.getComputedStyle(clrField);
-                        const color = style.getPropertyValue("color");
-                        const rgbArray = color.match(/\d+/g).map(Number);
-                        getHexColorFromPicker(index, rgbaToHexColor(rgbArray))
-                    });
-                    updateEmojiAndURL();
-                }
-            });
-        });
-    } else {
-        customizedPalette.forEach((hexColor, idx) => {
-            const picker = document.createElement("input");
-            picker.setAttribute("class", "color-block");
-            picker.setAttribute("id", `color-block-${idx}`);
-            picker.type = "color";
-            if (idx in modifiedColorPickers && keepPalette) {
-                picker.value = modifiedColorPickers[idx]
-            } else {
-                picker.value = hexColor
-            };
-            colorPickers.appendChild(picker);
-            picker.addEventListener("input", (event) => {
-                Array.from(colorPickers.children).forEach((picker, pickerIdx) => {
-                    getHexColorFromPicker(pickerIdx, picker.value);
-                })
-                updateEmojiAndURL()
-            });
-        });
-    };
-    const loadPromises = Array.from(document.fonts.values()).map(fontFace => fontFace.load());
-    await Promise.all(loadPromises);
-    if (!keepPalette) {
-        window.location.hash = `${emojiToUnicode(thisEmoji)}`;
-    }
-    updateCanvas("reference-canvas", thisEmoji)
-    // tmp(thisEmoji)
 
-    getOutline(thisEmoji)
-    pathsToSVG()
-
+    customizedPalette.forEach((hexColor, idx) => {
+        const pickerSpan = document.createElement("div");
+        pickerSpan.setAttribute("class", "clr-component");
+        const clrFieldDiv = document.createElement("div");
+        clrFieldDiv.setAttribute("class", "clr-field");
+        clrFieldDiv.setAttribute("id", `color-field-${idx}`);
+        const picker_des = document.createElement("input");
+        picker_des.setAttribute("id", `color-block-${idx}`);
+        picker_des.setAttribute("aria-label", `color block of layer ${idx}`);
+        picker_des.setAttribute("class", "desktop-picker-input");
+        picker_des.setAttribute("data-coloris", "");
+        picker_des.type = "text";
+        if (idx in modifiedColorPickers && keepPalette) {
+            picker_des.value = modifiedColorPickers[idx]
+            clrFieldDiv.style.color = modifiedColorPickers[idx]
+        } else {
+            picker_des.value = hexColor
+            clrFieldDiv.style.color = hexColor
+        };
+        const colorButton = document.createElement("button");
+        colorButton.type = "button";
+        colorButton.setAttribute("aria-labelledby", "clr-open-label");
+        clrFieldDiv.appendChild(colorButton);
+        clrFieldDiv.appendChild(picker_des);
+        pickerSpan.appendChild(clrFieldDiv);
+        colorPickers.appendChild(pickerSpan);
+        Coloris({
+            onChange: () => {
+                const colorPickers = document.getElementById("color-pickers");
+                const clrFields = colorPickers.querySelectorAll(".clr-field");
+                clrFields.forEach((clrField, index) => {
+                    const style = window.getComputedStyle(clrField);
+                    const color = style.getPropertyValue("color");
+                    const rgbArray = color.match(/\d+/g).map(Number);
+                    getHexColorFromPicker(index, rgbaToHexColor(rgbArray))
+                });
+                updateEmojiAndURL();
+            }
+        });
+    });
 }
 
-function updateCanvas(canvasId, thisEmoji) {
-    console.log(`→ Select ${thisEmoji}`)
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext("2d")
+async function updateCanvas(mission) {
+    const svg = document.getElementById('customized-emoji-svg-data');
+    const canvas = document.getElementById('customized-emoji-canvas');
+    const ctx = canvas.getContext('2d');
+
     const scaleProp = 10
-    if (canvasId == "result-canvas") {
-        canvas.width = document.getElementById("customized-emoji").clientWidth * scaleProp;
-        canvas.height = document.getElementById("customized-emoji").clientHeight * scaleProp;
-        ctx.scale(scaleProp, scaleProp);
-    }
+    canvas.width = svg.clientWidth * scaleProp;
+    canvas.height = svg.clientHeight * scaleProp;
+    ctx.scale(scaleProp, scaleProp);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Get font size from px to em
-    const childFontSizePx = parseFloat(window.getComputedStyle(document.getElementById("customized-emoji")).getPropertyValue("font-size"));
-    const parentFontSizePx = parseFloat(window.getComputedStyle(document.getElementById("customized-emoji").parentElement).getPropertyValue("font-size"))
-    const realFontSizeEm = childFontSizePx / parentFontSizePx
-    // Set canvas
-    ctx.font = `${realFontSizeEm}em "Twemoji"`;
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    if (canvasId == "result-canvas") {
-        ctx.fillText(thisEmoji, canvas.width / (2 * scaleProp), canvas.height / (2 * scaleProp));
-    } else {
-        ctx.fillText(thisEmoji, canvas.width / 2, canvas.height / 2);
-    }
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+
+    const img = new Image();
+    img.onload = async function() {
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        if (mission == 1) {
+            triggerDownload(canvas.toDataURL('image/png'), `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`)
+        } else if (mission == 2) {
+            canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({
+                'image/png': blob
+            })]))
+        } else if (mission == 3) {
+            const dataUrl = canvas.toDataURL();
+            const blob = await (await fetch(dataUrl)).blob();
+            const filesArray = [
+                new File(
+                    [blob],
+                    `${document.getElementById("customized-emoji").innerHTML}.png`, {
+                        type: "image/png",
+                        lastModified: new Date().getTime()
+                    }
+                )
+            ];
+            const shareData = {
+                files: filesArray,
+            };
+            navigator.share(shareData);
+        } else if (mission == 4) {
+            document.getElementById("result-image").src = canvas.toDataURL("image/png");
+        }
+    };
+    img.src = 'data:image/svg+xml,' + encodeURIComponent(svgData);
 }
 
 function selectRandomColor() {
@@ -260,6 +254,7 @@ function selectedFromPicker(thisEmoji) {
     document.getElementById("emojiBoard").style.display = "none";
     updateEmoji(thisEmoji, false)
 }
+
 // See https://github.com/missive/emoji-mart for more info and settings
 function loadEmojiPicker() {
     const emojiPickerOptions = {
@@ -269,6 +264,7 @@ function loadEmojiPicker() {
         perLine: 8,
         theme: "light",
         maxFrequentRows: 1,
+        skinTonePosition: "none",
         exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
     };
     const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
@@ -282,7 +278,7 @@ function loadEmojiPicker() {
 }
 
 function changeDownloadButtonIcon() {
-    Array.from(document.getElementsByClassName("download-button")).forEach(function(element) {
+    Array.from(document.getElementsByClassName("download-image")).forEach(function(element) {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
@@ -291,6 +287,7 @@ function changeDownloadButtonIcon() {
         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" /></svg>
 `)
     })
+
     Array.from(document.getElementsByClassName("copy-image")).forEach(function(element) {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
@@ -304,12 +301,23 @@ function changeDownloadButtonIcon() {
 `)
     })
 }
+
+
+function triggerDownload(imgURI, fileName) {
+    let a = document.createElement('a')
+    a.setAttribute('download', fileName)
+    a.setAttribute('href', imgURI)
+    a.setAttribute('target', '_blank')
+    a.click()
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const emojiPickerButton = document.getElementById("emoji-picker-button");
     emojiPickerButton.addEventListener("click", function() {
         showEmojiModal()
     });
 })
+
 Array.from(document.getElementsByClassName("random-emoji-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -318,6 +326,7 @@ Array.from(document.getElementsByClassName("random-emoji-button"))
             changeDownloadButtonIcon()
         });
     });
+
 Array.from(document.getElementsByClassName("random-color-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -326,6 +335,7 @@ Array.from(document.getElementsByClassName("random-color-button"))
             changeDownloadButtonIcon()
         });
     });
+
 Array.from(document.getElementsByClassName("reset-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -335,26 +345,21 @@ Array.from(document.getElementsByClassName("reset-button"))
             changeDownloadButtonIcon()
         });
     });
-Array.from(document.getElementsByClassName("download-button"))
+
+Array.from(document.getElementsByClassName("download-image"))
     .forEach(function(element) {
-        element.addEventListener("click", function() {
-            const resultCanvas = document.getElementById("result-canvas")
-            updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
-            const dataURL = resultCanvas.toDataURL("image/png");
-            const downloadLink = document.createElement("a");
-            console.log(`→ Downloading Your ${document.getElementById("customized-emoji").innerHTML} 💾`)
-            downloadLink.href = dataURL;
-            downloadLink.download = `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`;
-            downloadLink.click();
+        element.addEventListener("click", async () => {
+            updateCanvas(1)
         });
     });
+
 Array.from(document.getElementsByClassName("share-button"))
     .forEach(function(element) {
         element.addEventListener("click", async () => {
-            updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
-            document.getElementById("result-image").src = document.getElementById("result-canvas").toDataURL("image/png");
+            updateCanvas(4);
             changeDownloadButtonIcon()
             if (navigator.share && window.innerWidth < 768) {
+
                 const shareData = {
                     title: "Collaborate & Share With Friends!",
                     text: "#EmojiSalon",
@@ -414,6 +419,7 @@ Array.from(document.getElementsByClassName("share-button"))
             }
         });
     });
+
 Array.from(document.getElementsByClassName("share-facebook"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -421,6 +427,7 @@ Array.from(document.getElementsByClassName("share-facebook"))
             window.open(facebookShareURL, "_blank");
         });
     });
+
 Array.from(document.getElementsByClassName("share-twitter"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -429,36 +436,28 @@ Array.from(document.getElementsByClassName("share-twitter"))
             window.open(twitterShareURL, "_blank");
         });
     });
-async function canvasToClipboardByWebShareAPI() {
-    const resultCanvas = document.getElementById("result-canvas")
-    updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
-    const dataUrl = resultCanvas.toDataURL();
-    const blob = await (await fetch(dataUrl)).blob();
-    const filesArray = [
-        new File(
-            [blob],
-            `${document.getElementById("customized-emoji").innerHTML}.png`, {
-                type: "image/png",
-                lastModified: new Date().getTime()
-            }
-        )
-    ];
-    const shareData = {
-        files: filesArray,
-    };
-    navigator.share(shareData);
-}
+
+Array.from(document.getElementsByClassName("download-svg"))
+    .forEach(function(element) {
+        element.addEventListener("click", function() {
+            const svgData = document.getElementById("customized-emoji-svg-data")
+            const data = (new XMLSerializer()).serializeToString(svgData)
+            const svgBlob = new Blob([data], {
+                type: 'image/svg+xml;charset=utf-8'
+            })
+            const url = URL.createObjectURL(svgBlob)
+            triggerDownload(url, `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.svg`)
+        });
+    });
+
+
 Array.from(document.getElementsByClassName("copy-image"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
             if (navigator.canShare) {
-                canvasToClipboardByWebShareAPI()
+                updateCanvas(3)
             } else {
-                const resultCanvas = document.getElementById("result-canvas")
-                updateCanvas("result-canvas", document.getElementById("customized-emoji").innerHTML);
-                resultCanvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({
-                    'image/png': blob
-                })]))
+                updateCanvas(2);
                 // change icon
                 while (element.firstChild) {
                     element.removeChild(element.firstChild);
@@ -469,6 +468,7 @@ Array.from(document.getElementsByClassName("copy-image"))
             }
         });
     });
+
 Array.from(document.getElementsByClassName("share-linkedin"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -476,6 +476,7 @@ Array.from(document.getElementsByClassName("share-linkedin"))
             window.open(lineShareURL, "_blank");
         });
     });
+
 Array.from(document.getElementsByClassName("copy-link"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -521,19 +522,14 @@ function showEmojiModal() {
         }
     };
 }
-// Default Emoji List
+
 function getRandomEmoji() {
     const defaultEmojis = ["😀", "😙", "😎", "😪", "🤤", "😴", "😰", "🦓", "🥵", "🦴", "👀", "🚀", "👍", "🪩", "🧚‍♀️", "🧚", "🧚‍♂️", "🌟", "🧤", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🍔", "🐈", "🐈‍⬛", "🐟", "🍕", "🎉", "🐓", "🐱", "🌺", "🍎", "🏛", "🐭", "🐮", "🐯", "🐰", "🐲", "🐍", "🐴", "🐏", "🐵", "🐔", "🐶", "🐷", "🐕", "🐑", "🐤", "🦕", "🦖", "🐳", "🐋", "🐬", "🦋", "☕️", "🍒", "🌭", "🍩", "🏅", "🚂", "🚗", "🥻", "🧥", "👜", "👢", "📱", "🧮", "🩴", "🎮", "🎠", "🛝", "🎡", "🎢", "💈", "🎪", "🍭", "🦄", "🎨"];
     const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
     return defaultEmojis[randomIndex];
 }
+
 async function main() {
-    const fontURL = "https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2"
-
-    response = await fetch(fontURL);
-    arrayBuffer = await response.arrayBuffer();
-    theFont = fontkit.create(new Buffer(arrayBuffer))
-
 
     var thisEmoji = ""
     if (window.location.hash) {
@@ -543,7 +539,6 @@ async function main() {
             // If url has palette info, use it
             if (parts.length > 1) {
                 paletteCode = decodeURIComponent(decodeURL(parts[1]));
-                setOverridePaletteStyle(paletteCode)
             }
             thisEmoji = unicodeToEmoji(parts[0])
             document.getElementById("customized-emoji").innerHTML = thisEmoji
@@ -563,116 +558,81 @@ async function main() {
         updateEmoji(thisEmoji, true);
         window.location.hash = `${emojiToUnicode(thisEmoji)}`;
     }
-    const originalCanvas = document.getElementById("reference-canvas");
-    originalCanvas.width = document.getElementById("customized-emoji").clientWidth;
-    originalCanvas.height = document.getElementById("customized-emoji").clientHeight;
 }
 
-
-
-
-function svgPath(glyph) {
-    return glyph.path.toSVG();
+async function fetchEmojiData(thisEmoji) {
+    console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
+    const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await response.json()
+    return data
 }
 
-// function rgbaToSvgColor({
-//     red,
-//     green,
-//     blue,
-//     alpha = 255
-// }) {
-//     return {
-//         fill: `rgb(${red}, ${green}, ${blue})`,
-//         opacity: (alpha / 255).toFixed(2),
-//     };
+// async function fetchAllData() {
+//     const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/allData.json`);
+//     if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//     }
+//     const data = await response.json()
+//     return data
 // }
 
-function tmp(thisEmoji){
-    console.log(theFont.layout(thisEmoji).glyphs[0].layers)
+async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
+    if (Array.isArray(pathArrayLocal) && Array.isArray(paletteArrayLocal)) {
 
-    lys = theFont.layout(thisEmoji).glyphs[0].layers
-    console.log(lys)
-    lys.forEach((comp, index) => {
-        console.log(index, comp)
-        console.log(comp.glyph, comp.color)
-    })
+        var svgData = []
 
-
-    theFont.layout(thisEmoji).glyphs[0].layers.map(({glyph, color}) => {
-        console.log(glyph.id, color)
-    })
-
-}
-
-
-function getOutline(thisEmoji) {
-    emojiOutlines = []
-    colorData = []
-    colorIndex = []
-    // var run = theFont.layout(thisEmoji);
-
-    // console.log(theFont.layout(thisEmoji).glyphs[0].layers.length)
-    theFont.layout(thisEmoji).glyphs[0].layers.map(({glyph, color}) => {
-    // run.glyphs[0].layers.map(({glyph, color}) => {
-    // theFont.layout(thisEmoji).glyphs[0].layers.forEach((l, index) => {
-    //     glyph = l.glyph
-    //     color = l.color
-        // console.log(glyph, color)
-        colorData.push(color)
-        try{
-            var decoded = glyph._decode();
-            console.log("decoded", decoded)
-        
-    
-            var d =
-                decoded.numberOfContours === -1 ?
-                decoded.components
-                .map(({
-                    glyphID
-                }) => {
-                    font._glyphs[glyphID] = false; // EXPLICIT CACHE CLEAR FOR THIS GLYPH
-                    return svgPath(font._getBaseGlyph(glyphID))
-                })
-                .join(` `) :
-                svgPath(glyph);
-                emojiOutlines.push(d);
-        } catch(e){
-            console.log(index, e)
+        if (getOverrideStyleString().length > 0) {
+            getOverrideStyleString().split(', ').forEach(pair => {
+                const [key, value] = pair.split(' ');
+                customizedPalette[originalPaletteIndex.indexOf(parseInt(key))] = value
+            });
+        } else if (paletteCode.length > 0) {
+            paletteCode.split(', ').forEach(pair => {
+                const [key, value] = pair.split(' ');
+                customizedPalette[originalPaletteIndex.indexOf(parseInt(key))] = value
+            });
         }
-        
-    
-    })
-    
-    colorData.forEach((color, index ) => {
-        var indexInCOlors = [... new Set(colorData)].indexOf(color)
-        colorIndex.push(indexInCOlors)
-    })
+
+        pathArrayLocal.forEach((d, index) => {
+            svgData.push(`<path fill="${customizedPalette[originalPaletteIndex.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
+        })
+        const svg = `
+<svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 512 512">
+<g transform="translate(0,0) scale(1,1)">
+${svgData.join(`\n`)}
+</g>
+</svg>
+    `;
+        showSVG(svg, "customized-emoji-svg")
+        setReferenceEmojiSVG()
+
+    } else {
+        console.log("Waiting for fetching...")
+    }
 }
 
-function pathsToSVG() {
+function showSVG(svg, canvasName) {
+    document.getElementById(canvasName).innerHTML = svg
+}
+
+function setReferenceEmojiSVG() {
     var svgData = []
-    console.log(colorIndex)
-    emojiOutlines.forEach( (d, index) => {
-        svgData.push(`<path fill="${customizedPalette[colorIndex[index]]}" fill-opacity="${1}" d="${d}" />`)
+    pathArray.forEach((d, index) => {
+        svgData.push(`<path fill="${rgbaToHexColor(originalPalette[originalPaletteIndex.indexOf(paletteArray[index])])}" fill-opacity="${1}" d="${d}" />`)
     })
     const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-<g transform="translate(0,448) scale(1,-1)">
-  ${svgData.join(`\n`)}
+<svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 512 512">
+<g transform="translate(0,0) scale(1,1)">
+${svgData.join(`\n`)}
 </g>
 </svg>
 `;
-    console.log(svg);
+    showSVG(svg, "reference-emoji-svg")
+
 }
-
-
-
-
-
-var response, arrayBuffer, theFont
-var emojiOutlines, colorIndex
-
-
 
 main()
 loadEmojiPicker()

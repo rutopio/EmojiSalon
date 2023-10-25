@@ -31,8 +31,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="image/favicon-16x16.png">
     <link rel="manifest" href="image/site.webmanifest">
     <!-- Styles -->
-    <style id="palette-overrides-style"></style>
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- <style id="palette-overrides-style"></style> -->
+    <!-- <link rel="preload" href="https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2" as="font" type="font/woff2" crossorigin> -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-mart@latest/css/emoji-mart.css" />
@@ -64,7 +64,16 @@
                 </div>
 
                 <div class="mx-2 mx-lg-2 btns">
-                    <button class="btn-hover-color-3 btn-tooltip share-btn square-btn copy-image basic-btn" aria-label="Copy image">
+                    <button class="btn-hover-color-3 btn-tooltip share-btn square-btn download-svg basic-btn" aria-label="Download SVG">
+                        <svg class="btn-icon" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM0 14.841a1.13 1.13 0 0 0 .401.823c.13.108.288.192.478.252.19.061.411.091.665.091.338 0 .624-.053.858-.158.237-.105.416-.252.54-.44a1.17 1.17 0 0 0 .187-.656c0-.224-.045-.41-.135-.56a1 1 0 0 0-.375-.357 2.027 2.027 0 0 0-.565-.21l-.621-.144a.97.97 0 0 1-.405-.176.37.37 0 0 1-.143-.299c0-.156.061-.284.184-.384.125-.101.296-.152.513-.152.143 0 .266.023.37.068a.625.625 0 0 1 .245.181.56.56 0 0 1 .12.258h.75a1.092 1.092 0 0 0-.199-.566 1.21 1.21 0 0 0-.5-.41 1.813 1.813 0 0 0-.78-.152c-.293 0-.552.05-.776.15-.225.099-.4.24-.528.421-.127.182-.19.395-.19.639 0 .201.04.376.123.524.082.149.199.27.351.367.153.095.332.167.54.213l.618.144c.207.049.36.113.462.193a.387.387 0 0 1 .153.326.512.512 0 0 1-.085.29.559.559 0 0 1-.256.193c-.111.047-.249.07-.413.07-.117 0-.224-.013-.32-.04a.837.837 0 0 1-.248-.115.578.578 0 0 1-.255-.384H0Zm4.575 1.09h.952l1.327-3.999h-.879l-.887 3.138H5.05l-.897-3.138h-.917l1.339 4Zm5.483-3.293c.076.152.123.316.14.492h-.776a.797.797 0 0 0-.096-.249.689.689 0 0 0-.17-.19.707.707 0 0 0-.237-.126.963.963 0 0 0-.3-.044c-.284 0-.506.1-.664.302-.157.2-.235.484-.235.85v.497c0 .235.033.44.097.616a.881.881 0 0 0 .305.413.87.87 0 0 0 .518.146.965.965 0 0 0 .457-.097.67.67 0 0 0 .273-.263c.06-.11.09-.23.09-.364v-.254h-.823v-.59h1.576v.798c0 .193-.032.377-.096.55a1.29 1.29 0 0 1-.293.457 1.37 1.37 0 0 1-.495.314c-.198.074-.43.111-.698.111a1.98 1.98 0 0 1-.752-.132 1.447 1.447 0 0 1-.534-.377 1.58 1.58 0 0 1-.319-.58 2.482 2.482 0 0 1-.105-.745v-.507c0-.36.066-.677.199-.949.134-.271.329-.482.583-.633.256-.152.564-.228.926-.228.238 0 .45.033.635.1.188.066.348.158.48.275.134.117.238.253.314.407Z"/>
+
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mx-2 mx-lg-2 btns">
+                    <button class="btn-hover-color-4 btn-tooltip share-btn square-btn copy-image basic-btn" aria-label="Copy image">
                         <svg class="btn-icon" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1Zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5v-1Zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2Z" />
 
@@ -73,7 +82,7 @@
                 </div>
 
                 <div class="mx-2 mx-lg-2 btns">
-                    <button class="btn-hover-color-4 btn-tooltip share-btn square-btn copy-link basic-btn" aria-label="Copy design link">
+                    <button class="btn-hover-color-5 btn-tooltip share-btn square-btn copy-link basic-btn" aria-label="Copy design link">
                         <svg class="btn-icon" viewBox="0 0 16 16">
                             <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
                             <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
@@ -83,7 +92,7 @@
 
                 <div class="mx-1 mx-lg-2 btns d-none d-lg-block">
                     <a rel="noreferrer noopener" href="https://github.com/rutopio/EmojiSalon" target="_blank">
-                        <button class="btn-hover-color-5 btn-tooltip share-btn square-btn basic-btn" aria-label="Star or fork repo">
+                        <button class="btn-hover-color-6 btn-tooltip share-btn square-btn basic-btn" aria-label="Star or fork repo">
                             <svg class="btn-icon" viewBox="0 0 16 16">
                                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
 
@@ -105,7 +114,6 @@
 
             <div class="d-flex ">
                 <div class="d-flex justify-content-center align-items-center col-lg-4 col-12">
-                    <canvas id="result-canvas" style="display: none;"></canvas>
                     <img id="result-image" class="col-lg-8 col-md-6 col-10">
                 </div>
 
@@ -168,7 +176,7 @@
                     </div>
 
                 </div>
-                <div class="d-lg-none my-3 col-12 d-flex justify-content-center align-items-center">
+                <div class="d-lg-none mt-3 mb-5 col-12 d-flex justify-content-center align-items-center">
 
                     <div class="mx-2 btns">
                         <button class="m-link-color-1 mobile-icon-desciption home-btn square-btn basic-btn random-color-button" aria-label="Random Fill">
@@ -190,7 +198,7 @@
                     </div>
 
                     <div class="mx-2 btns">
-                        <button class="m-link-color-3 mobile-icon-desciption home-btn square-btn download-button basic-btn" aria-label="Save image">
+                        <button class="m-link-color-3 mobile-icon-desciption home-btn square-btn download-image basic-btn" aria-label="Save image">
                             <svg class="btn-icon" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
@@ -218,13 +226,13 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12 d-flex justify-content-center align-items-center">
-                    <div id="customized-emoji">
-                        <soan style="font-size: 10px;">Loading Font...</soan>
-                    </div>
+                <div class="col-lg-4 col-12 d-flex justify-content-center align-items-center my-4 my-xl-0">
+                    <div id="customized-emoji" class="d-none" ></div>
+                    <canvas id="customized-emoji-canvas" class="d-none" width="16em" height="16em" ></canvas>
+                    <div id="customized-emoji-svg"></div>
                 </div>
                 <div class="col-lg-4 d-none d-lg-flex justify-content-center align-items-center">
-                    <canvas id="reference-canvas"></canvas>
+                    <div id="reference-emoji-svg"></div>
                 </div>
             </div>
             <div class="row mt-4 d-none d-lg-flex"></div>
@@ -259,7 +267,7 @@
                     </div>
 
                     <div class="mx-2 btns">
-                        <button class="btn-hover-color-4 btn-tooltip home-btn square-btn download-button basic-btn" aria-label="Save image">
+                        <button class="btn-hover-color-4 btn-tooltip home-btn square-btn download-image basic-btn" aria-label="Save image">
                             <svg class="btn-icon" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />

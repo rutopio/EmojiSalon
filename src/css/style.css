@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,500&display=swap');
 
-@font-face { 
+/* @font-face { 
     font-family: Twemoji;
     src: url("https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2") format("woff2");
     font-display: swap;
-}
+} */
 
 
 :root {
@@ -80,7 +80,7 @@ body {
     width: 100%;
 }
 
-#customized-emoji {
+/* #customized-emoji {
     font-family: var(--emoji-font);
     font-size: 16em;
     font-palette: --palette;
@@ -88,7 +88,7 @@ body {
 
 #result-canvas {
     font-palette: --palette;
-}
+} */
 
 .footer-content {
     font-size: 10pt;
@@ -204,6 +204,10 @@ body {
     color: #833ab4
 }
 
+.btn-hover-color-6:hover {
+    color: #FFB11B
+}
+
 .btn-hover-color-1:hover::after {
     background: #3b5998
 }
@@ -222,6 +226,10 @@ body {
 
 .btn-hover-color-5:hover::after {
     background: #833ab4
+}
+
+.btn-hover-color-6:hover::after {
+    background: #DDA52D
 }
 
 .home-btn {
