@@ -5,8 +5,13 @@ var pathArray = []
 var paletteArray = []
 var paletteCode = "";
 var currentURL = window.location.href;
-import emojiData from "./emojiData.json"
-import paletteData from "./paletteData.json"
+import emojiData from "./emojiPaletteData.json"
+import paletteDataRaw from "./paletteColorData.json"
+import emojiCategories from "./emojiCategories.json"
+import emojiPathsAndColors from "./default.json"
+
+var paletteData = paletteDataRaw.map(c => "#"+c)
+
 
 console.log(`Loading palette data: ${paletteData.length}`)
 console.log(`Loading Emoji data: ${Object.keys(emojiData).length}`)
@@ -52,7 +57,7 @@ function unicodeToEmoji(urlCode) {
             fin.push(character)
         })
         var character = fin.join("")
-        // check is an emoji
+        // check if it's an emoji
         const emojisRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Component}|\p{Emoji})+$/u;
         if (emojisRegex.test(character)) {
             return character
@@ -104,11 +109,11 @@ async function updateEmoji(thisEmoji, keepPalette) {
     fetchEmojiData(thisEmoji).then(data => {
         pathArray = data.d;
         paletteArray = data.f.map(color => color === null ? '#000000' : color)
-            .map(color => color.match(/^#([0-9a-fA-F]{3})$/) ? color.replace(/^#([0-9a-fA-F]{3})$/, '#$1$1') : color ).map(color => color.toLowerCase());
+            .map(color => color.match(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/) ? color.replace(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/, '#$1$1$2$2$3$3') : color ).map(color => color.toLowerCase());
         console.log(pathArray, paletteArray)
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
-        console.error("An error occurred during fetching:", error);
+        console.error("An error occurred during fetching:", error); 
     });
 
     if (!keepPalette) {
@@ -123,9 +128,10 @@ async function updateEmoji(thisEmoji, keepPalette) {
 function setColorPickers(glyphId, keepPalette) {
 
     originalPaletteIndex = [...new Set(emojiData[glyphId])]
+    console.log("originalPaletteIndex", emojiData[glyphId])
     originalPalette = originalPaletteIndex
         .map(index => paletteData[index]);
-    
+    console.log(originalPalette)
     customizedPalette = [... originalPalette]
     // Reset color color-pickers
     const colorPickers = document.getElementById("color-pickers");
@@ -189,9 +195,10 @@ async function updateCanvas(mission) {
     const canvas = document.getElementById('customized-emoji-canvas');
     const ctx = canvas.getContext('2d');
 
+    const padding = 50
     const scaleProp = 10
-    canvas.width = svg.clientWidth * scaleProp;
-    canvas.height = svg.clientHeight * scaleProp;
+    canvas.width = svg.clientWidth * scaleProp + padding;
+    canvas.height = svg.clientHeight * scaleProp + padding;
     ctx.scale(scaleProp, scaleProp);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -199,7 +206,7 @@ async function updateCanvas(mission) {
 
     const img = new Image();
     img.onload = async function() {
-        ctx.drawImage(img, 0, 0, img.width, img.height);
+        ctx.drawImage(img, padding/scaleProp/2, padding/scaleProp/2, img.width, img.height);
         if (mission == 1) {
             triggerDownload(canvas.toDataURL('image/png'), `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`)
         } else if (mission == 2) {
@@ -261,7 +268,7 @@ function loadEmojiPicker() {
         theme: "light",
         maxFrequentRows: 1,
         skinTonePosition: "none",
-        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash"],
+        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash", "copyright", "registered"],
     };
     const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
     const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
@@ -556,13 +563,31 @@ async function main() {
     }
 }
 
-async function fetchEmojiData(thisEmoji) {
-    console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
-    const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
+
+function findEmojiCategory(unicode) {
+    console.log(unicode)
+    for (const key in emojiCategories) {
+      if (emojiCategories[key].includes(unicode)) {
+        return key;
+      }
     }
-    const data = await response.json()
+    return null; 
+  }
+
+async function fetchEmojiData(thisEmoji) {
+    var data
+    if (emojiToUnicode(thisEmoji) in emojiPathsAndColors){
+        data = emojiPathsAndColors[emojiToUnicode(thisEmoji)]
+    } else {
+        console.log(emojiToUnicode(thisEmoji))
+        console.log( findEmojiCategory(emojiToUnicode(thisEmoji)) )
+        console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
+        const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        data = await response.json()
+    }
     return data
 }
 
@@ -594,6 +619,9 @@ async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
         }
 
         pathArrayLocal.forEach((d, index) => {
+            // console.log(paletteArrayLocal[index])
+            // console.log(originalPalette)
+            // console.log(originalPalette.indexOf(paletteArrayLocal[index]))
             svgData.push(`<path fill="${customizedPalette[originalPalette.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
         })
         const svg = `
@@ -604,6 +632,7 @@ ${svgData.join(`\n`)}
 </svg>
     `;
         showSVG(svg, "customized-emoji-svg")
+        // console.log(svg)
 
     } else {
         console.log("Waiting for fetching...")
