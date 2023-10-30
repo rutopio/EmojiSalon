@@ -12,9 +12,8 @@ import emojiPathsAndColors from "./default.json"
 
 var paletteData = paletteDataRaw.map(c => "#"+c)
 
-
-console.log(`Loading palette data: ${paletteData.length}`)
-console.log(`Loading Emoji data: ${Object.keys(emojiData).length}`)
+console.log(`Loading Emoji Data: ${Object.keys(emojiData).length}`)
+console.log(`Loading Palette Color data: ${paletteData.length}`)
 
 function rgbaToHexColor(rgbaColorArray) {
     return "#" + rgbaColorArray.slice(0, 3)
@@ -40,10 +39,9 @@ function emojiToUnicode(thisEmoji) {
 
     if (res.length == 2){
         if (res[res.length - 1] === "fe0f" || res[res.length - 1] === "fe0e") {
-            res.pop(); // Remove the last element
+            res.pop(); // Remove the last element if it is emoji variation selector (FE0F and FE0E)
         }
     }
-
     return `u${res.join("_")}`
 }
 
@@ -57,7 +55,7 @@ function unicodeToEmoji(urlCode) {
             fin.push(character)
         })
         var character = fin.join("")
-        // check if it's an emoji
+        // check if the char is an emoji
         const emojisRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Component}|\p{Emoji})+$/u;
         if (emojisRegex.test(character)) {
             return character
@@ -102,7 +100,6 @@ function updateEmojiAndURL() {
 
 async function updateEmoji(thisEmoji, keepPalette) {
     document.getElementById("customized-emoji").innerHTML = thisEmoji;
-
     pathArray = {}
     paletteArray = {}
     const glyphId = emojiToUnicode(thisEmoji).toLowerCase()
@@ -565,7 +562,6 @@ async function main() {
 
 
 function findEmojiCategory(unicode) {
-    console.log(unicode)
     for (const key in emojiCategories) {
       if (emojiCategories[key].includes(unicode)) {
         return key;
@@ -579,26 +575,28 @@ async function fetchEmojiData(thisEmoji) {
     if (emojiToUnicode(thisEmoji) in emojiPathsAndColors){
         data = emojiPathsAndColors[emojiToUnicode(thisEmoji)]
     } else {
-        console.log(emojiToUnicode(thisEmoji))
-        console.log( findEmojiCategory(emojiToUnicode(thisEmoji)) )
-        console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
-        const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        const category = findEmojiCategory(emojiToUnicode(thisEmoji)) 
+        if (category == null){
+            console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
+            const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            data = await response.json()
+        } else {
+            console.log(`New Category, fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`)
+            const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const thisCat = await response.json()
+            data = thisCat[emojiToUnicode(thisEmoji)]
+            Object.assign(emojiPathsAndColors, thisCat)
         }
-        data = await response.json()
     }
     return data
 }
 
-// async function fetchAllData() {
-//     const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/allData.json`);
-//     if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//     }
-//     const data = await response.json()
-//     return data
-// }
 
 async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
 
@@ -622,7 +620,7 @@ async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
             // console.log(paletteArrayLocal[index])
             // console.log(originalPalette)
             // console.log(originalPalette.indexOf(paletteArrayLocal[index]))
-            svgData.push(`<path fill="${customizedPalette[originalPalette.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
+            svgData.push(`<path fill="${customizedPalette[originalPalette.indexOf(paletteArrayLocal[index])]}"  d='${d}' />`)
         })
         const svg = `
 <svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
@@ -632,10 +630,10 @@ ${svgData.join(`\n`)}
 </svg>
     `;
         showSVG(svg, "customized-emoji-svg")
-        // console.log(svg)
+        console.log(svg)
 
     } else {
-        console.log("Waiting for fetching...")
+        console.log("Loading path...")
     }
 }
 
@@ -646,7 +644,7 @@ function showSVG(svg, canvasName) {
 function setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal) {
     var svgData = []
     pathArrayLocal.forEach((d, index) => {
-        svgData.push(`<path fill="${paletteArrayLocal[index]}" fill-opacity="${1}" d="${d}" />`)
+        svgData.push(`<path fill="${paletteArrayLocal[index]}"  d='${d}' />`)
     })
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
