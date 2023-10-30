@@ -105,7 +105,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
         pathArray = data.d;
         paletteArray = data.f.map(color => color === null ? '#000000' : color)
             .map(color => color.match(/^#([0-9a-fA-F]{3})$/) ? color.replace(/^#([0-9a-fA-F]{3})$/, '#$1$1') : color ).map(color => color.toLowerCase());
-        // console.log(pathArray, paletteArray)
+        console.log(pathArray, paletteArray)
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
         console.error("An error occurred during fetching:", error);
