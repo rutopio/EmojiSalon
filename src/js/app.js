@@ -107,7 +107,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
         pathArray = data.d;
         paletteArray = data.f.map(color => color === null ? '#000000' : color)
             .map(color => color.match(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/) ? color.replace(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/, '#$1$1$2$2$3$3') : color ).map(color => color.toLowerCase());
-        console.log(pathArray, paletteArray)
+        // console.log(pathArray, paletteArray)
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
         console.error("An error occurred during fetching:", error); 
@@ -125,10 +125,10 @@ async function updateEmoji(thisEmoji, keepPalette) {
 function setColorPickers(glyphId, keepPalette) {
 
     originalPaletteIndex = [...new Set(emojiData[glyphId])]
-    console.log("originalPaletteIndex", emojiData[glyphId])
+    // console.log("originalPaletteIndex", emojiData[glyphId])
     originalPalette = originalPaletteIndex
         .map(index => paletteData[index]);
-    console.log(originalPalette)
+    // console.log(originalPalette)
     customizedPalette = [... originalPalette]
     // Reset color color-pickers
     const colorPickers = document.getElementById("color-pickers");
@@ -577,14 +577,14 @@ async function fetchEmojiData(thisEmoji) {
     } else {
         const category = findEmojiCategory(emojiToUnicode(thisEmoji)) 
         if (category == null){
-            console.log(`fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
+            console.log(`Unknown Category, try fetch https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
             const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             data = await response.json()
         } else {
-            console.log(`New Category, fetch: https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`)
+            console.log(`New Category {category}, fetch https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`)
             const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -630,10 +630,10 @@ ${svgData.join(`\n`)}
 </svg>
     `;
         showSVG(svg, "customized-emoji-svg")
-        console.log(svg)
+        // console.log(svg)
 
     } else {
-        console.log("Loading path...")
+        // console.log("Loading path...")
     }
 }
 
