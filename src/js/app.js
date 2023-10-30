@@ -103,7 +103,8 @@ async function updateEmoji(thisEmoji, keepPalette) {
     const glyphId = emojiToUnicode(thisEmoji).toLowerCase()
     console.log("glyphId", glyphId)
     fetchEmojiData(thisEmoji).then(data => {
-        pathArray = data.path;
+        pathArray = data;
+        console.log(pathArray)
         paletteArray = data.palette.map(str => parseInt(str));
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
