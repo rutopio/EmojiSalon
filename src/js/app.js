@@ -103,8 +103,8 @@ async function updateEmoji(thisEmoji, keepPalette) {
     const glyphId = emojiToUnicode(thisEmoji).toLowerCase()
     console.log("glyphId", glyphId)
     fetchEmojiData(thisEmoji).then(data => {
-        pathArray = data;
-        paletteArray = emojiData[glyphId];
+        pathArray = data.d;
+        paletteArray = data.f;
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
         console.error("An error occurred during fetching:", error);
@@ -580,6 +580,8 @@ async function fetchEmojiData(thisEmoji) {
 // }
 
 async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
+    setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal)
+
     if (Array.isArray(pathArrayLocal) && Array.isArray(paletteArrayLocal)) {
 
         var svgData = []
@@ -607,7 +609,6 @@ ${svgData.join(`\n`)}
 </svg>
     `;
         showSVG(svg, "customized-emoji-svg")
-        setReferenceEmojiSVG()
 
     } else {
         console.log("Waiting for fetching...")
@@ -618,14 +619,11 @@ function showSVG(svg, canvasName) {
     document.getElementById(canvasName).innerHTML = svg
 }
 
-function setReferenceEmojiSVG() {
+function setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal) {
     var svgData = []
     console.log(paletteArray)
     pathArray.forEach((d, index) => {
-        console.log( rgbaToHexColor ( originalPalette[originalPaletteIndex.indexOf(paletteArray[index])]))
-
-
-        svgData.push(`<path fill="${rgbaToHexColor(originalPalette[originalPaletteIndex.indexOf(paletteArray[index])])}" fill-opacity="${1}" d="${d}" />`)
+        svgData.push(`<path fill="${paletteArrayLocal[index]}" fill-opacity="${1}" d="${d}" />`)
     })
     const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
