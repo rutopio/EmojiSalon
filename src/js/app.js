@@ -600,7 +600,7 @@ async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
             svgData.push(`<path fill="${customizedPalette[originalPaletteIndex.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
         })
         const svg = `
-<svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 512 512">
+<svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
 <g transform="translate(0,0) scale(1,1)">
 ${svgData.join(`\n`)}
 </g>
@@ -624,7 +624,7 @@ function setReferenceEmojiSVG() {
         svgData.push(`<path fill="${rgbaToHexColor(originalPalette[originalPaletteIndex.indexOf(paletteArray[index])])}" fill-opacity="${1}" d="${d}" />`)
     })
     const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
 <g transform="translate(0,0) scale(1,1)">
 ${svgData.join(`\n`)}
 </g>
