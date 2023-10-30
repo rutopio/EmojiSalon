@@ -265,7 +265,7 @@ function loadEmojiPicker() {
         theme: "light",
         maxFrequentRows: 1,
         skinTonePosition: "none",
-        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash", "copyright", "registered"],
+        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash", "copyright", "registered", "chains"],
     };
     const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
     const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
