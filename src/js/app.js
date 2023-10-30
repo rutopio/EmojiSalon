@@ -104,8 +104,7 @@ async function updateEmoji(thisEmoji, keepPalette) {
     console.log("glyphId", glyphId)
     fetchEmojiData(thisEmoji).then(data => {
         pathArray = data;
-        console.log(pathArray)
-        paletteArray = data.palette.map(str => parseInt(str));
+        paletteArray = emojiData[glyphId];
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
         console.error("An error occurred during fetching:", error);
@@ -621,7 +620,11 @@ function showSVG(svg, canvasName) {
 
 function setReferenceEmojiSVG() {
     var svgData = []
+    console.log(paletteArray)
     pathArray.forEach((d, index) => {
+        console.log( rgbaToHexColor ( originalPalette[originalPaletteIndex.indexOf(paletteArray[index])]))
+
+
         svgData.push(`<path fill="${rgbaToHexColor(originalPalette[originalPaletteIndex.indexOf(paletteArray[index])])}" fill-opacity="${1}" d="${d}" />`)
     })
     const svg = `
@@ -631,6 +634,8 @@ ${svgData.join(`\n`)}
 </g>
 </svg>
 `;
+console.log(svg)
+
     showSVG(svg, "reference-emoji-svg")
 
 }
