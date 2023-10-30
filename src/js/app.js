@@ -79,7 +79,7 @@ function decodeURL(url) {
 function getOverrideStyleString() {
     return customizedPalette
         .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} ${rgbaColorArray}`)
-        .filter((_, idx) => !areColorsEqual(customizedPalette[idx], rgbaToHexColor(originalPalette[idx])))
+        .filter((_, idx) => !areColorsEqual(customizedPalette[idx], originalPalette[idx]))
         .join(", ");
 }
 
@@ -101,10 +101,11 @@ async function updateEmoji(thisEmoji, keepPalette) {
     pathArray = {}
     paletteArray = {}
     const glyphId = emojiToUnicode(thisEmoji).toLowerCase()
-    console.log("glyphId", glyphId)
     fetchEmojiData(thisEmoji).then(data => {
         pathArray = data.d;
-        paletteArray = data.f;
+        paletteArray = data.f.map(color => color === null ? '#000000' : color)
+            .map(color => color.match(/^#([0-9a-fA-F]{3})$/) ? color.replace(/^#([0-9a-fA-F]{3})$/, '#$1$1') : color ).map(color => color.toLowerCase());
+        // console.log(pathArray, paletteArray)
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
         console.error("An error occurred during fetching:", error);
@@ -123,14 +124,9 @@ function setColorPickers(glyphId, keepPalette) {
 
     originalPaletteIndex = [...new Set(emojiData[glyphId])]
     originalPalette = originalPaletteIndex
-        .map(index => paletteData[index])
-        .map(ele => [ele.red, ele.green, ele.blue, ele.alpha]);
-
-    // Copy default palette to customized palette
-    customizedPalette = []
-    originalPalette.forEach((rbgaColor, _) => {
-        customizedPalette.push(rgbaToHexColor(rbgaColor));
-    })
+        .map(index => paletteData[index]);
+    
+    customizedPalette = [... originalPalette]
     // Reset color color-pickers
     const colorPickers = document.getElementById("color-pickers");
     while (colorPickers.firstChild) {
@@ -580,10 +576,9 @@ async function fetchEmojiData(thisEmoji) {
 // }
 
 async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
-    setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal)
 
     if (Array.isArray(pathArrayLocal) && Array.isArray(paletteArrayLocal)) {
-
+        setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal)
         var svgData = []
 
         if (getOverrideStyleString().length > 0) {
@@ -599,7 +594,7 @@ async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
         }
 
         pathArrayLocal.forEach((d, index) => {
-            svgData.push(`<path fill="${customizedPalette[originalPaletteIndex.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
+            svgData.push(`<path fill="${customizedPalette[originalPalette.indexOf(paletteArrayLocal[index])]}" fill-opacity="${1}" d="${d}" />`)
         })
         const svg = `
 <svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
@@ -621,8 +616,7 @@ function showSVG(svg, canvasName) {
 
 function setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal) {
     var svgData = []
-    console.log(paletteArray)
-    pathArray.forEach((d, index) => {
+    pathArrayLocal.forEach((d, index) => {
         svgData.push(`<path fill="${paletteArrayLocal[index]}" fill-opacity="${1}" d="${d}" />`)
     })
     const svg = `
@@ -632,8 +626,6 @@ ${svgData.join(`\n`)}
 </g>
 </svg>
 `;
-console.log(svg)
-
     showSVG(svg, "reference-emoji-svg")
 
 }
