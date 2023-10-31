@@ -1,18 +1,23 @@
-var originalPalette = [];
-var customizedPalette = [];
+var originalPaletteColors = [];
+var originalPaletteIndex
+var originalPaletteColors = [];
 var originalPaletteIndex = []
+
+var customizedPaletteColors = [];
 var pathArray = []
 var paletteArray = []
+
 var paletteCode = "";
 var currentURL = window.location.href;
-import emojiData from "./emojiPaletteData.json"
-import paletteDataRaw from "./paletteColorData.json"
+
+import emojiPaletteData from "./emojiPaletteData.json"
+import paletteColorDataRaw from "./paletteColorData.json"
 import emojiCategories from "./emojiCategories.json"
-import emojiPathsAndColors from "./default.json"
+import emojiPathsAndColors from "./defaultEmojisSVGData.json"
 
-var paletteData = paletteDataRaw.map(c => "#"+c)
+var paletteData = paletteColorDataRaw.map(c => "#" + c)
 
-console.log(`Loading Emoji Data: ${Object.keys(emojiData).length}`)
+console.log(`Loading Emoji Data: ${Object.keys(emojiPaletteData).length}`)
 console.log(`Loading Palette Color data: ${paletteData.length}`)
 
 function rgbaToHexColor(rgbaColorArray) {
@@ -24,8 +29,8 @@ function rgbaToHexColor(rgbaColorArray) {
 
 function emojiToUnicode(thisEmoji) {
     var res = []
-    const subEmojis = [...thisEmoji]
-    subEmojis.forEach((ele, _) => {
+    const components = [...thisEmoji]
+    components.forEach((ele, _) => {
         if (ele.length === 1) { // ZWJ or EMOJI MODIFIER FITZPATRICK
             res.push(ele.charCodeAt(0).toString("16"))
         } else if (ele.length === 2) {
@@ -37,7 +42,7 @@ function emojiToUnicode(thisEmoji) {
         }
     })
 
-    if (res.length == 2){
+    if (res.length == 2) {
         if (res[res.length - 1] === "fe0f" || res[res.length - 1] === "fe0e") {
             res.pop(); // Remove the last element if it is emoji variation selector (FE0F and FE0E)
         }
@@ -60,10 +65,10 @@ function unicodeToEmoji(urlCode) {
         if (emojisRegex.test(character)) {
             return character
         } else {
-            throw err;
+            setRandomEmoji();
         }
     } catch (err) {
-        throw err;
+        setRandomEmoji();
     }
 }
 
@@ -80,14 +85,14 @@ function decodeURL(url) {
 }
 
 function getOverrideStyleString() {
-    return customizedPalette
+    return customizedPaletteColors
         .map((rgbaColorArray, idx) => `${originalPaletteIndex[idx]} ${rgbaColorArray}`)
-        .filter((_, idx) => !areColorsEqual(customizedPalette[idx], originalPalette[idx]))
+        .filter((_, idx) => !areColorsEqual(customizedPaletteColors[idx], originalPaletteColors[idx]))
         .join(", ");
 }
 
 function getHexColorFromPicker(paletteIndex, hexColor) {
-    customizedPalette[paletteIndex] = hexColor
+    customizedPaletteColors[paletteIndex] = hexColor
 }
 
 function updateEmojiAndURL() {
@@ -106,11 +111,11 @@ async function updateEmoji(thisEmoji, keepPalette) {
     fetchEmojiData(thisEmoji).then(data => {
         pathArray = data.d;
         paletteArray = data.f.map(color => color === null ? '#000000' : color)
-            .map(color => color.match(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/) ? color.replace(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/, '#$1$1$2$2$3$3') : color ).map(color => color.toLowerCase());
-        // console.log(pathArray, paletteArray)
+            .map(color => color.match(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/) ? color.replace(/^#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])$/, '#$1$1$2$2$3$3') : color).map(color => color.toLowerCase());
         setCustomizedEmojiSVG(pathArray, paletteArray);
     }).catch(error => {
-        console.error("An error occurred during fetching:", error); 
+        console.error("An error occurred during fetching:", error);
+        return
     });
 
     if (!keepPalette) {
@@ -118,18 +123,17 @@ async function updateEmoji(thisEmoji, keepPalette) {
         window.location.hash = `${emojiToUnicode(thisEmoji)}`;
         setCustomizedEmojiSVG(pathArray, paletteArray)
     }
+
     setColorPickers(glyphId, keepPalette)
-    
+
 }
 
 function setColorPickers(glyphId, keepPalette) {
 
-    originalPaletteIndex = [...new Set(emojiData[glyphId])]
-    // console.log("originalPaletteIndex", emojiData[glyphId])
-    originalPalette = originalPaletteIndex
+    originalPaletteIndex = [...new Set(emojiPaletteData[glyphId])]
+    originalPaletteColors = originalPaletteIndex
         .map(index => paletteData[index]);
-    // console.log(originalPalette)
-    customizedPalette = [... originalPalette]
+    customizedPaletteColors = [...originalPaletteColors]
     // Reset color color-pickers
     const colorPickers = document.getElementById("color-pickers");
     while (colorPickers.firstChild) {
@@ -145,7 +149,7 @@ function setColorPickers(glyphId, keepPalette) {
         })
     }
 
-    customizedPalette.forEach((hexColor, idx) => {
+    customizedPaletteColors.forEach((hexColor, idx) => {
         const pickerSpan = document.createElement("div");
         pickerSpan.setAttribute("class", "clr-component");
         const clrFieldDiv = document.createElement("div");
@@ -192,10 +196,10 @@ async function updateCanvas(mission) {
     const canvas = document.getElementById('customized-emoji-canvas');
     const ctx = canvas.getContext('2d');
 
-    const padding = 50
+    const imagePadding = 50
     const scaleProp = 10
-    canvas.width = svg.clientWidth * scaleProp + padding;
-    canvas.height = svg.clientHeight * scaleProp + padding;
+    canvas.width = svg.clientWidth * scaleProp + imagePadding;
+    canvas.height = svg.clientHeight * scaleProp + imagePadding;
     ctx.scale(scaleProp, scaleProp);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -203,7 +207,7 @@ async function updateCanvas(mission) {
 
     const img = new Image();
     img.onload = async function() {
-        ctx.drawImage(img, padding/scaleProp/2, padding/scaleProp/2, img.width, img.height);
+        ctx.drawImage(img, imagePadding / scaleProp / 2, imagePadding / scaleProp / 2, img.width, img.height);
         if (mission == 1) {
             triggerDownload(canvas.toDataURL('image/png'), `${emojiToUnicode(document.getElementById("customized-emoji").innerHTML)}-EmojiSalon.png`)
         } else if (mission == 2) {
@@ -239,9 +243,9 @@ function selectRandomColor() {
         const maxVal = 255
         return Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
     }
-    customizedPalette.forEach((_, idx) => {
+    customizedPaletteColors.forEach((_, idx) => {
         const hexRndColor = rgbaToHexColor([getRandomColor(), getRandomColor(), getRandomColor(), 255])
-        customizedPalette[idx] = hexRndColor
+        customizedPaletteColors[idx] = hexRndColor
         if (document.getElementById(`color-field-${idx}`) !== null) {
             document.getElementById(`color-field-${idx}`).style.color = hexRndColor
         }
@@ -265,7 +269,7 @@ function loadEmojiPicker() {
         theme: "light",
         maxFrequentRows: 1,
         skinTonePosition: "none",
-        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash", "copyright", "registered", "chains"],
+        exceptEmojis: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "keycap_star", "hash", "copyright", "registered"],
     };
     const emojiPickerDesktopContainer = document.getElementById("emoji-picker-desktop");
     const emojiPickerMobileContainer = document.getElementById("emoji-picker-mobile");
@@ -283,8 +287,7 @@ function changeDownloadButtonIcon() {
             element.removeChild(element.firstChild);
         }
         element.insertAdjacentHTML("afterbegin", `
-        <svg class="btn-icon" viewBox="0 0 16 16"> <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" /></svg>
+        <svg class="btn-icon" viewBox="0 0 16 16"> <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" /><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" /></svg>
 `)
     })
 
@@ -293,15 +296,12 @@ function changeDownloadButtonIcon() {
             element.removeChild(element.firstChild);
         }
         element.insertAdjacentHTML("afterbegin", `
-        <svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" />
-        <path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-        <path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
+        <svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" /><path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" /><path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z" />
 
 </svg> 
 `)
     })
 }
-
 
 function triggerDownload(imgURI, fileName) {
     let a = document.createElement('a')
@@ -314,7 +314,7 @@ function triggerDownload(imgURI, fileName) {
 document.addEventListener("DOMContentLoaded", function() {
     const emojiPickerButton = document.getElementById("emoji-picker-button");
     emojiPickerButton.addEventListener("click", function() {
-        showEmojiModal()
+        showModal("emojiBoard")
     });
 })
 
@@ -322,7 +322,7 @@ Array.from(document.getElementsByClassName("random-emoji-button"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
             console.log("→ Random Select an Emoji 🎲")
-            updateEmoji(getRandomEmoji(), false);
+            setRandomEmoji()
             changeDownloadButtonIcon()
         });
     });
@@ -371,8 +371,7 @@ Array.from(document.getElementsByClassName("share-button"))
                     while (element.firstChild) {
                         element.removeChild(element.firstChild);
                     }
-                    element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"> <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
-                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
+                    element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"> <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" /><path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
              </svg>`)
                 })
                 Array.from(document.getElementsByClassName("copy-image")).forEach(function(element) {
@@ -415,7 +414,7 @@ Array.from(document.getElementsByClassName("share-button"))
     base-palette: 0;
 }`
                 }
-                showShareModal()
+                showModal("shareBoard")
             }
         });
     });
@@ -450,7 +449,6 @@ Array.from(document.getElementsByClassName("download-svg"))
         });
     });
 
-
 Array.from(document.getElementsByClassName("copy-image"))
     .forEach(function(element) {
         element.addEventListener("click", function() {
@@ -462,9 +460,7 @@ Array.from(document.getElementsByClassName("copy-image"))
                 while (element.firstChild) {
                     element.removeChild(element.firstChild);
                 }
-                element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" />
-            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z" />
-  </svg>`);
+                element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"><path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z" /><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z" /></svg>`);
             }
         });
     });
@@ -490,27 +486,13 @@ Array.from(document.getElementsByClassName("copy-link"))
             while (element.firstChild) {
                 element.removeChild(element.firstChild);
             }
-            element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16">            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+            element.insertAdjacentHTML("afterbegin", `<svg class="btn-icon" viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
             </svg>`);
         });
     });
 
-function showShareModal() {
-    const modal = document.getElementById("shareBoard");
-    const closeButton = modal.querySelector(".close");
-    modal.style.display = "block";
-    closeButton.onclick = function() {
-        modal.style.display = "none";
-    };
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-}
-
-function showEmojiModal() {
-    const modal = document.getElementById("emojiBoard");
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
     const closeButton = modal.querySelector(".close");
     modal.style.display = "block";
     closeButton.onclick = function() {
@@ -529,9 +511,7 @@ function getRandomEmoji() {
     return defaultEmojis[randomIndex];
 }
 
-async function main() {
-
-    var thisEmoji = ""
+function main() {
     if (window.location.hash) {
         try {
             const inputString = window.location.hash.substring(1)
@@ -540,63 +520,59 @@ async function main() {
             if (parts.length > 1) {
                 paletteCode = decodeURIComponent(decodeURL(parts[1]));
             }
-            thisEmoji = unicodeToEmoji(parts[0])
+            const thisEmoji = unicodeToEmoji(parts[0])
             document.getElementById("customized-emoji").innerHTML = thisEmoji
             updateEmoji(thisEmoji, true);
             console.log(`→ Url Get: ${thisEmoji}`)
         } catch (e) {
-            console.log("→ Get Invalid Url ❓", e)
-            console.log("→ Random Select an Emoji 🎰")
-            thisEmoji = getRandomEmoji()
-            updateEmoji(thisEmoji, true);
-            window.location.hash = `${emojiToUnicode(thisEmoji)}`;
+            console.log("→ Get Invalid Url, Random Select an Emoji 🎰", e)
+            setRandomEmoji()
         }
     } else {
-        console.log("→ Get Home URL 🏚")
-        console.log("→ Random Select an Emoji 🎰")
-        thisEmoji = getRandomEmoji()
-        updateEmoji(thisEmoji, true);
-        window.location.hash = `${emojiToUnicode(thisEmoji)}`;
+        console.log("→ Get Basic URL, Random Select an Emoji 🎰")
+        setRandomEmoji()
     }
 }
 
+function setRandomEmoji() {
+    const thisEmoji = getRandomEmoji()
+    updateEmoji(thisEmoji, true);
+    window.location.hash = `${emojiToUnicode(thisEmoji)}`;
+}
 
 function findEmojiCategory(unicode) {
-    for (const key in emojiCategories) {
-      if (emojiCategories[key].includes(unicode)) {
-        return key;
-      }
+    for (const category in emojiCategories) {
+        if (emojiCategories[category].includes(unicode)) {
+            return category;
+        }
     }
-    return null; 
-  }
+    return null;
+}
 
 async function fetchEmojiData(thisEmoji) {
-    var data
-    if (emojiToUnicode(thisEmoji) in emojiPathsAndColors){
-        data = emojiPathsAndColors[emojiToUnicode(thisEmoji)]
+    if (emojiToUnicode(thisEmoji) in emojiPathsAndColors) {
+        return emojiPathsAndColors[emojiToUnicode(thisEmoji)]
     } else {
-        const category = findEmojiCategory(emojiToUnicode(thisEmoji)) 
-        if (category == null){
+        const category = findEmojiCategory(emojiToUnicode(thisEmoji))
+        if (category == null) {
             console.log(`Unknown Category, try fetch https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`)
             const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${emojiToUnicode(thisEmoji)}.json`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            data = await response.json()
+            return await response.json()
         } else {
-            console.log(`New Category {category}, fetch https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`)
+            console.log(`New Emoji Category: ${category}, fetch https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`)
             const response = await fetch(`https://raw.githubusercontent.com/rutopio/EmojiSalon/svgProcess/src/data/${category}.json`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            const thisCat = await response.json()
-            data = thisCat[emojiToUnicode(thisEmoji)]
-            Object.assign(emojiPathsAndColors, thisCat)
+            const newCategory = await response.json()
+            Object.assign(emojiPathsAndColors, newCategory)
+            return emojiPathsAndColors[emojiToUnicode(thisEmoji)]
         }
     }
-    return data
 }
-
 
 async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
 
@@ -607,33 +583,22 @@ async function setCustomizedEmojiSVG(pathArrayLocal, paletteArrayLocal) {
         if (getOverrideStyleString().length > 0) {
             getOverrideStyleString().split(', ').forEach(pair => {
                 const [key, value] = pair.split(' ');
-                customizedPalette[originalPaletteIndex.indexOf(parseInt(key))] = value
+                customizedPaletteColors[originalPaletteIndex.indexOf(parseInt(key))] = value
             });
         } else if (paletteCode.length > 0) {
             paletteCode.split(', ').forEach(pair => {
                 const [key, value] = pair.split(' ');
-                customizedPalette[originalPaletteIndex.indexOf(parseInt(key))] = value
+                customizedPaletteColors[originalPaletteIndex.indexOf(parseInt(key))] = value
             });
         }
 
         pathArrayLocal.forEach((d, index) => {
-            // console.log(paletteArrayLocal[index])
-            // console.log(originalPalette)
-            // console.log(originalPalette.indexOf(paletteArrayLocal[index]))
-            svgData.push(`<path fill="${customizedPalette[originalPalette.indexOf(paletteArrayLocal[index])]}"  d='${d}' />`)
+            svgData.push(`<path fill="${customizedPaletteColors[originalPaletteColors.indexOf(paletteArrayLocal[index])]}"  d='${d}' />`)
         })
-        const svg = `
-<svg id="customized-emoji-svg-data" xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
-<g transform="translate(0,0) scale(1,1)">
-${svgData.join(`\n`)}
-</g>
-</svg>
-    `;
+        const svg = `<svg id='customized-emoji-svg-data' xmlns='http://www.w3.org/2000/svg' width='16em' height='16em' viewBox='0 0 36 36'><g transform='translate(0,0) scale(1,1)'>${svgData.join(`\n`)}</g></svg>`;
         showSVG(svg, "customized-emoji-svg")
-        // console.log(svg)
-
     } else {
-        // console.log("Loading path...")
+        // console.log("Waiting fetch...")
     }
 }
 
@@ -644,17 +609,16 @@ function showSVG(svg, canvasName) {
 function setReferenceEmojiSVG(pathArrayLocal, paletteArrayLocal) {
     var svgData = []
     pathArrayLocal.forEach((d, index) => {
-        svgData.push(`<path fill="${paletteArrayLocal[index]}"  d='${d}' />`)
+        svgData.push(`<path fill='${paletteArrayLocal[index]}'  d='${d}' />`)
     })
     const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
-<g transform="translate(0,0) scale(1,1)">
-${svgData.join(`\n`)}
-</g>
-</svg>
-`;
+    <svg xmlns="http://www.w3.org/2000/svg" width="16em" height="16em" viewBox="0 0 36 36">
+    <g transform="translate(0,0) scale(1,1)">
+    ${svgData.join(`\n`)}
+    </g>
+    </svg>
+    `;
     showSVG(svg, "reference-emoji-svg")
-
 }
 
 main()
