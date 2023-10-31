@@ -12,45 +12,50 @@
 
 </div>
 
+## About Branch
+
+- `main`: **Twemoji** (Stable), using `COLR/CPAL v0` color font approach.
+- `svgProcess`: **Twemoji** (Stable), using SVG approach. Currently, due to some [known issues](#issues), **the website is using the SVG approach instead of the COLR/CPAL color font approach.** Code and resource can be found in this branch.
+- `withNotoEmoji`: **Twemoji** & **Noto Color Emoji** (Experimental), using `COLR/CPAL v0` and `COLR/CPAL v1` color font approach.
+
+While COLR/CPAL is more elegant and lightweight for demonstrating the potential of color fonts, the SVG approach offers better compatibility.
+
 ## Emoji Series
 
 - [Twemoji-colr / Created by Twitter & Modified by Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
-  - *Stable.* Current website and `main` branch.
 - [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji): `COLR/CPAL v1`
-  - *Experimental.* Switch to `with-Noto-Emoji` branch.
-
 
 ## Browser Compatibility
 
 - Have been tested on my own devices:
 
-|   | Chrome | Edge | FireFox | Safari | Brave |
-| ---:|:----:|:----:|:----:|:----:|:----:|
-| Version  | 117.0 | 117.0 | 117.0.1 | 16.0 | 1.58.131 |
-|Twemoji| ✅ | ✅ | 🟠 * | ✅ | ✅ |
-|Noto Color Emoji| ✅ | ✅ | 🟠 * | ❌ ** | ✅ | 
+|                  | Chrome | Edge  | FireFox | Safari  |  Brave   |
+| ---------------: | :----: | :---: | :-----: | :-----: | :------: |
+|          Version | 117.0  | 117.0 | 117.0.1 |  16.0   | 1.58.131 |
+|          Twemoji |   ✅   |  ✅   |  🟠 \*  |   ✅    |    ✅    |
+| Noto Color Emoji |   ✅   |  ✅   |  🟠 \*  | ❌ \*\* |    ✅    |
 
-| |Chrome on iOS | Safari on iOS | Chrome on Android |
-| ---:|:----:|:----:|:----:|
-|Version| 100.0 / iOS 16.5 | 16.5 / iOS 16.5| 104.0 / Android 12|
-|Twemoji| ✅ | ✅ | ✅ |
-|Noto Color Emoji| ❌ ** | ❌ ** | ✅ |
+|                  |     Safari on iOS     | Chrome on iOS\*\*\*\* | Chrome on Android  |
+| ---------------: | :-------------------: | :-------------------: | :----------------: |
+|          Version | 16.5 / iOS 16.5\*\*\* |   100.0 / iOS 16.5    | 104.0 / Android 12 |
+|          Twemoji |          ✅           |          ✅           |         ✅         |
+| Noto Color Emoji |        ❌ \*\*        |        ❌ \*\*        |         ✅         |
 
 - `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
 - `**`: Safari and any browser on iOS/iPadOS cannot render `COLR/CPAL v1` color fonts. Therefore, the link open via these browsers will be redirected to use Twemoji.
-- You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
-
+- `***`: iOS versions below 17 offer support for this feature, but iOS 17 does not.
+- `****`: All third-party browsers on iOS are based on the same WebKit kernel as Safari.
+- You can use [ChromaCheck (@RoelN)](https://pixelambacht.nl/chromacheck/) or [Color fonts live examples (@yoksel)](https://yoksel.github.io/color-fonts-demo/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
 
 ### COLR/CPAL v0 - Twemoji
 
 - [COLR/CPAL(v0) Font Formats - Can I USe...](https://caniuse.com/colr)
 - Basically all browsers and platforms are all supported.
 
-
 ### COLR/CPAL v1 - Noto Color Emoji
 
 - [COLR/CPAL(v1) Font Formats - Can I USe...](https://caniuse.com/colr-v1)
-- *Technically* Supported:
+- _Technically_ Supported:
   - Chrome 98+
   - Edge 98+
   - FireFox 107+
@@ -60,7 +65,6 @@
   - Safari
   - Browsers on iPhone and iPad - they are all based on WebKit engine.
 
-
 ## Related Packages and Repo
 
 - [Node.js](https://nodejs.org/)
@@ -69,7 +73,6 @@
 - [Coloris](https://github.com/mdbassit/Coloris)
 - [Parcel](https://parceljs.org/)
 - [Bootstrap](https://getbootstrap.com/)
-- [ChromaCheck](https://github.com/RoelN/ChromaCheck)
 
 ## Build
 
@@ -106,15 +109,29 @@ For example:
 
 `COLR/CPAL v1` is an extended version of `COLR/CPAL v0`, designed to elevate the capabilities of color fonts, particularly in the realm of gradient colors.
 
-Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts. 
+Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts.
+
+## Issues
+
+**Currently, iOS below 17 are support `COLR/CPAL v0` color font, however, ios 17 does not support anymore.**
+
+This issue has been reported on the WebKit forum. Given that many users have updated their iPhone and iPad devices to version 17, this repository now use the SVG approach instead of the COLR/CPAL format for better compatibility.
+
+See the report for details:
+
+- [Bug 262223 - COLR support vanished between Safari 16 and 17 / 2023-09-27](https://bugs.webkit.org/show_bug.cgi?id=262223)
 
 ## Copyright
 
-Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license under [MIT](http://opensource.org/licenses/MIT) [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), and [Noto Color Emoji](https://github.com/googlefonts/noto-emoji),  under the [Apache license](https://www.apache.org/licenses/LICENSE-2.0).
+<div align="center">
+<img src=https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png style="width: 100pt;">
+</div>
+
+Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license under [MIT](http://opensource.org/licenses/MIT) [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), and [Noto Color Emoji](https://github.com/googlefonts/noto-emoji), under the [Apache license](https://www.apache.org/licenses/LICENSE-2.0).
 
 You are free to use it for personal and commercial purposes. For more details and legal advices, please refer to the license of emoji sources.
 
-I don't claim any copyright over your creation.
+I do not claim any copyright over your creation.
 
 ## See More...
 
