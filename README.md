@@ -12,35 +12,15 @@
 
 </div>
 
-## About Branch
+## How to use?
 
-Because of some [known issues](#issues), in this branch, we will be using the SVG approach instead of the COLR/CPAL color font approach. While COLR/CPAL is more elegant and lightweight for demonstrating the potential of color fonts, the SVG approach offers better compatibility.
+In this branch, we will use [Twemoji](https://github.com/twitter/twemoji) SVG data for demonstrations. You can download your creation as an SVG or PNG for your use.
 
-## Emoji
+If you intend to use your creation on a website, you can utilize the [Twemoji-colr](https://github.com/mozilla/twemoji-colr) webfont along with modified CSS. The HTML and CSS codes can be found in the _Share and More_ panel (click the _Share and More_ button on the desktop website)
 
-- [Twemoji-colr / Created by Twitter & Modified by Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
+Moreover, the `colrv0` branch uses `COLR/CPAL v0` color fonts to achieve the same result as svg approach. And the `colrv1` shows the advanced experiment about `COLR/CPAL v1` by using Noto Color Emoji.
 
-## Browser Compatibility
-
-- Mainstream browsers universally support displaying the `<svg>` tag.
-- However, if you intend to use `COLR/CPAL` webfont, the compatibility may vary depending on different browsers:
-
-|         | Chrome | Edge  | FireFox | Safari |  Brave   |
-| ------: | :----: | :---: | :-----: | :----: | :------: |
-| Version | 117.0  | 117.0 | 117.0.1 |  16.0  | 1.58.131 |
-| Twemoji |   ✅   |  ✅   |  🟠 \*  |   ✅   |    ✅    |
-
-|         |    Safari on iOS     |  Chrome on iOS\*\*\*  | Chrome on Android  |
-| ------: | :------------------: | :-------------------: | :----------------: |
-| Version | 16.5 / iOS 16.5 \*\* | 100.0 / iOS 16.5 \*\* | 104.0 / Android 12 |
-| Twemoji |          ✅          |          ✅           |         ✅         |
-
-- `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
-- `**`: iOS versions below 17 offer support for this feature, but iOS 17 does not.
-- `***`: All third-party browsers on iOS are based on the same WebKit kernel as Safari.
-- You can use [ChromaCheck (@RoelN)](https://pixelambacht.nl/chromacheck/) or [Color fonts live examples (@yoksel)](https://yoksel.github.io/color-fonts-demo/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
-
-## Related Packages and Repo
+## Related
 
 - [Node.js](https://nodejs.org/)
 - [FontKit](https://github.com/foliojs/fontkit)
@@ -61,7 +41,32 @@ npm start
 npm run build
 ```
 
-## How does it work?
+## Browser Compatibility
+
+### SVG
+
+- Mainstream browsers universally support displaying the `<svg>` tag.
+
+### Webfont (COLR/CPAL v0)
+
+- However, if you intend to use TWemoji webfont, the compatibility may vary depending on different browsers:
+
+|         | Chrome | Edge  | FireFox | Safari |  Brave   |
+| ------: | :----: | :---: | :-----: | :----: | :------: |
+| Version | 117.0  | 117.0 | 117.0.1 |  16.0  | 1.58.131 |
+| Twemoji |   ✅   |  ✅   |  🟠 \*  |   ✅   |    ✅    |
+
+|         |    Safari on iOS     |  Chrome on iOS\*\*\*  | Chrome on Android  |
+| ------: | :------------------: | :-------------------: | :----------------: |
+| Version | 16.5 / iOS 16.5 \*\* | 100.0 / iOS 16.5 \*\* | 104.0 / Android 12 |
+| Twemoji |          ✅          |          ✅           |         ✅         |
+
+- `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
+- `**`: iOS versions below 17 offer support for this feature, but iOS 17 does not.
+- `***`: All third-party browsers on iOS are based on the same WebKit kernel as Safari.
+- You can use [ChromaCheck (@RoelN)](https://pixelambacht.nl/chromacheck/) or [Color fonts live examples (@yoksel)](https://yoksel.github.io/color-fonts-demo/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
+
+## How does webfont work?
 
 `COLR` (Color) and `CPAL` (Color Palette) are OpenType technologies to enable the use of multi-colored glyphs and emoji in fonts. Designer can create color font that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
 
