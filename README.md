@@ -12,54 +12,33 @@
 
 </div>
 
-## Emoji Series
+## About Branch
+
+Because of some [known issues](#issues), in this branch, we will be using the SVG approach instead of the COLR/CPAL color font approach. While COLR/CPAL is more elegant and lightweight for demonstrating the potential of color fonts, the SVG approach offers better compatibility.
+
+## Emoji
 
 - [Twemoji-colr / Created by Twitter & Modified by Mozilla](https://github.com/mozilla/twemoji-colr): `COLR/CPAL v0`
-  - *Stable.* Current website and `main` branch.
-- [Noto Color Emoji / Google Font](https://fonts.google.com/noto/specimen/Noto+Color+Emoji): `COLR/CPAL v1`
-  - *Experimental.* Switch to `with-Noto-Emoji` branch.
-
 
 ## Browser Compatibility
 
-- Have been tested on my own devices:
+- Mainstream browsers universally support displaying the `<svg>` tag.
+- However, if you intend to use `COLR/CPAL` webfont, the compatibility may vary depending on different browsers:
 
-|   | Chrome | Edge | FireFox | Safari | Brave |
-| ---:|:----:|:----:|:----:|:----:|:----:|
-| Version  | 117.0 | 117.0 | 117.0.1 | 16.0 | 1.58.131 |
-|Twemoji| ✅ | ✅ | 🟠 * | ✅ | ✅ |
-|Noto Color Emoji| ✅ | ✅ | 🟠 * | ❌ ** | ✅ | 
+|         | Chrome | Edge  | FireFox | Safari |  Brave   |
+| ------: | :----: | :---: | :-----: | :----: | :------: |
+| Version | 117.0  | 117.0 | 117.0.1 |  16.0  | 1.58.131 |
+| Twemoji |   ✅   |  ✅   |  🟠 \*  |   ✅   |    ✅    |
 
-| |Chrome on iOS | Safari on iOS | Chrome on Android |
-| ---:|:----:|:----:|:----:|
-|Version| 100.0 / iOS 16.5 | 16.5 / iOS 16.5| 104.0 / Android 12|
-|Twemoji| ✅ | ✅ | ✅ |
-|Noto Color Emoji| ❌ ** | ❌ ** | ✅ |
+|         |    Safari on iOS     |  Chrome on iOS\*\*\*  | Chrome on Android  |
+| ------: | :------------------: | :-------------------: | :----------------: |
+| Version | 16.5 / iOS 16.5 \*\* | 100.0 / iOS 16.5 \*\* | 104.0 / Android 12 |
+| Twemoji |          ✅          |          ✅           |         ✅         |
 
 - `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
-- `**`: Safari and any browser on iOS/iPadOS cannot render `COLR/CPAL v1` color fonts. Therefore, the link open via these browsers will be redirected to use Twemoji.
-- You can use [ChromaCheck](https://pixelambacht.nl/chromacheck/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
-
-
-### COLR/CPAL v0 - Twemoji
-
-- [COLR/CPAL(v0) Font Formats - Can I USe...](https://caniuse.com/colr)
-- Basically all browsers and platforms are all supported.
-
-
-### COLR/CPAL v1 - Noto Color Emoji
-
-- [COLR/CPAL(v1) Font Formats - Can I USe...](https://caniuse.com/colr-v1)
-- *Technically* Supported:
-  - Chrome 98+
-  - Edge 98+
-  - FireFox 107+
-  - Opera 86+
-  - other Chromium-Based browsers...
-- Unsupported:
-  - Safari
-  - Browsers on iPhone and iPad - they are all based on WebKit engine.
-
+- `**`: iOS versions below 17 offer support for this feature, but iOS 17 does not.
+- `***`: All third-party browsers on iOS are based on the same WebKit kernel as Safari.
+- You can use [ChromaCheck (@RoelN)](https://pixelambacht.nl/chromacheck/) or [Color fonts live examples (@yoksel)](https://yoksel.github.io/color-fonts-demo/) to see whether your browser support `COLR/CPAL v0` and `COLR/CPAL v1` format.
 
 ## Related Packages and Repo
 
@@ -69,7 +48,6 @@
 - [Coloris](https://github.com/mdbassit/Coloris)
 - [Parcel](https://parceljs.org/)
 - [Bootstrap](https://getbootstrap.com/)
-- [ChromaCheck](https://github.com/RoelN/ChromaCheck)
 
 ## Build
 
@@ -77,10 +55,9 @@
 # develop on local
 npm install
 npm start
-# at http://localhost:1234
 
 # build a single html page
-# if failed or miss files, delete `public` and `.parcel-cache` folder and retry
+# if fail, remove `public` and `.parcel-cache` folders and retry
 npm run build
 ```
 
@@ -106,21 +83,32 @@ For example:
 
 `COLR/CPAL v1` is an extended version of `COLR/CPAL v0`, designed to elevate the capabilities of color fonts, particularly in the realm of gradient colors.
 
-Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts. 
+Currently, most modern web browsers support `COLR/CPAL v0` font format, however, WebKit, the engine behind Safari and all browsers (including third-party) on iPhone and iPad, does not provide full support for `COLR/CPAL v1` fonts.
+
+## Issues
+
+**Currently, iOS below 17 are support `COLR/CPAL v0` color font, however, ios 17 does not support anymore.**
+
+This issue has been reported on the WebKit forum. Given that many users have updated their iPhone and iPad devices to version 17, this repository now use the SVG approach instead of the COLR/CPAL format for better compatibility.
+
+See the report for details:
+
+- [Bug 262223 - COLR support vanished between Safari 16 and 17 / 2023-09-27](https://bugs.webkit.org/show_bug.cgi?id=262223)
 
 ## Copyright
 
-Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license under [MIT](http://opensource.org/licenses/MIT) [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/), and [Noto Color Emoji](https://github.com/googlefonts/noto-emoji),  under the [Apache license](https://www.apache.org/licenses/LICENSE-2.0).
+<div align="center">
+<img src=https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png style="width: 100pt;">
+</div>
 
-You are free to use it for personal and commercial purposes. For more details and legal advices, please refer to the license of emoji sources.
+Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (graphic).
+
+This license enables reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.
 
 I don't claim any copyright over your creation.
 
 ## See More...
 
-- [COLRv1 Color Gradient Vector Fonts in Chrome 98 - Chrome for Developers Blog](https://developer.chrome.com/blog/colrv1-fonts/)
 - [OpenType COLR (Color Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/colr)
 - [OpenType CPAL (Color Palette Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/cpal)
-- [\[webkit-dev\] Request for Position: COLR v1 Vector Color Fonts](https://lists.webkit.org/pipermail/webkit-dev/2021-May/031839.html)
 - [COLR/CPAL(v0) Font Formats - Can I USe...](https://caniuse.com/colr)
-- [COLR/CPAL(v1) Font Formats - Can I USe...](https://caniuse.com/colr-v1)
