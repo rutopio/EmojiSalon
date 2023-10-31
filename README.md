@@ -117,3 +117,8 @@ I don't claim any copyright over your creation.
 - [OpenType COLR (Color Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/colr)
 - [OpenType CPAL (Color Palette Table) Spec - Microsoft](https://learn.microsoft.com/en-us/typography/opentype/spec/cpal)
 - [COLR/CPAL(v0) Font Formats - Can I USe...](https://caniuse.com/colr)
+
+# Special Thanks
+
+- [justfont](https://justfont.com/)
+- The [cover photo](https://www.pexels.com/zh-tw/photo/15545362/) is credited to [Bilakis](https://www.pexels.com/zh-tw/@bilakis/).
