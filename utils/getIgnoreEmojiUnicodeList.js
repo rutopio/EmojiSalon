@@ -32,9 +32,9 @@ defaultEmojis.forEach((e, i) => {
 
 output = JSON.stringify(output)
 
-fs.writeFile("./ignoreEmojiUnicodeList.json", output, 'utf8', function(err) {
+fs.writeFile("data/ignoreEmojiUnicodeList.json", output, 'utf8', function(err) {
     if (err) {
         return console.log(err);
     }
-    console.log("The file was saved!");
+    console.log("File Saved: ignoreEmojiUnicodeList.json");
 });

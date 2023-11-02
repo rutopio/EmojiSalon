@@ -37,9 +37,10 @@ for l in Glyphs.font.selectedLayers:
 		allData[glyph.name] = emojiData
 		useCounter += 1
 
-with open(f"fullPathAndColorData.json", "w") as outfile: 
+with open(f"data/fullPathAndColorData.json", "w") as outfile: 
 	json.dump(allData, outfile)
 
 		
 print(f"Success: {useCounter} | Skip: {skipCounter}")
-print(f"Dump finish! There are {len(allData)} emojis")
+print(f"Finish! There are {len(allData)} emojis")
+print("\nFile Saved: fullPathAndColorData.json")

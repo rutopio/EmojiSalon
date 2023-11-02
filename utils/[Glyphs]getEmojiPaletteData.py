@@ -17,7 +17,9 @@ for glyph in Glyphs.font.glyphs:
 	colorString = ", ".join(colors)
 	output+= f" '{glyph.name}': [{colorString}], "
 	
-print(output)
+print(f"Finish! There are {len(output)} emojis")
 
-with open(f"json/emojiPaletteData.json", "w") as outfile:
+with open(f"data/emojiPaletteData.json", "w") as outfile:
     json.dump(output, outfile)
+
+print("File Saved: emojiPaletteData.json")

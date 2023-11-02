@@ -1,3 +1,5 @@
+# SVG Source can be found in https://github.com/twitter/twemoji
+
 from xml.etree import ElementTree
 import os
 import json
@@ -47,7 +49,6 @@ def concatPathData(path, opacity, transform):
             return path
 
 
-# SVG Source can be found in https://github.com/twitter/twemoji
 fileNames = os.listdir(".")
 
 allData = {}
@@ -55,7 +56,7 @@ allData = {}
 skipCounter = 0
 useCounter = 0
 for fileName in fileNames:
-    # ignore emoji with skin indicator
+    # ignore emoji with skin tone modifiers
     if (
         "1f3fb" in fileName
         or "1f3fc" in fileName
@@ -141,3 +142,4 @@ with open(f"json/fullPathAndColorData.json", "w") as outfile:
 
 print(f"Success: {useCounter} | Skip: {skipCounter}")
 print(f"Dump finish! There are {len(allData)} emojis")
+print("File Saved: fullPathAndColorData.json")

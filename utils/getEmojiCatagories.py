@@ -2,7 +2,7 @@ from xml.etree import ElementTree
 import os
 import json
 
-emojiDataPath = "emojimart.json"
+emojiDataPath = "data/emojimart.json"
 
 with open(emojiDataPath, "r") as file:
     data = json.load(file)
@@ -26,5 +26,7 @@ for category in categories:
     results[thisCategoryName] = glyphs
     print(f"{'{0:<15}'.format(thisCategoryName)}: {len(glyphs)}")
 
-with open(f"emojiCategories.json", "w") as outfile:
+with open(f"data/emojiCategories.json", "w") as outfile:
     json.dump(results, outfile)
+
+print("File Saved: emojiCategories.json")

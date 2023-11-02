@@ -1,10 +1,10 @@
 import os
 import json
 
-with open(f"emojiCategories.json", "r") as file:
+with open(f"data/emojiCategories.json", "r") as file:
     categoryData = json.load(file)
 
-with open(f"ignoreEmojiUnicodeList.json", "r") as file:
+with open(f"data/ignoreEmojiUnicodeList.json", "r") as file:
     ignoreEmojis = json.load(file)
 
 skipCounter = 0
@@ -33,11 +33,9 @@ for _, (categoryName, emojiList) in enumerate(categoryData.items()):
                 err.append(emo)
 
     print(f"{categoryName}: {len(categoryData)}")
-    with open(f"json/{categoryName}.json", "w") as outfile:
+    with open(f"data/{categoryName}.json", "w") as outfile:
         json.dump(categoryData, outfile)
 
 nl = "\n"
-print("-" * 50)
 print(f"Success: {useCounter} | Skip: {skipCounter} | Error: {len(err)}")
-print("-" * 50)
 print(f"Error ({len(err)}): {nl.join(err)}")
