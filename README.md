@@ -2,9 +2,7 @@
 
 <h1>🪄 Emoji Salon - Coloring Your Emoji</h1>
 
-🔗 https://emojisalon.art 🔗
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/875f191b-0b50-46c8-966a-49fa4f20b6fe/deploy-status)](https://app.netlify.com/sites/elegant-mccarthy-ce9195/deploys)
+🔗&nbsp;&nbsp; https://emojisalon.art &nbsp;&nbsp;🔗
 
 ![](src/image/social.png)
 
@@ -16,9 +14,9 @@
 
 In this branch, we will use [Twemoji](https://github.com/twitter/twemoji) SVG data for demonstrations. You can select, color, and download your creation as an SVG or PNG for your use.
 
-Besides, if you intend to use your creation on the website, you can utilize the [Twemoji-colr](https://github.com/mozilla/twemoji-colr) webfont along with modified CSS. The HTML and CSS codes can be found in the _Share and More_ panel (click the _Share and More_ button on the desktop website)
+Additionally, if you intend to use your creation on the website, you can make use of the [Twemoji-colr](https://github.com/mozilla/twemoji-colr) webfont along with modified CSS. The HTML and CSS codes can be found in the _Share and More_ panel (click the _Share and More_ button on the desktop website)
 
-Moreover, the `colrv0` branch demonstrate the use of `COLR/CPAL v0` color fonts to achieve the same result as svg approach. And the `colrv1` shows the advanced experiment about `COLR/CPAL v1` by using Noto Color Emoji.
+Moreover, the `colrv0` branch demonstrates the use of `COLR/CPAL v0` color fonts to achieve the same result as svg approach. And the `colrv1` shows the advanced experiment about `COLR/CPAL v1` by using Noto Color Emoji.
 
 ## Usage
 
@@ -38,7 +36,7 @@ Moreover, the `colrv0` branch demonstrate the use of `COLR/CPAL v0` color fonts 
 
 For some people with color vision deficiencies or color blindness, it may be challenging to correctly identify certain emojis that are too similar in color or overly vibrant.
 
-For example, 🇮🇹 Italy and 🇮🇪 Ireland⁠; 🇷🇴 Romania and 🇹🇩 Chad⁠; 🇱🇻 Latvia and 🇦🇹 Austria⁠; 🇲🇨 Monaco and 🇮🇩 Indonesia⁠.
+For instance, 🇮🇹 Italy and 🇮🇪 Ireland⁠; 🇷🇴 Romania and 🇹🇩 Chad⁠; 🇱🇻 Latvia and 🇦🇹 Austria⁠; 🇲🇨 Monaco and 🇮🇩 Indonesia⁠.
 
 However, most current emoji designs do not take them into consideration. This website aims to provide easily distinguishable emojis for such individuals.
 
@@ -77,7 +75,7 @@ npm run build
 ### Webfont
 
 - `COLR` (_Color_) and `CPAL` (_Color Palette_) are OpenType technologies to enable the use of multi-colored glyphs and emoji in fonts. Designer can create color font that contain multiple layers of color information, allowing for complex and vibrant color rendering. User can change the layer's color by override `@font-palette-values` attribute.
-- `COLR/CPAL v1` is an extended version of `COLR/CPAL v0`, designed to elevate the capabilities of color fonts, particularly in the realm of gradient colors.
+- `COLR/CPAL v1` is an extended version of `COLR/CPAL v0`, designed to elevate the capabilities of color fonts, such as gradient color support.
 - For example:
 
 ```
