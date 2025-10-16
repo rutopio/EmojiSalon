@@ -2,7 +2,7 @@
 
 <h1>🪄 Emoji Salon - Coloring Your Emoji</h1>
 
-🔗&nbsp;&nbsp; https://emojisalon.art &nbsp;&nbsp;🔗
+🔗&nbsp;&nbsp; https://emojisalon.pages.dev &nbsp;&nbsp;🔗
 
 ![](src/image/social.png)
 
@@ -57,7 +57,7 @@ npm start
 npm run build
 ```
 
-## Related
+## Dependencies
 
 - [Node.js](https://nodejs.org/)
 - [FontKit](https://github.com/foliojs/fontkit)
@@ -98,12 +98,12 @@ npm run build
 |         | Chrome | Edge  | FireFox |       Safari        |
 | ------: | :----: | :---: | :-----: | :-----------------: |
 | Version | 117.0  | 117.0 | 117.0.1 | 16.0 / Monterey\*\* |
-| Twemoji |   ✅   |  ✅   |  🟠 \*  |         ✅          |
+| Twemoji |   ✅    |   ✅   |  🟠 \*   |          ✅          |
 
 |         |    Safari on iOS     |  Chrome on iOS\*\*\*  | Chrome on Android  |
 | ------: | :------------------: | :-------------------: | :----------------: |
 | Version | 16.5 / iOS 16.5 \*\* | 100.0 / iOS 16.5 \*\* | 104.0 / Android 12 |
-| Twemoji |          ✅          |          ✅           |         ✅         |
+| Twemoji |          ✅           |           ✅           |         ✅          |
 
 - `*`: In Firefox, both rendering and coloring functions are available. However, the result can not be rendered into an image. When you try to download the creation, it will be the original version and not the color overridden one.
 - `**`: **Currently, Safari below 17 are support `COLR/CPAL v0` color font, however, Safari 17 (on iOS 17 or macOS Sonoma) does not support anymore.** Reference: COLR support vanished between Safari 16 and 17: [WebKit Bugzilla Bug 262223](https://bugs.webkit.org/show_bug.cgi?id=262223)
@@ -131,4 +131,3 @@ I do not own any copyright to your work.
 ## Special Thanks
 
 - [justfont](https://justfont.com/)
-- Cover Image by [Bilakis](https://www.pexelscom/zh-tw/@bilakis/) via [Pexels](https://www.pexels.com/zh-tw/photo/15545362/)

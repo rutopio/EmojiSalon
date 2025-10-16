@@ -1,8 +1,8 @@
 {
   "name": "Emoji Salon",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "ChingRu <https://github.com/rutopio>",
-  "description": "Coloring Your Emoji. Based on Noto Color Emoji (COLR/CPAL v1 color font)",
+  "description": "Coloring Your Emoji.",
   "source": "src/index.html",
   "scripts": {
     "start": "parcel",

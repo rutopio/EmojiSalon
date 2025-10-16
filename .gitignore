@@ -131,3 +131,4 @@ dist
 
 # images
 utils/ai
+.DS_Store
