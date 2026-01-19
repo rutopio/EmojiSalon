@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import {
-  ArrowSquareOutIcon,
   CaretRightIcon,
+  GithubLogoIcon,
   ListIcon,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
+import { GithubIcon } from "./icon";
 import { ThemeToggle } from "./theme-toggle";
 
 /**
@@ -77,8 +78,8 @@ export default function Navbar() {
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <ArrowSquareOutIcon className="size-4" />
-                  Github
+                  <GithubIcon />
+                  rutopio/EmojiSalon
                 </a>
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -104,7 +105,7 @@ export default function Navbar() {
                 <ListIcon className="size-6" weight="bold" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-fit min-w-48">
               <DropdownMenuItem asChild>
                 <Link to="/" className="flex items-center gap-2">
                   <CaretRightIcon
@@ -140,8 +141,8 @@ export default function Navbar() {
                   rel="noreferrer noopener"
                   className="flex items-center gap-2"
                 >
-                  <ArrowSquareOutIcon className="size-4" />
-                  Github
+                  <GithubIcon />
+                  rutopio/EmojiSalon
                 </a>
               </DropdownMenuItem>
             </DropdownMenuContent>

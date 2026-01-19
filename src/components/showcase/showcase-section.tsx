@@ -134,79 +134,81 @@ export default function ShowcaseSection({
       {/* Hidden canvas for image generation */}
       <canvas ref={canvasRef} className="hidden" />
 
-      {/* Unicode label */}
-      <div className="relative mb-4 flex w-full items-center justify-center">
-        <span className="text-primary font-mono text-base">
-          {unicodeDisplay}
-        </span>
-        <div className="absolute -top-1 right-0 flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="xs"
-            onClick={() => handleNavigate(firstVariant.palette)}
-            className="size-8"
-          >
-            <PencilSimpleIcon />
-          </Button>
-          <Button
-            variant="outline"
-            size="xs"
-            onClick={handleDownload}
-            className="size-8"
-          >
-            <DownloadSimpleIcon />
-          </Button>
-          <Button
-            variant="outline"
-            size="xs"
-            onClick={handleShare}
-            className="size-8"
-          >
-            <ShareNetworkIcon />
-          </Button>
+      <div className="flex flex-col gap-8">
+        {/* Unicode label */}
+        <div className="relative flex w-full items-center justify-center">
+          <span className="text-primary font-mono text-base">
+            {unicodeDisplay}
+          </span>
+          <div className="absolute -top-1 right-0 flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="xs"
+              onClick={() => handleNavigate(firstVariant.palette)}
+              className="size-8"
+            >
+              <PencilSimpleIcon />
+            </Button>
+            <Button
+              variant="outline"
+              size="xs"
+              onClick={handleDownload}
+              className="size-8"
+            >
+              <DownloadSimpleIcon />
+            </Button>
+            <Button
+              variant="outline"
+              size="xs"
+              onClick={handleShare}
+              className="size-8"
+            >
+              <ShareNetworkIcon />
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="flex flex-wrap items-center justify-center gap-12">
-        {/* Original emoji */}
-        <EmojiPreview
-          svg={originalSvg}
-          label={originalName}
-          isLoading={isLoading}
-        />
-
-        {/* Arrow */}
-        <ArrowRightIcon size={20} weight="bold" className="text-primary" />
-
-        {/* Variants */}
-        {hasMultipleVariants ? (
-          // Multiple variants: render each separately
-          variants.map((variant, index) => (
-            <VariantPreview key={index} emoji={emoji} variant={variant} />
-          ))
-        ) : (
-          // Single variant: use the already loaded modifiedSvg
+        {/* Content */}
+        <div className="flex flex-wrap items-center justify-center gap-12">
+          {/* Original emoji */}
           <EmojiPreview
-            svg={modifiedSvg}
-            label={firstVariant.name}
+            svg={originalSvg}
+            label={originalName}
             isLoading={isLoading}
           />
-        )}
-      </div>
 
-      {/* Share Modal */}
-      <ShowcaseShareModal
-        open={shareModalOpen}
-        onOpenChange={setShareModalOpen}
-        emoji={unicodeToEmoji(emoji) || ""}
-        palette={firstVariant.palette}
-        svgData={modifiedSvg}
-        imageSrc={imageSrc}
-        customizedPaletteColors={customizedPaletteColors}
-        originalPaletteColors={originalPaletteColors}
-        originalPaletteIndex={originalPaletteIndex}
-      />
+          {/* Arrow */}
+          <ArrowRightIcon size={20} weight="bold" className="text-primary" />
+
+          {/* Variants */}
+          {hasMultipleVariants ? (
+            // Multiple variants: render each separately
+            variants.map((variant, index) => (
+              <VariantPreview key={index} emoji={emoji} variant={variant} />
+            ))
+          ) : (
+            // Single variant: use the already loaded modifiedSvg
+            <EmojiPreview
+              svg={modifiedSvg}
+              label={firstVariant.name}
+              isLoading={isLoading}
+            />
+          )}
+        </div>
+
+        {/* Share Modal */}
+        <ShowcaseShareModal
+          open={shareModalOpen}
+          onOpenChange={setShareModalOpen}
+          emoji={unicodeToEmoji(emoji) || ""}
+          palette={firstVariant.palette}
+          svgData={modifiedSvg}
+          imageSrc={imageSrc}
+          customizedPaletteColors={customizedPaletteColors}
+          originalPaletteColors={originalPaletteColors}
+          originalPaletteIndex={originalPaletteIndex}
+        />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CircleNotchIcon } from "@phosphor-icons/react";
 import Footer from "@/components/footer";
 import ActionButtons from "@/components/home/action-buttons";
 import ColorPalettePickers from "@/components/home/color-palette-pickers";
@@ -9,6 +8,7 @@ import ShareModal from "@/components/home/share-modal";
 import Navbar from "@/components/navbar";
 import { useEmoji } from "@/contexts/emoji-context";
 import useIsClient from "@/hooks/use-is-client";
+import { Spinner } from "@/components/ui/spinner";
 
 // Define search params type
 interface EmojiSearchParams {
@@ -42,7 +42,7 @@ function EmojiSalonPage() {
   if (!isClient) {
     return (
       <div className="flex h-dvh items-center justify-center">
-        <CircleNotchIcon size={32} className="animate-spin text-neutral-400" />
+        <Spinner className="size-8"/>
       </div>
     );
   }

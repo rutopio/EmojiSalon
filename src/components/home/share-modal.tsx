@@ -162,7 +162,7 @@ export default function ShareModal() {
               <div className="flex items-center gap-2">
                 <div className="text-sm">HTML</div>
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="sm"
                   onClick={handleCopyHTMLCode}
                   className="ml-auto w-32"
@@ -171,14 +171,14 @@ export default function ShareModal() {
                   <div className="text-xs">Copy HTML</div>
                 </Button>
               </div>
-              <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs">
+              <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs">
                 <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
               </pre>
 
               <div className="mt-4 flex items-center gap-2">
                 <div className="text-sm">CSS</div>
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="sm"
                   onClick={handleCopyCSSCode}
                   className="ml-auto w-32"
@@ -187,7 +187,7 @@ export default function ShareModal() {
                   <div className="text-xs">Copy CSS</div>
                 </Button>
               </div>
-              <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs whitespace-pre-wrap">
+              <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs whitespace-pre-wrap">
                 <code>{cssCode}</code>
               </pre>
             </div>

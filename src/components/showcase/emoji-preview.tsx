@@ -2,7 +2,7 @@
  * EmojiPreview - Renders a single emoji SVG with optional label.
  */
 
-import { CircleNotchIcon } from "@phosphor-icons/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EmojiPreviewProps {
   svg: string;
@@ -17,12 +17,9 @@ export default function EmojiPreview({
 }: EmojiPreviewProps) {
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-8">
         <div className="flex size-32 items-center justify-center">
-          <CircleNotchIcon
-            size={24}
-            className="animate-spin text-neutral-400"
-          />
+          <Skeleton className="size-32" />
         </div>
         <span className="text-center text-sm text-neutral-500">{label}</span>
       </div>
