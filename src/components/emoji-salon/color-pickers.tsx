@@ -26,9 +26,7 @@ import {
   ColorThumb,
   SliderTrack,
 } from "@/components/color";
-import { Label } from "@/components/ui/label";
 import { useEmoji } from "@/contexts/emoji-context";
-import { useEmojiActions } from "@/hooks/use-emoji-actions";
 import { Pipette } from "lucide-react";
 
 import type { Color } from "react-aria-components";
@@ -135,8 +133,11 @@ export function ColorPickerPopover({
 
             {/* Hex Input Field */}
             <ColorField colorSpace="hsb" className="flex w-full flex-col gap-1">
-              <Label className="text-sm font-medium">Hex</Label>
-              <AriaInput className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]" />
+              {/* <Label className="text-sm font-medium"></Label> */}
+              <AriaInput
+                className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                placeholder="Hex"
+              />
             </ColorField>
 
             {/* Color Swatch Picker */}
@@ -161,9 +162,8 @@ export function ColorPickerPopover({
  * A component that displays multiple color pickers for editing a color palette.
  * Uses EmojiContext for colors and useEmojiActions for color change handling.
  */
-export function ColorPalettePicker() {
-  const { customizedPaletteColors } = useEmoji();
-  const { handleColorChange } = useEmojiActions();
+export default function ColorPalettePicker() {
+  const { customizedPaletteColors, handleColorChange } = useEmoji();
 
   return (
     <div className="flex justify-center">

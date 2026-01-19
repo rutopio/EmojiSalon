@@ -1,6 +1,6 @@
-export function Footer() {
+export default function Footer() {
   return (
-    <div className="container text-center font-mono text-sm tracking-wider">
+    <div className="container text-center font-mono text-xs tracking-wider">
       <p>
         Created by{" "}
         <a

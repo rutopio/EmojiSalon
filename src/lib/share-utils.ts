@@ -77,48 +77,30 @@ export function copyLinkToClipboard(): void {
  * - A .mod-emoji class that applies the font
  * - @font-palette-values with color overrides (if any)
  *
- * Color overrides are parsed from the URL search params in the format:
- * `?emoji=xxx&palette=195(F0DAA3)-824(6E343F)`
- *
+ * @param {string[]} customizedColors - Current customized palette colors
+ * @param {string[]} originalColors - Original palette colors
+ * @param {number[]} originalIndex - Original palette indices
  * @returns {string} Complete CSS code for displaying the customized emoji.
- *
- * @example
- * // With URL: https://example.com/?emoji=u1f600&palette=3(ff0000)5(00ff00)
- * const css = generateCSSCode();
- * // Returns:
- * // @font-face {
- * //     font-family: Twemoji;
- * //     src: url("...") format("woff2");
- * // }
- * // .mod-emoji { ... }
- * // @font-palette-values --mod-palette {
- * //     override-colors: 3 #ff0000, 5 #00ff00
- * // }
  */
-export function generateCSSCode(): string {
-  // SSR guard: window is not available on server
-  if (typeof window === "undefined") {
-    return "";
-  }
+export function generateCSSCode(
+  customizedColors: string[],
+  originalColors: string[],
+  originalIndex: number[]
+): string {
+  // Build override colors by comparing customized vs original
+  const overrides: string[] = [];
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const palette = searchParams.get("palette");
-
-  let overrideColors = "";
-  if (palette) {
-    try {
-      // Decode new format: "195_f0daa3-824_6e343f" → "195 #f0daa3, 824 #6e343f"
-      overrideColors = palette
-        .split("-")
-        .map((pair) => {
-          const [index, hex] = pair.split("_");
-          return `${index} #${hex}`;
-        })
-        .join(", ");
-    } catch {
-      overrideColors = "";
+  customizedColors.forEach((color, idx) => {
+    const originalColor = originalColors[idx];
+    if (originalColor && color.toLowerCase() !== originalColor.toLowerCase()) {
+      const paletteIdx = originalIndex[idx];
+      if (paletteIdx !== undefined) {
+        overrides.push(`${paletteIdx} ${color}`);
+      }
     }
-  }
+  });
+
+  const overrideColors = overrides.join(", ");
 
   return `@font-face { 
     font-family: Twemoji;
@@ -132,7 +114,7 @@ export function generateCSSCode(): string {
 
 @font-palette-values --mod-palette {
     font-family: Twemoji;
-    base-palette: 0;${overrideColors ? `\n    override-colors: ${overrideColors}` : ""}
+    base-palette: 0;${overrideColors ? `\n    override-colors: ${overrideColors};` : ""}
 }`;
 }
 

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
 
 export const Route = createFileRoute("/showcase")({
   component: ShowcasePage,

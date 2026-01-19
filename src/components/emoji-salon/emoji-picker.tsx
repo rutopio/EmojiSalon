@@ -7,8 +7,8 @@
  * @see https://github.com/missive/emoji-mart
  */
 
-import { useSyncExternalStore } from "react";
-import { useEmojiActions } from "@/hooks/use-emoji-actions";
+import { useTheme } from "@/components/theme-provider";
+import { useEmoji } from "@/contexts/emoji-context";
 import data from "@emoji-mart/data/sets/15/twitter.json";
 import EmojiMartPicker from "@emoji-mart/react";
 
@@ -34,19 +34,11 @@ interface EmojiMartEmoji {
   emoticons?: string[];
 }
 
-// Hook to check if we're on the client (exported for use in index.tsx)
-export function useIsClient() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-}
-
 export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
   const handleEmojiSelect = (emoji: EmojiMartEmoji) => {
     onEmojiSelect(emoji.native, emoji.name);
   };
+  const { theme } = useTheme();
 
   return (
     <div className="emoji-mart-container w-full">
@@ -56,7 +48,7 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
         set="twitter"
         emojiSize={28}
         perLine={8}
-        theme="light"
+        theme={theme === "dark" ? "dark" : "light"}
         maxFrequentRows={1}
         skinTonePosition="none"
         exceptEmojis={[
@@ -84,8 +76,8 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
  * Desktop emoji picker that uses useEmojiActions hook internally.
  * Shown only on large screens.
  */
-export function DesktopEmojiPicker() {
-  const { handleEmojiSelect } = useEmojiActions();
+export default function DesktopEmojiPicker() {
+  const { handleEmojiSelect } = useEmoji();
 
   return (
     <div className="hidden lg:block">

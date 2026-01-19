@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useEmoji } from "@/contexts/emoji-context";
-import { useEmojiActions } from "@/hooks/use-emoji-actions";
 import {
   copyLinkToClipboard,
   downloadSVG,
@@ -27,19 +26,26 @@ import { CheckCircleIcon } from "lucide-react";
 
 /**
  * Modal component for sharing customized emoji.
- * Uses useEmojiActions hook for state and handlers.
+ * Uses useEmoji hook for state and handlers.
  */
-export function ShareModal() {
-  const { currentEmoji } = useEmoji();
+export default function ShareModal() {
   const {
+    currentEmoji,
     shareModalOpen,
     setShareModalOpen,
     resultImageSrc,
     svgHTML,
     handleCopyImage,
-  } = useEmojiActions();
+    customizedPaletteColors,
+    originalPaletteColors,
+    originalPaletteIndex,
+  } = useEmoji();
 
-  const cssCode = generateCSSCode();
+  const cssCode = generateCSSCode(
+    customizedPaletteColors,
+    originalPaletteColors,
+    originalPaletteIndex
+  );
 
   const handleDownloadSVG = () => {
     downloadSVG(svgHTML, currentEmoji);
@@ -137,12 +143,12 @@ export function ShareModal() {
 
             <div className="col-span-2 hidden flex-col gap-2 lg:flex">
               <div className="text-sm">HTML</div>
-              <pre className="overflow-x-auto rounded bg-gray-200 px-4 py-2 text-xs">
+              <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs">
                 <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
               </pre>
 
               <div className="mt-4 text-sm">CSS</div>
-              <pre className="overflow-x-auto rounded bg-gray-200 px-4 py-2 text-xs whitespace-pre-wrap">
+              <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs whitespace-pre-wrap">
                 <code>{cssCode}</code>
               </pre>
             </div>

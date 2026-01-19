@@ -12,6 +12,7 @@ import { EmojiPicker } from "@/components/emoji-salon/emoji-picker";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
+  PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
@@ -20,13 +21,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEmojiActions } from "@/hooks/use-emoji-actions";
+import { useEmoji } from "@/contexts/emoji-context";
 
 interface ActionButtonsProps {
   variant?: "desktop" | "mobile";
 }
 
-export function ActionButtons({ variant = "desktop" }: ActionButtonsProps) {
+export default function ActionButtons({
+  variant = "desktop",
+}: ActionButtonsProps) {
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
   const {
@@ -37,7 +40,7 @@ export function ActionButtons({ variant = "desktop" }: ActionButtonsProps) {
     handleDownloadImage,
     handleCopyImage,
     handleShare,
-  } = useEmojiActions();
+  } = useEmoji();
 
   // Wrap emoji select to close popover
   const onEmojiSelect = (emoji: string, label: string) => {
@@ -48,42 +51,39 @@ export function ActionButtons({ variant = "desktop" }: ActionButtonsProps) {
   if (variant === "mobile") {
     return (
       <div className="flex w-full flex-col gap-4 lg:hidden">
-        <div className="grid w-full grid-cols-5 gap-2">
-          <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="col-span-4">
-                    <SmileyWinkIcon className="size-5" />
-                    <span className="ml-1">Select Emoji</span>
-                  </Button>
-                </PopoverTrigger>
-              </TooltipTrigger>
-              <TooltipContent>Select an Emoji</TooltipContent>
-            </Tooltip>
-            <PopoverContent
-              className="w-auto border-none bg-transparent p-0 shadow-none"
-              align="center"
-              side="bottom"
-              sideOffset={8}
-            >
-              <EmojiPicker onEmojiSelect={onEmojiSelect} />
-            </PopoverContent>
-          </Popover>
+        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+          <PopoverAnchor asChild>
+            <div className="grid w-full grid-cols-5 gap-2">
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="col-span-4">
+                  <SmileyWinkIcon className="size-5" />
+                  <span className="ml-1">Select Emoji</span>
+                </Button>
+              </PopoverTrigger>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                className="col-span-1"
-                onClick={handleRandomEmoji}
-              >
-                <DiceFiveIcon className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Random Emoji</TooltipContent>
-          </Tooltip>
-        </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="col-span-1"
+                    onClick={handleRandomEmoji}
+                  >
+                    <DiceFiveIcon className="size-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Random Emoji</TooltipContent>
+              </Tooltip>
+            </div>
+          </PopoverAnchor>
+          <PopoverContent
+            className="w-auto border-none bg-transparent p-0 shadow-none"
+            align="center"
+            side="bottom"
+            sideOffset={8}
+          >
+            <EmojiPicker onEmojiSelect={onEmojiSelect} />
+          </PopoverContent>
+        </Popover>
 
         <div className="grid w-full grid-cols-5 gap-2">
           <Tooltip>
