@@ -2,10 +2,9 @@
 
 import * as React from "react";
 import { XIcon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Dialog as SheetPrimitive } from "radix-ui";
-
-import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;

@@ -8,6 +8,7 @@
  */
 
 import { useSyncExternalStore } from "react";
+import { useEmojiActions } from "@/hooks/use-emoji-actions";
 import data from "@emoji-mart/data/sets/15/twitter.json";
 import EmojiMartPicker from "@emoji-mart/react";
 
@@ -21,14 +22,6 @@ interface EmojiPickerProps {
    * @param label - The label/name of the emoji.
    */
   onEmojiSelect: (emoji: string, label: string) => void;
-  /**
-   * The currently selected emoji to highlight.
-   */
-  selectedEmoji?: string;
-  /**
-   * The label of the currently selected emoji.
-   */
-  selectedEmojiLabel?: string;
 }
 
 interface EmojiMartEmoji {
@@ -41,8 +34,8 @@ interface EmojiMartEmoji {
   emoticons?: string[];
 }
 
-// Hook to check if we're on the client
-function useIsClient() {
+// Hook to check if we're on the client (exported for use in index.tsx)
+export function useIsClient() {
   return useSyncExternalStore(
     () => () => {},
     () => true,
@@ -51,20 +44,9 @@ function useIsClient() {
 }
 
 export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
-  const isClient = useIsClient();
-
   const handleEmojiSelect = (emoji: EmojiMartEmoji) => {
     onEmojiSelect(emoji.native, emoji.name);
   };
-
-  // Avoid SSR issues - only render on client
-  if (!isClient) {
-    return (
-      <div className="emoji-mart-container">
-        <div className="h-[435px] w-[352px] animate-pulse rounded-lg bg-neutral-100" />
-      </div>
-    );
-  }
 
   return (
     <div className="emoji-mart-container w-full">
@@ -72,7 +54,7 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
         data={data}
         onEmojiSelect={handleEmojiSelect}
         set="twitter"
-        emojiSize={32}
+        emojiSize={28}
         perLine={8}
         theme="light"
         maxFrequentRows={1}
@@ -94,6 +76,20 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
           "registered",
         ]}
       />
+    </div>
+  );
+}
+
+/**
+ * Desktop emoji picker that uses useEmojiActions hook internally.
+ * Shown only on large screens.
+ */
+export function DesktopEmojiPicker() {
+  const { handleEmojiSelect } = useEmojiActions();
+
+  return (
+    <div className="hidden lg:block">
+      <EmojiPicker onEmojiSelect={handleEmojiSelect} />
     </div>
   );
 }

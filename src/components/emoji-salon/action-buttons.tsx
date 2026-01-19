@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ArrowCounterClockwiseIcon,
   DiceFiveIcon,
@@ -7,92 +8,75 @@ import {
   ShareNetworkIcon,
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
-
-import { EmojiPicker } from "~/components/emoji-salon/emoji-picker";
-import { Button } from "~/components/ui/button";
+import { EmojiPicker } from "@/components/emoji-salon/emoji-picker";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
+} from "@/components/ui/popover";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
+} from "@/components/ui/tooltip";
+import { useEmojiActions } from "@/hooks/use-emoji-actions";
 
 interface ActionButtonsProps {
-  onRandomEmoji: () => void;
-  onRandomColors: () => void;
-  onReset: () => void;
-  onDownloadImage: () => void;
-  onCopyImage: () => void;
-  onShare: () => void;
-  onEmojiSelect?: (emoji: string) => void;
-  emojiPickerOpen?: boolean;
-  onEmojiPickerOpenChange?: (open: boolean) => void;
   variant?: "desktop" | "mobile";
 }
 
-export function ActionButtons({
-  onRandomEmoji,
-  onRandomColors,
-  onReset,
-  onDownloadImage,
-  onCopyImage,
-  onShare,
-  onEmojiSelect,
-  emojiPickerOpen,
-  onEmojiPickerOpenChange,
-  variant = "desktop",
-}: ActionButtonsProps) {
-  const handleEmojiSelect = (emoji: string) => {
-    onEmojiSelect?.(emoji);
-    onEmojiPickerOpenChange?.(false);
+export function ActionButtons({ variant = "desktop" }: ActionButtonsProps) {
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+
+  const {
+    handleEmojiSelect,
+    handleRandomEmoji,
+    handleRandomColors,
+    handleReset,
+    handleDownloadImage,
+    handleCopyImage,
+    handleShare,
+  } = useEmojiActions();
+
+  // Wrap emoji select to close popover
+  const onEmojiSelect = (emoji: string, label: string) => {
+    setEmojiPickerOpen(false);
+    handleEmojiSelect(emoji, label);
   };
 
   if (variant === "mobile") {
     return (
-      <div className="flex flex-col gap-4 lg:hidden">
-        <div className="flex justify-center gap-2">
-          {onEmojiSelect && (
-            <Popover
-              open={emojiPickerOpen}
-              onOpenChange={onEmojiPickerOpenChange}
+      <div className="flex w-full flex-col gap-4 lg:hidden">
+        <div className="grid w-full grid-cols-5 gap-2">
+          <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="col-span-4">
+                    <SmileyWinkIcon className="size-5" />
+                    <span className="ml-1">Select Emoji</span>
+                  </Button>
+                </PopoverTrigger>
+              </TooltipTrigger>
+              <TooltipContent>Select an Emoji</TooltipContent>
+            </Tooltip>
+            <PopoverContent
+              className="w-auto border-none bg-transparent p-0 shadow-none"
+              align="center"
+              side="bottom"
+              sideOffset={8}
             >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="bg-white shadow-md">
-                      <SmileyWinkIcon className="size-5" />
-                      <span className="ml-2">Select an Emoji</span>
-                    </Button>
-                  </PopoverTrigger>
-                </TooltipTrigger>
-                <TooltipContent>Select an Emoji</TooltipContent>
-              </Tooltip>
-              <PopoverContent
-                className="w-auto border-none bg-transparent p-0 shadow-none"
-                align="center"
-                side="bottom"
-                sideOffset={8}
-              >
-                <EmojiPicker
-                  onEmojiSelect={(emoji) => {
-                    handleEmojiSelect(emoji);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-          )}
+              <EmojiPicker onEmojiSelect={onEmojiSelect} />
+            </PopoverContent>
+          </Popover>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onRandomEmoji}
+                className="col-span-1"
+                onClick={handleRandomEmoji}
               >
                 <DiceFiveIcon className="size-5" />
               </Button>
@@ -101,14 +85,13 @@ export function ActionButtons({
           </Tooltip>
         </div>
 
-        <div className="flex justify-center gap-2">
+        <div className="grid w-full grid-cols-5 gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onRandomColors}
+                className="w-full"
+                onClick={handleRandomColors}
               >
                 <PaletteIcon className="size-5" />
               </Button>
@@ -120,9 +103,8 @@ export function ActionButtons({
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onReset}
+                className="w-full"
+                onClick={handleReset}
               >
                 <ArrowCounterClockwiseIcon className="size-5" />
               </Button>
@@ -134,9 +116,8 @@ export function ActionButtons({
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onDownloadImage}
+                className="w-full"
+                onClick={handleDownloadImage}
               >
                 <DownloadSimpleIcon className="size-5" />
               </Button>
@@ -148,9 +129,8 @@ export function ActionButtons({
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onCopyImage}
+                className="w-full"
+                onClick={handleCopyImage}
               >
                 <ImageIcon className="size-5" />
               </Button>
@@ -162,9 +142,8 @@ export function ActionButtons({
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="bg-white shadow-md"
-                onClick={onShare}
+                className="w-full"
+                onClick={handleShare}
               >
                 <ShareNetworkIcon className="size-5" />
               </Button>
@@ -177,51 +156,27 @@ export function ActionButtons({
   }
 
   return (
-    <div className="hidden gap-2 lg:grid lg:grid-cols-5">
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={onRandomEmoji}>
-            <DiceFiveIcon className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Random Emoji</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={onRandomColors}>
-            <PaletteIcon className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Random Colors</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={onReset}>
-            <ArrowCounterClockwiseIcon className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Reset Colors</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={onDownloadImage}>
-            <DownloadSimpleIcon className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Download Image</TooltipContent>
-      </Tooltip>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={onShare}>
-            <ShareNetworkIcon className="size-5" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Share</TooltipContent>
-      </Tooltip>
+    <div className="hidden gap-4 lg:grid lg:grid-cols-5">
+      <Button variant="outline" onClick={handleRandomEmoji}>
+        <DiceFiveIcon className="size-5" />
+        Random Emoji
+      </Button>
+      <Button variant="outline" onClick={handleRandomColors}>
+        <PaletteIcon className="size-5" />
+        Random Colors
+      </Button>
+      <Button variant="outline" onClick={handleReset}>
+        <ArrowCounterClockwiseIcon className="size-5" />
+        Reset Palette
+      </Button>
+      <Button variant="outline" onClick={handleDownloadImage}>
+        <DownloadSimpleIcon className="size-5" />
+        Save Image
+      </Button>
+      <Button variant="outline" onClick={handleShare}>
+        <ShareNetworkIcon className="size-5" />
+        Share Link
+      </Button>
     </div>
   );
 }

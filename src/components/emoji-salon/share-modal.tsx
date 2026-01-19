@@ -6,97 +6,84 @@ import {
   LinkIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
-
-import { Button } from "~/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "~/components/ui/dialog";
-import { Separator } from "~/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { useEmoji } from "@/contexts/emoji-context";
+import { useEmojiActions } from "@/hooks/use-emoji-actions";
 import {
   copyLinkToClipboard,
   downloadSVG,
   generateCSSCode,
   shareToFacebook,
   shareToTwitter,
-} from "~/lib/share-utils";
+} from "@/lib/share-utils";
+import { CheckCircleIcon } from "lucide-react";
 
-interface ShareModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  currentEmoji: string;
-  resultImageSrc: string;
-  svgData: string;
-  onCopyImage: () => void;
-}
+/**
+ * Modal component for sharing customized emoji.
+ * Uses useEmojiActions hook for state and handlers.
+ */
+export function ShareModal() {
+  const { currentEmoji } = useEmoji();
+  const {
+    shareModalOpen,
+    setShareModalOpen,
+    resultImageSrc,
+    svgHTML,
+    handleCopyImage,
+  } = useEmojiActions();
 
-export function ShareModal({
-  open,
-  onOpenChange,
-  currentEmoji,
-  resultImageSrc,
-  svgData,
-  onCopyImage,
-}: ShareModalProps) {
   const cssCode = generateCSSCode();
 
   const handleDownloadSVG = () => {
-    downloadSVG(svgData, currentEmoji);
+    downloadSVG(svgHTML, currentEmoji);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+    <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Share Your Customized Emoji</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-wrap justify-center gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
+        <div className="flex flex-col gap-4">
+          <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-2">
               <Button variant="outline" size="icon" onClick={shareToTwitter}>
                 <XLogoIcon className="size-5" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>Tweet</TooltipContent>
-          </Tooltip>
+              <div className="text-xs">X (Twitter)</div>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="flex items-center justify-center">
+                <Button variant="outline" size="icon" onClick={shareToFacebook}>
+                  <FacebookLogoIcon className="size-5" />
+                </Button>
+              </div>
+              <div className="text-xs"> Facebook</div>
+            </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={shareToFacebook}>
-                <FacebookLogoIcon className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Share on Facebook</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
+            <div className="flex flex-col items-center justify-center gap-2">
               <Button variant="outline" size="icon" onClick={handleDownloadSVG}>
                 <FileSvgIcon className="size-5" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>Download SVG</TooltipContent>
-          </Tooltip>
+              <div className="text-xs">Save SVG</div>
+            </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={onCopyImage}>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <Button variant="outline" size="icon" onClick={handleCopyImage}>
                 <ClipboardIcon className="size-5" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>Copy Image</TooltipContent>
-          </Tooltip>
+              <div className="text-xs">Copy Image</div>
+            </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
+            <div className="flex flex-col items-center justify-center gap-2">
               <Button
                 variant="outline"
                 size="icon"
@@ -104,12 +91,10 @@ export function ShareModal({
               >
                 <LinkIcon className="size-5" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>Copy Link</TooltipContent>
-          </Tooltip>
+              <div className="text-xs">Copy Link</div>
+            </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
+            <div className="flex flex-col items-center justify-center gap-2">
               <a
                 href="https://github.com/rutopio/EmojiSalon"
                 target="_blank"
@@ -119,48 +104,48 @@ export function ShareModal({
                   <GithubLogoIcon className="size-5" />
                 </Button>
               </a>
-            </TooltipTrigger>
-            <TooltipContent>Star or Fork Repo</TooltipContent>
-          </Tooltip>
-        </div>
-
-        <div className="text-center text-xs">
-          <p>
-            ✓{" "}
-            <a
-              href="https://github.com/rutopio/EmojiSalon#copyright"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="underline"
-            >
-              Free for Personal & Commercial Use
-            </a>
-          </p>
-        </div>
-
-        <Separator className="my-4" />
-
-        <div className="flex flex-col gap-4 lg:flex-row">
-          <div className="flex justify-center lg:w-1/3">
-            {resultImageSrc && (
-              <img
-                src={resultImageSrc}
-                alt="Result"
-                className="max-w-[200px]"
-              />
-            )}
+              <div className="text-xs">Github Repo</div>
+            </div>
           </div>
 
-          <div className="hidden lg:block lg:w-2/3">
-            <div className="mb-1 font-sans text-sm">HTML</div>
-            <pre className="overflow-x-auto rounded bg-gray-200 p-2 text-xs">
-              <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
-            </pre>
+          <div className="mx-auto flex items-center gap-2 text-center text-sm">
+            <CheckCircleIcon className="size-4" />
+            <p>
+              <a
+                href="https://github.com/rutopio/EmojiSalon#copyright"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="underline"
+              >
+                Free for Personal & Commercial Use
+              </a>
+            </p>
+          </div>
 
-            <div className="mt-4 mb-1 font-sans text-sm">CSS</div>
-            <pre className="overflow-x-auto rounded bg-gray-200 p-2 text-xs whitespace-pre-wrap">
-              <code>{cssCode}</code>
-            </pre>
+          <Separator className="my-2" />
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <div className="col-span-1 flex justify-center p-4">
+              {resultImageSrc && (
+                <img
+                  src={resultImageSrc}
+                  alt="Result"
+                  className="aspect-square w-full object-contain"
+                />
+              )}
+            </div>
+
+            <div className="col-span-2 hidden flex-col gap-2 lg:flex">
+              <div className="text-sm">HTML</div>
+              <pre className="overflow-x-auto rounded bg-gray-200 px-4 py-2 text-xs">
+                <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
+              </pre>
+
+              <div className="mt-4 text-sm">CSS</div>
+              <pre className="overflow-x-auto rounded bg-gray-200 px-4 py-2 text-xs whitespace-pre-wrap">
+                <code>{cssCode}</code>
+              </pre>
+            </div>
           </div>
         </div>
       </DialogContent>

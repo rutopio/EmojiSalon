@@ -1,17 +1,19 @@
+import { useEmojiActions } from "@/hooks/use-emoji-actions";
+
 interface EmojiDisplayProps {
-  svgHTML: string;
   variant?: "customized" | "reference";
 }
 
-export function EmojiDisplay({
-  svgHTML,
-  variant = "customized",
-}: EmojiDisplayProps) {
+export function EmojiDisplay({ variant = "customized" }: EmojiDisplayProps) {
+  const { svgHTML, referenceSvgHTML } = useEmojiActions();
+
+  const html = variant === "reference" ? referenceSvgHTML : svgHTML;
+
   if (variant === "reference") {
     return (
       <div className="hidden items-center justify-center lg:flex">
         <div
-          dangerouslySetInnerHTML={{ __html: svgHTML }}
+          dangerouslySetInnerHTML={{ __html: html }}
           className="h-64 w-64"
         />
       </div>
@@ -21,7 +23,7 @@ export function EmojiDisplay({
   return (
     <div className="my-8 flex items-center justify-center lg:my-0">
       <div
-        dangerouslySetInnerHTML={{ __html: svgHTML }}
+        dangerouslySetInnerHTML={{ __html: html }}
         className="h-64 w-64"
       />
     </div>

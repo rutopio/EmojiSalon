@@ -1,6 +1,5 @@
+import { cn } from "@/lib/utils";
 import QR from "qrcode";
-
-import { cn } from "~/lib/utils";
 
 import type { HTMLAttributes } from "react";
 

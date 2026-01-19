@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Color picker popover component using react-aria-components.
+ *
+ * This component provides a color picker in a popover that allows users to
+ * select colors using a color area, hue slider, and hex input.
+ */
+
 import { use } from "react";
 import {
   Button as AriaButton,
@@ -8,8 +15,6 @@ import {
   parseColor,
   Popover,
 } from "react-aria-components";
-import { Pipette } from "lucide-react";
-
 import {
   ColorArea,
   ColorField,
@@ -20,17 +25,28 @@ import {
   ColorSwatchPickerItem,
   ColorThumb,
   SliderTrack,
-} from "~/components/color";
-import { Label } from "~/components/ui/label";
+} from "@/components/color";
+import { Label } from "@/components/ui/label";
+import { useEmoji } from "@/contexts/emoji-context";
+import { useEmojiActions } from "@/hooks/use-emoji-actions";
+import { Pipette } from "lucide-react";
 
 import type { Color } from "react-aria-components";
 
-/**
- * @fileoverview Color picker popover component using react-aria-components.
- *
- * This component provides a color picker in a popover that allows users to
- * select colors using a color area, hue slider, and hex input.
- */
+/** Preset colors for the swatch picker - add more colors here as needed */
+const PRESET_COLORS = [
+  "#FF3B30",
+  "#FF9500",
+  "#A2845E",
+  "#FFCC00",
+  "#34C759",
+  "#00C7BE",
+  "#32ADE6",
+  "#007AFF",
+  "#AF52DE",
+  "#FF2D55",
+  "#8E8E93",
+];
 
 /**
  * EyeDropper button component that uses the browser's EyeDropper API
@@ -92,13 +108,13 @@ export function ColorPickerPopover({
     <ColorPicker value={colorValue} onChange={handleColorChange}>
       <DialogTrigger>
         <AriaButton
-          className="h-12 w-12 cursor-pointer rounded-lg border p-0 outline-none focus:ring-2 focus:ring-offset-2"
+          className="size-12 cursor-pointer rounded-lg border-2 p-0 outline-none focus:ring-2 focus:ring-offset-2"
           style={{ backgroundColor: color }}
         >
           <ColorSwatch className="h-full w-full rounded-md" />
         </AriaButton>
         <Popover placement="bottom" className="w-fit">
-          <Dialog className="flex flex-col gap-4 rounded-lg border bg-white p-3 shadow-lg outline-none">
+          <Dialog className="flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg outline-none">
             {/* Color Area for saturation and brightness */}
             <div>
               <ColorArea
@@ -124,29 +140,43 @@ export function ColorPickerPopover({
             </ColorField>
 
             {/* Color Swatch Picker */}
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-6 gap-2">
               <EyeDropperButton />
-              <ColorSwatchPicker className="w-fit">
-                <ColorSwatchPickerItem color="#F00">
-                  <ColorSwatch />
-                </ColorSwatchPickerItem>
-                <ColorSwatchPickerItem color="#f90">
-                  <ColorSwatch />
-                </ColorSwatchPickerItem>
-                <ColorSwatchPickerItem color="#0F0">
-                  <ColorSwatch />
-                </ColorSwatchPickerItem>
-                <ColorSwatchPickerItem color="#08f">
-                  <ColorSwatch />
-                </ColorSwatchPickerItem>
-                <ColorSwatchPickerItem color="#00f">
-                  <ColorSwatch />
-                </ColorSwatchPickerItem>
-              </ColorSwatchPicker>
+              {PRESET_COLORS.map((presetColor) => (
+                <ColorSwatchPicker key={presetColor}>
+                  <ColorSwatchPickerItem color={presetColor}>
+                    <ColorSwatch />
+                  </ColorSwatchPickerItem>
+                </ColorSwatchPicker>
+              ))}
             </div>
           </Dialog>
         </Popover>
       </DialogTrigger>
     </ColorPicker>
+  );
+}
+
+/**
+ * A component that displays multiple color pickers for editing a color palette.
+ * Uses EmojiContext for colors and useEmojiActions for color change handling.
+ */
+export function ColorPalettePicker() {
+  const { customizedPaletteColors } = useEmoji();
+  const { handleColorChange } = useEmojiActions();
+
+  return (
+    <div className="flex justify-center">
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        {customizedPaletteColors.map((color, idx) => (
+          <ColorPickerPopover
+            key={`color-${color}-${idx}`}
+            color={color}
+            onColorChange={(newColor) => handleColorChange(idx, newColor)}
+            index={idx}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

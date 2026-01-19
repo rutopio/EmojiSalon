@@ -2,10 +2,9 @@
 
 import * as React from "react";
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
-
-import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
 
 import type { UseEmblaCarouselType } from "embla-carousel-react";
 

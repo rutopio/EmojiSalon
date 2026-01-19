@@ -7,7 +7,7 @@
  * @module share-utils
  */
 
-import { decodeURL, emojiToUnicode, triggerDownload } from "./emoji-utils";
+import { emojiToUnicode, triggerDownload } from "./emoji-utils";
 
 // ============================================================================
 // Social Sharing Functions
@@ -77,13 +77,13 @@ export function copyLinkToClipboard(): void {
  * - A .mod-emoji class that applies the font
  * - @font-palette-values with color overrides (if any)
  *
- * Color overrides are parsed from the URL hash in the format:
- * `#{unicode}-{encoded-overrides}`
+ * Color overrides are parsed from the URL search params in the format:
+ * `?emoji=xxx&palette=195(F0DAA3)-824(6E343F)`
  *
  * @returns {string} Complete CSS code for displaying the customized emoji.
  *
  * @example
- * // With URL: https://example.com/#u1f600-3(ff0000)5(00ff00)
+ * // With URL: https://example.com/?emoji=u1f600&palette=3(ff0000)5(00ff00)
  * const css = generateCSSCode();
  * // Returns:
  * // @font-face {
@@ -101,13 +101,20 @@ export function generateCSSCode(): string {
     return "";
   }
 
-  const hash = window.location.hash.substring(1);
-  const parts = hash.split("-");
+  const searchParams = new URLSearchParams(window.location.search);
+  const palette = searchParams.get("palette");
 
   let overrideColors = "";
-  if (parts.length > 1) {
+  if (palette) {
     try {
-      overrideColors = decodeURL(parts[1]);
+      // Decode new format: "195_f0daa3-824_6e343f" → "195 #f0daa3, 824 #6e343f"
+      overrideColors = palette
+        .split("-")
+        .map((pair) => {
+          const [index, hex] = pair.split("_");
+          return `${index} #${hex}`;
+        })
+        .join(", ");
     } catch {
       overrideColors = "";
     }
