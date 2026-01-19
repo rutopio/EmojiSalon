@@ -1,0 +1,168 @@
+{
+  "sections": [
+    {
+      "emoji": "u1f349",
+      "variants": [
+        {
+          "palette": "2_ffcc00",
+          "name": "Yellow Watermelon"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f369",
+      "variants": [
+        {
+          "palette": "4_424997-623_b04f91-604_385da6-3_6e66a7-125_8d3781",
+          "name": "Blueberry Doughnut"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f951",
+      "variants": [
+        {
+          "palette": "579_a2542e-220_e8dac7-663_f2ede8-8_e7c571-891_edd190",
+          "name": "Soft-Boiled Egg"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f384",
+      "variants": [
+        {
+          "palette": "189_ffffff",
+          "name": "Outdoor Xmas Tree"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f95d",
+      "variants": [
+        {
+          "palette": "194_6d2340-197_f4cb45-220_f4cb45-663_f4cb45",
+          "name": "Passion Fruit"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f30c",
+      "variants": [
+        {
+          "palette": "5_7f2726-576_7c5232-590_433f3d-591_4e564d-478_cd692b",
+          "name": "Lithosphere"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f4c8",
+      "variants": [
+        {
+          "palette": "2_5da138",
+          "name": "West"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f4ee",
+      "variants": [
+        {
+          "palette": "2_295da8-9_9bb7cc",
+          "name": "Blue Postbox"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f996",
+      "variants": [
+        {
+          "palette": "918_1c1d1d-919_5a5b5b-920_383939-13_a29481",
+          "name": "Godzilla"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f98b",
+      "variants": [
+        {
+          "palette": "662_f4d28a-3_52443b-58_cf5529",
+          "name": "Mothra"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f916",
+      "variants": [
+        {
+          "palette": "13_030000-4_030000-195_030000-10_030000-3_030000-12_030000-11_1c1d1d-2_ffffff-478_030000-222_6a7982",
+          "name": "Star Wars"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f989",
+      "variants": [
+        {
+          "palette": "8_61ad49-194_85b946-546_ffffff",
+          "name": "Duolingo"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f383",
+      "variants": [
+        {
+          "palette": "13_452d17-637_263b20-638_f3c744",
+          "name": "Light-up Jack O'Lantern"
+        }
+      ]
+    },
+    {
+      "emoji": "u1fab3",
+      "variants": [
+        {
+          "palette": "8_311009-194_e3e77f-596_a33f2c",
+          "name": "Firefly"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f35b",
+      "variants": [
+        {
+          "palette": "13_c6782f-32_f7f188-222_f8e17f-546_e5a138",
+          "name": "Curry With Omelette Rice"
+        },
+        {
+          "palette": "13_d7e38d-32_efeeed-222_cbd5db-546_8ebf54",
+          "name": "Green Curry"
+        },
+        {
+          "palette": "13_d7e38d-32_f7f188-222_f8e17f-546_8ebf54",
+          "name": "Green Curry With Omelette Rice"
+        }
+      ]
+    },
+    {
+      "emoji": "u1f94b",
+      "variants": [
+        {
+          "palette": "58_ffffff",
+          "name": "White Rank"
+        },
+        {
+          "palette": "58_f5e359",
+          "name": "Yellow Rank"
+        },
+        {
+          "palette": "58_486db1",
+          "name": "Blue Rank"
+        },
+        {
+          "palette": "58_d32e2b",
+          "name": "Red Rank"
+        }
+      ]
+    }
+  ]
+}

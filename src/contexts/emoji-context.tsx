@@ -26,6 +26,7 @@ import {
   triggerDownload,
   unicodeToEmoji,
 } from "@/lib/emoji-utils";
+import { toast } from "sonner";
 
 interface EmojiSearchParams {
   emoji?: string;
@@ -376,7 +377,10 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   // Download image
   const handleDownloadImage = useCallback(() => {
     updateCanvas(1);
-  }, [updateCanvas]);
+    toast.success("Image downloaded", {
+      description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.png`,
+    });
+  }, [updateCanvas, currentEmoji]);
 
   // Copy image
   const handleCopyImage = useCallback(() => {
@@ -385,6 +389,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
     } else {
       updateCanvas(2);
     }
+    toast.success("Image copied to clipboard");
   }, [updateCanvas]);
 
   // Share

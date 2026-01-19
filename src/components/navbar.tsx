@@ -31,6 +31,7 @@ export default function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isShowcase = location.pathname === "/showcase";
+  const isAbout = location.pathname === "/about";
   return (
     <>
       {/* Desktop Navigation */}
@@ -53,9 +54,17 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()}  [&.active]:underline [&.active]:underline-offset-4`}
               >
                 <Link to="/showcase">Showcase</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={`${navigationMenuTriggerStyle()}  [&.active]:underline [&.active]:underline-offset-4`}
+              >
+                <Link to="/about">About</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -113,6 +122,14 @@ export default function Navbar() {
                     )}
                   />
                   Showcase
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/about" className="flex items-center gap-2">
+                  <CaretRightIcon
+                    className={cn("size-4 opacity-0", isAbout && "opacity-100")}
+                  />
+                  About
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

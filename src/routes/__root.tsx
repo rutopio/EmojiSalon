@@ -105,7 +105,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         <ThemeProvider>
           <EmojiProvider>
             {children}
-            <Toaster richColors />
+            <Toaster position="top-center" />
           </EmojiProvider>
         </ThemeProvider>
 

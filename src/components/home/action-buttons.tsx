@@ -8,7 +8,7 @@ import {
   ShareNetworkIcon,
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
-import { EmojiPicker } from "@/components/emoji-salon/emoji-picker";
+import { EmojiPicker } from "@/components/home/emoji-picker";
 import { Button } from "@/components/ui/button";
 import {
   Popover,

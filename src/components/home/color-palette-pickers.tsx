@@ -5,16 +5,19 @@
  * select colors using a color area, hue slider, and hex input.
  */
 
-import { use } from "react";
+import { use, useRef } from "react";
 import {
   Button as AriaButton,
   Input as AriaInput,
+  Label as AriaLabel,
   ColorPickerStateContext,
   Dialog,
   DialogTrigger,
+  OverlayTriggerStateContext,
   parseColor,
   Popover,
 } from "react-aria-components";
+import { CopyIcon, EyedropperIcon, XIcon } from "@phosphor-icons/react";
 import {
   ColorArea,
   ColorField,
@@ -26,25 +29,12 @@ import {
   ColorThumb,
   SliderTrack,
 } from "@/components/color";
+import { Button } from "@/components/ui/button";
 import { useEmoji } from "@/contexts/emoji-context";
-import { Pipette } from "lucide-react";
+import { PRESET_COLORS } from "@/lib/constants";
+import { toast } from "sonner";
 
 import type { Color } from "react-aria-components";
-
-/** Preset colors for the swatch picker - add more colors here as needed */
-const PRESET_COLORS = [
-  "#FF3B30",
-  "#FF9500",
-  "#A2845E",
-  "#FFCC00",
-  "#34C759",
-  "#00C7BE",
-  "#32ADE6",
-  "#007AFF",
-  "#AF52DE",
-  "#FF2D55",
-  "#8E8E93",
-];
 
 /**
  * EyeDropper button component that uses the browser's EyeDropper API
@@ -72,7 +62,7 @@ function EyeDropperButton() {
           );
       }}
     >
-      <Pipette className="h-4 w-4" />
+      <EyedropperIcon className="h-4 w-4" />
     </AriaButton>
   );
 }
@@ -97,24 +87,58 @@ export function ColorPickerPopover({
 }: ColorPickerPopoverProps) {
   // Parse the hex color to a Color object
   const colorValue = parseColor(color).toFormat("hsb");
+  // Track if user is dragging to prevent popover close during drag
+  const isDraggingRef = useRef(false);
 
   const handleColorChange = (newColor: Color) => {
     onColorChange(newColor.toString("hex"));
   };
 
   return (
-    <ColorPicker value={colorValue} onChange={handleColorChange}>
-      <DialogTrigger>
-        <AriaButton
-          className="size-12 cursor-pointer rounded-lg border-2 p-0 outline-none focus:ring-2 focus:ring-offset-2"
-          style={{ backgroundColor: color }}
+    <DialogTrigger>
+      <AriaButton
+        className="size-12 cursor-pointer rounded-lg border-2 p-0 outline-none focus:ring-2 focus:ring-offset-2"
+        style={{ backgroundColor: color }}
+      >
+        <ColorSwatch />
+      </AriaButton>
+      <Popover
+        placement="bottom"
+        className="w-fit"
+        // Prevent popover from closing during color area/slider drag interactions
+        shouldCloseOnInteractOutside={() => !isDraggingRef.current}
+      >
+        <Dialog
+          className="relative flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg outline-none"
+          aria-label="Color picker"
         >
-          <ColorSwatch className="h-full w-full rounded-md" />
-        </AriaButton>
-        <Popover placement="bottom" className="w-fit">
-          <Dialog className="flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg outline-none">
+          <ColorPicker value={colorValue} onChange={handleColorChange}>
+            {/* Close Button */}
+            {(() => {
+              const state = use(OverlayTriggerStateContext);
+              return (
+                <AriaButton
+                  onPress={() => state?.close()}
+                  className="absolute top-2 right-2 flex size-6 items-center justify-center rounded-md transition-colors hover:bg-gray-100"
+                  aria-label="Close"
+                >
+                  <XIcon className="h-4 w-4" />
+                </AriaButton>
+              );
+            })()}
+
             {/* Color Area for saturation and brightness */}
-            <div>
+            <div
+              onPointerDown={() => {
+                isDraggingRef.current = true;
+              }}
+              onPointerUp={() => {
+                isDraggingRef.current = false;
+              }}
+              onPointerCancel={() => {
+                isDraggingRef.current = false;
+              }}
+            >
               <ColorArea
                 colorSpace="hsb"
                 xChannel="saturation"
@@ -132,12 +156,30 @@ export function ColorPickerPopover({
             </div>
 
             {/* Hex Input Field */}
-            <ColorField colorSpace="hsb" className="flex w-full flex-col gap-1">
-              {/* <Label className="text-sm font-medium"></Label> */}
+            <ColorField className="flex w-full gap-2">
+              <AriaLabel className="sr-only">Hex Color</AriaLabel>
               <AriaInput
                 className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
                 placeholder="Hex"
+                onKeyDown={(e) => {
+                  // Blur on Enter to commit the color value
+                  if (e.key === "Enter") {
+                    e.currentTarget.blur();
+                  }
+                }}
               />
+              <Button
+                className="size-9"
+                variant="ghost"
+                onClick={() => {
+                  navigator.clipboard.writeText(colorValue.toString("hex"));
+                  toast.success("Color copied to clipboard", {
+                    description: `${colorValue.toString("hex")}`,
+                  });
+                }}
+              >
+                <CopyIcon size={30} />
+              </Button>
             </ColorField>
 
             {/* Color Swatch Picker */}
@@ -151,10 +193,10 @@ export function ColorPickerPopover({
                 </ColorSwatchPicker>
               ))}
             </div>
-          </Dialog>
-        </Popover>
-      </DialogTrigger>
-    </ColorPicker>
+          </ColorPicker>
+        </Dialog>
+      </Popover>
+    </DialogTrigger>
   );
 }
 
@@ -162,7 +204,7 @@ export function ColorPickerPopover({
  * A component that displays multiple color pickers for editing a color palette.
  * Uses EmojiContext for colors and useEmojiActions for color change handling.
  */
-export default function ColorPalettePicker() {
+export default function ColorPalettePickers() {
   const { customizedPaletteColors, handleColorChange } = useEmoji();
 
   return (
@@ -170,7 +212,7 @@ export default function ColorPalettePicker() {
       <div className="flex flex-wrap items-center justify-center gap-2">
         {customizedPaletteColors.map((color, idx) => (
           <ColorPickerPopover
-            key={`color-${color}-${idx}`}
+            key={`palette-color-${idx}`}
             color={color}
             onColorChange={(newColor) => handleColorChange(idx, newColor)}
             index={idx}

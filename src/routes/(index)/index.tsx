@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CircleNotchIcon } from "@phosphor-icons/react";
-import ActionButtons from "@/components/emoji-salon/action-buttons";
-import ColorPalettePicker from "@/components/emoji-salon/color-pickers";
-import EmojiDisplay from "@/components/emoji-salon/emoji-display";
-import DesktopEmojiPicker from "@/components/emoji-salon/emoji-picker";
-import ShareModal from "@/components/emoji-salon/share-modal";
 import Footer from "@/components/footer";
+import ActionButtons from "@/components/home/action-buttons";
+import ColorPalettePickers from "@/components/home/color-palette-pickers";
+import EmojiDisplay from "@/components/home/emoji-display";
+import DesktopEmojiPicker from "@/components/home/emoji-picker";
+import ShareModal from "@/components/home/share-modal";
 import Navbar from "@/components/navbar";
 import { useEmoji } from "@/contexts/emoji-context";
 import useIsClient from "@/hooks/use-is-client";
@@ -16,7 +16,7 @@ interface EmojiSearchParams {
   palette?: string;
 }
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/(index)/")({
   component: EmojiSalonPage,
   validateSearch: (search: Record<string, unknown>): EmojiSearchParams => {
     return {
@@ -56,7 +56,7 @@ function EmojiSalonPage() {
           </div>
 
           <ActionButtons variant="desktop" />
-          <ColorPalettePicker />
+          <ColorPalettePickers />
         </div>
 
         <Footer />

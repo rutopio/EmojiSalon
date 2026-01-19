@@ -18,6 +18,8 @@ import foodsData from "@/data/foods.json";
 import natureData from "@/data/nature.json";
 import objectsData from "@/data/objects.json";
 import paletteColorDataRaw from "@/data/paletteColorData.json";
+
+import { DEFAULT_EMOJIS } from "./constants";
 import peopleData from "@/data/people.json";
 import placesData from "@/data/places.json";
 import symbolsData from "@/data/symbols.json";
@@ -489,94 +491,8 @@ export function parsePaletteString(
 // Random Selection Functions
 // ============================================================================
 
-/**
- * Default emojis used for random selection.
- * These are pre-bundled in defaultEmojisSVGData.json for instant loading.
- * @type {string[]}
- */
-export const defaultEmojis = [
-  "😀",
-  "😙",
-  "😎",
-  "😪",
-  "🤤",
-  "😴",
-  "😰",
-  "🦓",
-  "🥵",
-  "🦴",
-  "👀",
-  "🚀",
-  "👍",
-  "🪩",
-  "🧚‍♀️",
-  "🧚",
-  "🧚‍♂️",
-  "🌟",
-  "🧤",
-  "🍣",
-  "🍤",
-  "🍥",
-  "🥮",
-  "🍡",
-  "🥟",
-  "🍔",
-  "🐈",
-  "🐈‍⬛",
-  "🐟",
-  "🍕",
-  "🎉",
-  "🐓",
-  "🐱",
-  "🌺",
-  "🍎",
-  "🏛",
-  "🐭",
-  "🐮",
-  "🐯",
-  "🐰",
-  "🐲",
-  "🐍",
-  "🐴",
-  "🐏",
-  "🐵",
-  "🐔",
-  "🐶",
-  "🐷",
-  "🐕",
-  "🐑",
-  "🐤",
-  "🦕",
-  "🦖",
-  "🐳",
-  "🐋",
-  "🐬",
-  "🦋",
-  "☕️",
-  "🍒",
-  "🌭",
-  "🍩",
-  "🏅",
-  "🚂",
-  "🚗",
-  "🥻",
-  "🧥",
-  "👜",
-  "👢",
-  "📱",
-  "🧮",
-  "🩴",
-  "🎮",
-  "🎠",
-  "🛝",
-  "🎡",
-  "🎢",
-  "💈",
-  "🎪",
-  "🍭",
-  "🦄",
-  "🎨",
-];
+// Re-export from constants for backward compatibility
+export { DEFAULT_EMOJIS as defaultEmojis } from "./constants";
 
 /**
  * Get the label/name for an emoji character.
@@ -601,8 +517,8 @@ export function getEmojiLabel(emoji: string): string {
  * getRandomEmoji(); // Returns a random emoji like "😀" or "🦄"
  */
 export function getRandomEmoji(): string {
-  const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
-  return defaultEmojis[randomIndex];
+  const randomIndex = Math.floor(Math.random() * DEFAULT_EMOJIS.length);
+  return DEFAULT_EMOJIS[randomIndex];
 }
 
 /**

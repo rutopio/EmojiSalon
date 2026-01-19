@@ -1,4 +1,5 @@
 import {
+  CheckCircleIcon,
   ClipboardIcon,
   FacebookLogoIcon,
   FileSvgIcon,
@@ -22,7 +23,7 @@ import {
   shareToFacebook,
   shareToTwitter,
 } from "@/lib/share-utils";
-import { CheckCircleIcon } from "lucide-react";
+import { toast } from "sonner";
 
 /**
  * Modal component for sharing customized emoji.
@@ -49,6 +50,22 @@ export default function ShareModal() {
 
   const handleDownloadSVG = () => {
     downloadSVG(svgHTML, currentEmoji);
+  };
+
+  const handleCopyHTMLCode = () => {
+    navigator.clipboard.writeText(
+      `<span class="mod-emoji"> ${currentEmoji} </span>`
+    );
+    toast.success("HTML code copied to clipboard", {
+      description: `<span class="mod-emoji"> ${currentEmoji} </span>`,
+    });
+  };
+
+  const handleCopyCSSCode = () => {
+    navigator.clipboard.writeText(cssCode);
+    toast.success("CSS code copied to clipboard", {
+      description: `${cssCode}`,
+    });
   };
 
   return (
@@ -142,12 +159,34 @@ export default function ShareModal() {
             </div>
 
             <div className="col-span-2 hidden flex-col gap-2 lg:flex">
-              <div className="text-sm">HTML</div>
+              <div className="flex items-center gap-2">
+                <div className="text-sm">HTML</div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleCopyHTMLCode}
+                  className="ml-auto w-32"
+                >
+                  <ClipboardIcon />
+                  <div className="text-xs">Copy HTML</div>
+                </Button>
+              </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs">
                 <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
               </pre>
 
-              <div className="mt-4 text-sm">CSS</div>
+              <div className="mt-4 flex items-center gap-2">
+                <div className="text-sm">CSS</div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleCopyCSSCode}
+                  className="ml-auto w-32"
+                >
+                  <ClipboardIcon />
+                  <div className="text-xs">Copy CSS</div>
+                </Button>
+              </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-2 text-xs whitespace-pre-wrap">
                 <code>{cssCode}</code>
               </pre>

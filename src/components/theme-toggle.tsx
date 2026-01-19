@@ -1,3 +1,4 @@
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,7 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoonIcon, SunIcon } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();

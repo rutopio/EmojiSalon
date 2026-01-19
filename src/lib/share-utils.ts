@@ -7,7 +7,10 @@
  * @module share-utils
  */
 
+import { toast } from "sonner";
+
 import { emojiToUnicode, triggerDownload } from "./emoji-utils";
+import { FACEBOOK_SHARE_BASE_URL, TWITTER_SHARE_BASE_URL } from "./constants";
 
 // ============================================================================
 // Social Sharing Functions
@@ -26,8 +29,11 @@ import { emojiToUnicode, triggerDownload } from "./emoji-utils";
  */
 export function shareToTwitter(): void {
   const message = `#EmojiSalon ${window.location.href}`;
-  const twitterShareURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+  const twitterShareURL = `${TWITTER_SHARE_BASE_URL}?text=${encodeURIComponent(message)}`;
   window.open(twitterShareURL, "_blank");
+  toast.success("Shared to Twitter", {
+    description: twitterShareURL,
+  });
 }
 
 /**
@@ -42,8 +48,11 @@ export function shareToTwitter(): void {
  * shareToFacebook(); // Opens Facebook share dialog
  */
 export function shareToFacebook(): void {
-  const facebookShareURL = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+  const facebookShareURL = `${FACEBOOK_SHARE_BASE_URL}?u=${encodeURIComponent(window.location.href)}`;
   window.open(facebookShareURL, "_blank");
+  toast.success("Shared to Facebook", {
+    description: facebookShareURL,
+  });
 }
 
 // ============================================================================
@@ -63,6 +72,9 @@ export function shareToFacebook(): void {
  */
 export function copyLinkToClipboard(): void {
   navigator.clipboard.writeText(window.location.href);
+  toast.success("Link copied to clipboard", {
+    description: `${window.location.href}`,
+  });
 }
 
 // ============================================================================
