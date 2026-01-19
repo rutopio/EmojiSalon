@@ -135,6 +135,14 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
           },
           replace: true,
         });
+
+        // Also save to localStorage
+        localStorage.setItem("emojisalon:emoji", emojiUnicode);
+        if (paletteCode) {
+          localStorage.setItem("emojisalon:palette", paletteCode);
+        } else {
+          localStorage.removeItem("emojisalon:palette");
+        }
       }
     },
     [navigate, location.pathname]
@@ -186,34 +194,55 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
     [updateEmoji]
   );
 
-  // Initialize: load emoji from URL or random (only on home page)
+  // Initialize: load emoji from URL or localStorage or random (only on home page)
   useEffect(() => {
     if (isInitialized) return;
     // Skip initialization if not on home page
     if (location.pathname !== "/") return;
 
     const timer = setTimeout(() => {
+      let emojiLoaded = false;
+
+      // 1. Try to load from URL
       if (search.emoji) {
         try {
           const emoji = unicodeToEmoji(search.emoji);
           if (emoji) {
             setCurrentEmojiLabel(getEmojiLabel(emoji));
             updateEmoji(emoji, !!search.palette, search.palette);
-          } else {
-            const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
-            setCurrentEmojiLabel(label);
-            updateEmoji(randomEmoji, false);
+            emojiLoaded = true;
           }
         } catch {
-          const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
-          setCurrentEmojiLabel(label);
-          updateEmoji(randomEmoji, false);
+          // URL parsing failed, continue to localStorage
         }
-      } else {
+      }
+
+      // 2. If URL failed, try localStorage
+      if (!emojiLoaded) {
+        const storedEmoji = localStorage.getItem("emojisalon:emoji");
+        const storedPalette = localStorage.getItem("emojisalon:palette");
+
+        if (storedEmoji) {
+          try {
+            const emoji = unicodeToEmoji(storedEmoji);
+            if (emoji) {
+              setCurrentEmojiLabel(getEmojiLabel(emoji));
+              updateEmoji(emoji, !!storedPalette, storedPalette || undefined);
+              emojiLoaded = true;
+            }
+          } catch {
+            // localStorage parsing failed, continue to random
+          }
+        }
+      }
+
+      // 3. If both URL and localStorage failed, use random emoji
+      if (!emojiLoaded) {
         const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
         setCurrentEmojiLabel(label);
         updateEmoji(randomEmoji, false);
       }
+
       setIsInitialized(true);
     }, 0);
 

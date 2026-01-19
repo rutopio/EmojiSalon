@@ -9,8 +9,8 @@
 
 import { toast } from "sonner";
 
-import { emojiToUnicode, triggerDownload } from "./emoji-utils";
 import { FACEBOOK_SHARE_BASE_URL, TWITTER_SHARE_BASE_URL } from "./constants";
+import { emojiToUnicode, triggerDownload } from "./emoji-utils";
 
 // ============================================================================
 // Social Sharing Functions

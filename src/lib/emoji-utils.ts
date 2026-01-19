@@ -8,21 +8,21 @@
  */
 
 // Category data imports for complete emoji coverage
-import activityData from "@/data/activity.json";
-import defaultEmojisSVGData from "@/data/defaultEmojisSVGData.json";
-import emojiCategories from "@/data/emojiCategories.json";
-import emojiNames from "@/data/emojiNames.json";
-import emojiPaletteData from "@/data/emojiPaletteData.json";
-import flagsData from "@/data/flags.json";
-import foodsData from "@/data/foods.json";
-import natureData from "@/data/nature.json";
-import objectsData from "@/data/objects.json";
-import paletteColorDataRaw from "@/data/paletteColorData.json";
+import defaultEmojisSVGData from "@/data/default-emojis-data.json";
+import emojiCategories from "@/data/emoji-categories.json";
+import activityData from "@/data/emoji-category/activity.json";
+import flagsData from "@/data/emoji-category/flags.json";
+import foodsData from "@/data/emoji-category/foods.json";
+import natureData from "@/data/emoji-category/nature.json";
+import objectsData from "@/data/emoji-category/objects.json";
+import peopleData from "@/data/emoji-category/people.json";
+import placesData from "@/data/emoji-category/places.json";
+import symbolsData from "@/data/emoji-category/symbols.json";
+import emojiNames from "@/data/emoji-names.json";
+import emojiPaletteData from "@/data/emoji-palette-data.json";
+import paletteColorDataRaw from "@/data/palette-color-data.json";
 
 import { DEFAULT_EMOJIS } from "./constants";
-import peopleData from "@/data/people.json";
-import placesData from "@/data/places.json";
-import symbolsData from "@/data/symbols.json";
 
 // ============================================================================
 // Type Definitions

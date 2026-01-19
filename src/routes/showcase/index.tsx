@@ -6,6 +6,14 @@ import showcaseData from "@/data/showcase/showcase-data.json";
 
 export const Route = createFileRoute("/showcase/")({
   component: ShowcasePage,
+  head: () => ({
+    meta: [
+      {
+        title: "Showcase | Emoji Salon - Coloring Your Emoji",
+        description: "Explore creative emoji color variations",
+      },
+    ],
+  }),
 });
 
 function ShowcasePage() {
@@ -14,10 +22,12 @@ function ShowcasePage() {
       <div className="flex min-h-dvh flex-col">
         <Navbar />
 
-        <div className="container flex-1">
-          <div className="mb-8 text-center">
-            <div className="font-title-sans text-4xl font-bold tracking-wide lg:text-5xl">Showcase</div>
-            <div className="mt-2 text-muted-foreground text-lg  lg:text-xl">
+        <div className="container flex-1 lg:py-16">
+          <div className="mb-8 lg:text-center">
+            <div className="font-title-sans text-4xl font-bold tracking-wide lg:text-5xl">
+              Showcase
+            </div>
+            <div className="text-muted-foreground mt-2 text-lg lg:text-xl">
               Explore creative emoji color variations
             </div>
           </div>

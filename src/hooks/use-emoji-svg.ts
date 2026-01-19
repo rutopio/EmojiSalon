@@ -6,11 +6,11 @@
 import { useEffect, useState } from "react";
 import {
   fetchEmojiData,
+  getEmojiLabel,
   getOriginalPaletteData,
   normalizeColor,
   parsePaletteString,
   unicodeToEmoji,
-  getEmojiLabel,
 } from "@/lib/emoji-utils";
 
 interface UseEmojiSVGResult {
@@ -38,9 +38,15 @@ export function useEmojiSVG(
   const [modifiedSvg, setModifiedSvg] = useState("");
   const [originalName, setOriginalName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [customizedPaletteColors, setCustomizedPaletteColors] = useState<string[]>([]);
-  const [originalPaletteColors, setOriginalPaletteColors] = useState<string[]>([]);
-  const [originalPaletteIndex, setOriginalPaletteIndex] = useState<number[]>([]);
+  const [customizedPaletteColors, setCustomizedPaletteColors] = useState<
+    string[]
+  >([]);
+  const [originalPaletteColors, setOriginalPaletteColors] = useState<string[]>(
+    []
+  );
+  const [originalPaletteIndex, setOriginalPaletteIndex] = useState<number[]>(
+    []
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -76,11 +82,7 @@ export function useEmojiSVG(
       // Generate modified SVG
       let customizedColors = [...opColors];
       if (palette) {
-        customizedColors = parsePaletteString(
-          palette,
-          opColors,
-          opIndex
-        );
+        customizedColors = parsePaletteString(palette, opColors, opIndex);
       }
 
       const modifiedPaths = data.d.map((d, index) => {
@@ -161,7 +163,9 @@ export function useVariantSVG(
       );
 
       const paths = data.d.map((d, index) => {
-        const colorIndex = originalPaletteColors.indexOf(normalizedPalette[index]);
+        const colorIndex = originalPaletteColors.indexOf(
+          normalizedPalette[index]
+        );
         const fillColor =
           colorIndex !== -1
             ? customizedColors[colorIndex] || normalizedPalette[index]

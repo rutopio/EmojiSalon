@@ -24,6 +24,14 @@ export const Route = createFileRoute("/(index)/")({
       palette: typeof search.palette === "string" ? search.palette : undefined,
     };
   },
+  head: () => ({
+    meta: [
+      {
+        title: "Create | Emoji Salon - Coloring Your Emoji",
+        description: "Customize your emoji colors with Emoji Salon!",
+      },
+    ],
+  }),
 });
 
 function EmojiSalonPage() {

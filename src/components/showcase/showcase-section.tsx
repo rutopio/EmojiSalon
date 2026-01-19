@@ -112,7 +112,6 @@ export default function ShowcaseSection({
 
   const handleDownload = useCallback(() => {
     generateImage((dataUrl) => {
-      const emojiChar = unicodeToEmoji(emoji);
       triggerDownload(dataUrl, `${emoji}-EmojiSalon.png`);
       toast.success("Image downloaded", {
         description: `${emoji}-EmojiSalon.png`,
@@ -145,9 +144,9 @@ export default function ShowcaseSection({
             variant="outline"
             size="xs"
             onClick={() => handleNavigate(firstVariant.palette)}
-            className="size-8 "
+            className="size-8"
           >
-            <PencilSimpleIcon  />
+            <PencilSimpleIcon />
           </Button>
           <Button
             variant="outline"

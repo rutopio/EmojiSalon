@@ -21,10 +21,7 @@ import {
   TWITTER_SHARE_BASE_URL,
 } from "@/lib/constants";
 import { emojiToUnicode, triggerDownload } from "@/lib/emoji-utils";
-import {
-  copyLinkToClipboard,
-  generateCSSCode,
-} from "@/lib/share-utils";
+import { generateCSSCode } from "@/lib/share-utils";
 import { toast } from "sonner";
 
 interface ShowcaseShareModalProps {
@@ -133,14 +130,22 @@ export default function ShowcaseShareModal({
         <div className="flex flex-col gap-4">
           <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleShareToTwitter}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleShareToTwitter}
+              >
                 <XLogoIcon className="size-5" />
               </Button>
               <div className="text-xs">X (Twitter)</div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex items-center justify-center">
-                <Button variant="outline" size="icon" onClick={handleShareToFacebook}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleShareToFacebook}
+                >
                   <FacebookLogoIcon className="size-5" />
                 </Button>
               </div>

@@ -80,11 +80,13 @@ Extracts path and fill color data from Twemoji SVG files.
 
 **Input:** Twemoji SVG files (download from [twitter/twemoji](https://github.com/twitter/twemoji))
 
-**Output:** 
+**Output:**
+
 - Individual JSON files for each emoji
 - `fullPathAndColorData.json` containing all emoji data
 
 **Features:**
+
 - Converts `<circle>` and `<ellipse>` elements to path data
 - Preserves `opacity` and `transform` attributes
 - Skips emoji with skin tone modifiers (handled separately)
@@ -94,6 +96,7 @@ Extracts path and fill color data from Twemoji SVG files.
 Groups individual emoji JSON files by category.
 
 **Prerequisites:**
+
 - Run `extract_svg_data.py` first
 - `emojiCategories.json` in data directory
 - `ignoreEmojiUnicodeList.json` in data directory
@@ -115,6 +118,7 @@ Extracts emoji native characters and unicode values from emoji-mart data.
 **Input:** `emojimart.json`
 
 **Output:**
+
 - `emojisWithSkinTone.json`
 - `emojisWithoutSkinTone.json`
 - `unicodeWithSkinTone.json`
@@ -160,6 +164,7 @@ node generate_ignore_list.js
 ## Complete Processing Steps
 
 1. **Download Twemoji SVG files**
+
    ```bash
    git clone https://github.com/twitter/twemoji
    ```
@@ -169,27 +174,32 @@ node generate_ignore_list.js
    - Rename to `emojimart.json` and place in `data/`
 
 3. **Generate category mapping**
+
    ```bash
    python scripts/generate_categories.py
    ```
 
 4. **Extract SVG data**
+
    ```bash
    cd <twemoji-svg-directory>
    python ../scripts/extract_svg_data.py
    ```
 
 5. **Generate ignore list**
+
    ```bash
    node scripts/generate_ignore_list.js
    ```
 
 6. **Group by categories**
+
    ```bash
    python scripts/group_by_categories.py
    ```
 
 7. **Extract palette colors**
+
    ```bash
    node scripts/extract_palette_colors.js
    ```
@@ -208,13 +218,13 @@ node generate_ignore_list.js
 
 ## Output Files
 
-| File | Description |
-|------|-------------|
-| `emojiCategories.json` | Maps category names to emoji unicode lists |
-| `paletteColorData.json` | Array of hex color values from CPAL table |
-| `emojiPaletteData.json` | Maps emoji unicode to palette color indices |
-| `defaultEmojisSVGData.json` | Default emojis bundled with the app |
-| `{category}.json` | Per-category emoji path and color data |
+| File                        | Description                                 |
+| --------------------------- | ------------------------------------------- |
+| `emojiCategories.json`      | Maps category names to emoji unicode lists  |
+| `paletteColorData.json`     | Array of hex color values from CPAL table   |
+| `emojiPaletteData.json`     | Maps emoji unicode to palette color indices |
+| `defaultEmojisSVGData.json` | Default emojis bundled with the app         |
+| `{category}.json`           | Per-category emoji path and color data      |
 
 ## Font Files
 
@@ -249,4 +259,3 @@ Used to extract palette color values.
 - Emoji with skin tone modifiers are skipped during SVG extraction (they use the same base paths)
 - The `glyphs_extract_paths_deprecated.py` script is kept for reference but should not be used
 - Some emoji may require manual verification after processing
-
