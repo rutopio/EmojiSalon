@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap");
 @import "tailwindcss" source("./");
 
 @import "tw-animate-css";
@@ -7,32 +6,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Twemoji font for consistent emoji rendering */
-@font-face {
-  font-family: "Twemoji Mozilla";
-  src:
-    url("/font/twemoji.woff2") format("woff2"),
-    url("/font/Twemoji.Mozilla.ttf") format("truetype");
-  font-display: swap;
+/* Emoji-mart picker styles */
+.emoji-mart-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-/* Apply Twemoji to frimousse emoji picker elements */
-[frimousse-root],
-[frimousse-emoji],
-[data-slot="emoji-picker"],
-[data-slot="emoji-picker-emoji"],
-[data-slot="emoji-picker-footer"] {
-  font-family: "Twemoji Mozilla", var(--frimousse-emoji-font) !important;
-  font-variant-emoji: emoji;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+/* Override emoji-mart theme to match our design */
+em-emoji-picker {
+  --rgb-background: 255, 255, 255;
+  --rgb-input: 249, 250, 251;
+  --rgb-color: 34, 34, 34;
+  --shadow: none;
+  --border-radius: 0;
 }
 
 :root {
-  --frimousse-emoji-font:
-    "Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji",
-    "Noto Color Emoji", sans-serif;
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Geist", sans-serif;
+  --font-mono: "Geist Mono", monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

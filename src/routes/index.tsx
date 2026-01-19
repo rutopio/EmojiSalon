@@ -13,6 +13,7 @@ import {
   ShareModal,
 } from "~/components/emoji-salon";
 import { EmojiPicker } from "~/components/emoji-salon/emoji-picker";
+import { Navbar } from "~/components/navbar";
 import {
   emojiToUnicode,
   fetchEmojiData,
@@ -353,13 +354,14 @@ function EmojiSalonPage() {
   const referenceSvgHTML = generateReferenceSVG();
 
   return (
-    <div className="h-dvh overflow-hidden bg-neutral-50 p-8">
-      <div className="container m-auto flex min-h-dvh flex-col items-center justify-center">
+    <div className="h-dvh overflow-hidden bg-neutral-50">
+      <div className="flex min-h-dvh flex-col items-center justify-center">
         {/* Hidden Canvas */}
         <canvas ref={canvasRef} className="hidden" width={256} height={256} />
 
-        {/* Main Content */}
-        <div className="flex flex-col items-center justify-center gap-8">
+        {/* Navigation Bar */}
+        <Navbar />
+        <div className="container flex flex-1 flex-col items-center justify-center gap-8">
           <div className="grid grid-cols-1 items-center lg:grid-cols-3 lg:gap-16">
             {/* Emoji Picker - Desktop */}
             <EmojiPicker
@@ -413,10 +415,8 @@ function EmojiSalonPage() {
               ))}
             </div>
           </div>
-
-          {/* Footer */}
-          <Footer />
         </div>
+        <Footer />
 
         {/* Share Modal */}
         <ShareModal

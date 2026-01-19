@@ -1,26 +1,67 @@
+import { use } from "react";
+import {
+  Button as AriaButton,
+  Input as AriaInput,
+  ColorPickerStateContext,
+  Dialog,
+  DialogTrigger,
+  parseColor,
+  Popover,
+} from "react-aria-components";
+import { Pipette } from "lucide-react";
+
+import {
+  ColorArea,
+  ColorField,
+  ColorPicker,
+  ColorSlider,
+  ColorSwatch,
+  ColorSwatchPicker,
+  ColorSwatchPickerItem,
+  ColorThumb,
+  SliderTrack,
+} from "~/components/color";
+import { Label } from "~/components/ui/label";
+
+import type { Color } from "react-aria-components";
+
 /**
  * @fileoverview Color picker popover component using react-aria-components.
  *
  * This component provides a color picker in a popover that allows users to
- * select colors using a color area and hue slider.
+ * select colors using a color area, hue slider, and hex input.
  */
 
-import { parseColor, type Color } from "react-aria-components";
+/**
+ * EyeDropper button component that uses the browser's EyeDropper API
+ * to pick colors from anywhere on the screen.
+ */
+function EyeDropperButton() {
+  const state = use(ColorPickerStateContext)!;
 
-import {
-  ColorArea,
-  ColorPicker,
-  ColorSlider,
-  ColorSwatch,
-  ColorThumb,
-  SliderTrack,
-} from "~/components/color";
-import { Button } from "~/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
+  // Check browser support.
+  // @ts-expect-error - EyeDropper API may not be available
+  if (typeof EyeDropper === "undefined") {
+    return null;
+  }
+
+  return (
+    <AriaButton
+      aria-label="Eye dropper"
+      className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex size-8 items-center justify-center rounded-md border text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      onPress={() => {
+        // @ts-expect-error - EyeDropper API may not be available
+        new EyeDropper()
+          .open()
+          .then((result: { sRGBHex: string }) =>
+            state.setColor(parseColor(result.sRGBHex))
+          );
+      }}
+    >
+      <Pipette className="h-4 w-4" />
+    </AriaButton>
+  );
+}
 
 interface ColorPickerPopoverProps {
   /** The current color value (hex string). */
@@ -33,7 +74,8 @@ interface ColorPickerPopoverProps {
 
 /**
  * A popover-based color picker that displays a color swatch button which,
- * when clicked, opens a color picker with an area selector and hue slider.
+ * when clicked, opens a color picker with an area selector, hue slider,
+ * and hex input field.
  */
 export function ColorPickerPopover({
   color,
@@ -48,46 +90,63 @@ export function ColorPickerPopover({
 
   return (
     <ColorPicker value={colorValue} onChange={handleColorChange}>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="h-12 w-12 cursor-pointer rounded-lg border border-black p-0"
-            style={{ backgroundColor: color }}
-          >
-            <ColorSwatch className="h-full w-full rounded-md" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-3" align="center" sideOffset={8}>
-          <div className="flex flex-col gap-3">
+      <DialogTrigger>
+        <AriaButton
+          className="h-12 w-12 cursor-pointer rounded-lg border p-0 outline-none focus:ring-2 focus:ring-offset-2"
+          style={{ backgroundColor: color }}
+        >
+          <ColorSwatch className="h-full w-full rounded-md" />
+        </AriaButton>
+        <Popover placement="bottom" className="w-fit">
+          <Dialog className="flex flex-col gap-4 rounded-lg border bg-white p-3 shadow-lg outline-none">
             {/* Color Area for saturation and brightness */}
-            <ColorArea
-              xChannel="saturation"
-              yChannel="brightness"
-              className="h-40 w-40 rounded-md border shadow-md"
-            >
-              <ColorThumb />
-            </ColorArea>
-
-            {/* Hue Slider */}
-            <ColorSlider channel="hue">
-              <SliderTrack
-                className="h-6 w-40 rounded-md"
-                style={{
-                  background:
-                    "linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)",
-                }}
+            <div>
+              <ColorArea
+                colorSpace="hsb"
+                xChannel="saturation"
+                yChannel="brightness"
+                className="h-48 w-full rounded-b-none border-b-0"
               >
-                <ColorThumb className="top-1/2 -translate-y-1/2" />
-              </SliderTrack>
-            </ColorSlider>
+                <ColorThumb className="z-50" />
+              </ColorArea>
+              {/* Hue Slider */}
+              <ColorSlider colorSpace="hsb" channel="hue">
+                <SliderTrack className="w-full rounded-t-none border-t-0">
+                  <ColorThumb className="top-1/2" />
+                </SliderTrack>
+              </ColorSlider>
+            </div>
 
-            {/* Display current color hex value */}
-            <div className="text-center text-sm font-medium">{color}</div>
-          </div>
-        </PopoverContent>
-      </Popover>
+            {/* Hex Input Field */}
+            <ColorField colorSpace="hsb" className="flex w-full flex-col gap-1">
+              <Label className="text-sm font-medium">Hex</Label>
+              <AriaInput className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]" />
+            </ColorField>
+
+            {/* Color Swatch Picker */}
+            <div className="flex items-center gap-2">
+              <EyeDropperButton />
+              <ColorSwatchPicker className="w-fit">
+                <ColorSwatchPickerItem color="#F00">
+                  <ColorSwatch />
+                </ColorSwatchPickerItem>
+                <ColorSwatchPickerItem color="#f90">
+                  <ColorSwatch />
+                </ColorSwatchPickerItem>
+                <ColorSwatchPickerItem color="#0F0">
+                  <ColorSwatch />
+                </ColorSwatchPickerItem>
+                <ColorSwatchPickerItem color="#08f">
+                  <ColorSwatch />
+                </ColorSwatchPickerItem>
+                <ColorSwatchPickerItem color="#00f">
+                  <ColorSwatch />
+                </ColorSwatchPickerItem>
+              </ColorSwatchPicker>
+            </div>
+          </Dialog>
+        </Popover>
+      </DialogTrigger>
     </ColorPicker>
   );
 }
-

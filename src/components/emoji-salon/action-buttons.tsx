@@ -8,12 +8,8 @@ import {
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
 
+import { EmojiPicker } from "~/components/emoji-salon/emoji-picker";
 import { Button } from "~/components/ui/button";
-import {
-  EmojiPicker,
-  EmojiPickerContent,
-  EmojiPickerSearch,
-} from "~/components/ui/emoji-picker";
 import {
   Popover,
   PopoverContent,
@@ -82,14 +78,10 @@ export function ActionButtons({
                 sideOffset={8}
               >
                 <EmojiPicker
-                  className="h-[326px] rounded-lg border shadow-md"
-                  onEmojiSelect={({ emoji }) => {
+                  onEmojiSelect={(emoji) => {
                     handleEmojiSelect(emoji);
                   }}
-                >
-                  <EmojiPickerSearch />
-                  <EmojiPickerContent />
-                </EmojiPicker>
+                />
               </PopoverContent>
             </Popover>
           )}

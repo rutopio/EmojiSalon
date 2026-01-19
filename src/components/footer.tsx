@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <div className="text-center font-mono text-sm">
+    <div className="container text-center font-mono text-sm">
       <p>
         created by{" "}
         <a

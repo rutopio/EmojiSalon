@@ -1,18 +1,15 @@
 /**
- * @fileoverview Frimousse-based emoji picker component for Emoji Salon.
+ * @fileoverview Emoji-mart based emoji picker component for Emoji Salon.
  *
- * This component wraps the frimousse emoji picker library with custom styling
+ * This component wraps the emoji-mart library with custom styling
  * to match the Emoji Salon design system.
  *
- * @see https://frimousse.liveblocks.io/
+ * @see https://github.com/missive/emoji-mart
  */
 
-import {
-  EmojiPicker as FrimousseEmojiPicker,
-  EmojiPickerContent as FrimousseEmojiPickerContent,
-  EmojiPickerFooter as FrimousseEmojiPickerFooter,
-  EmojiPickerSearch as FrimousseEmojiPickerSearch,
-} from "~/components/ui/emoji-picker";
+import { useSyncExternalStore } from "react";
+import data from "@emoji-mart/data/sets/15/twitter.json";
+import EmojiMartPicker from "@emoji-mart/react";
 
 /**
  * Props for the EmojiPicker component.
@@ -34,23 +31,69 @@ interface EmojiPickerProps {
   selectedEmojiLabel?: string;
 }
 
-export function EmojiPicker({
-  onEmojiSelect,
-  selectedEmoji,
-  selectedEmojiLabel,
-}: EmojiPickerProps) {
+interface EmojiMartEmoji {
+  id: string;
+  name: string;
+  native: string;
+  unified: string;
+  keywords: string[];
+  shortcodes: string;
+  emoticons?: string[];
+}
+
+// Hook to check if we're on the client
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+}
+
+export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
+  const isClient = useIsClient();
+
+  const handleEmojiSelect = (emoji: EmojiMartEmoji) => {
+    onEmojiSelect(emoji.native, emoji.name);
+  };
+
+  // Avoid SSR issues - only render on client
+  if (!isClient) {
+    return (
+      <div className="emoji-mart-container">
+        <div className="h-[435px] w-[352px] animate-pulse rounded-lg bg-neutral-100" />
+      </div>
+    );
+  }
+
   return (
-    <FrimousseEmojiPicker
-      className="h-[326px] rounded-lg border shadow-md"
-      selectedEmoji={selectedEmoji}
-      selectedEmojiLabel={selectedEmojiLabel}
-      onEmojiSelect={({ emoji, label }) => {
-        onEmojiSelect(emoji, label);
-      }}
-    >
-      <FrimousseEmojiPickerSearch />
-      <FrimousseEmojiPickerContent />
-      <FrimousseEmojiPickerFooter />
-    </FrimousseEmojiPicker>
+    <div className="emoji-mart-container w-full">
+      <EmojiMartPicker
+        data={data}
+        onEmojiSelect={handleEmojiSelect}
+        set="twitter"
+        emojiSize={32}
+        perLine={8}
+        theme="light"
+        maxFrequentRows={1}
+        skinTonePosition="none"
+        exceptEmojis={[
+          "one",
+          "two",
+          "three",
+          "four",
+          "five",
+          "six",
+          "seven",
+          "eight",
+          "nine",
+          "zero",
+          "keycap_star",
+          "hash",
+          "copyright",
+          "registered",
+        ]}
+      />
+    </div>
   );
 }
