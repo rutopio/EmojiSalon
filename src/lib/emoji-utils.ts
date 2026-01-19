@@ -7,17 +7,17 @@
  * @module emoji-utils
  */
 
-import defaultEmojisSVGData from "~/data/defaultEmojisSVGData.json";
-import emojiCategories from "~/data/emojiCategories.json";
-import emojiPaletteData from "~/data/emojiPaletteData.json";
-import paletteColorDataRaw from "~/data/paletteColorData.json";
-
 // Category data imports for complete emoji coverage
 import activityData from "~/data/activity.json";
+import defaultEmojisSVGData from "~/data/defaultEmojisSVGData.json";
+import emojiCategories from "~/data/emojiCategories.json";
+import emojiNames from "~/data/emojiNames.json";
+import emojiPaletteData from "~/data/emojiPaletteData.json";
 import flagsData from "~/data/flags.json";
 import foodsData from "~/data/foods.json";
 import natureData from "~/data/nature.json";
 import objectsData from "~/data/objects.json";
+import paletteColorDataRaw from "~/data/paletteColorData.json";
 import peopleData from "~/data/people.json";
 import placesData from "~/data/places.json";
 import symbolsData from "~/data/symbols.json";
@@ -579,6 +579,20 @@ export const defaultEmojis = [
 ];
 
 /**
+ * Get the label/name for an emoji character.
+ *
+ * @param {string} emoji - The emoji character.
+ * @returns {string} The emoji label/name, or empty string if not found.
+ *
+ * @example
+ * getEmojiLabel("😀"); // Returns "Grinning Face"
+ * getEmojiLabel("🦄"); // Returns "Unicorn"
+ */
+export function getEmojiLabel(emoji: string): string {
+  return (emojiNames as Record<string, string>)[emoji] || "";
+}
+
+/**
  * Get a random emoji from the default emoji list.
  *
  * @returns {string} A random emoji character.
@@ -589,6 +603,20 @@ export const defaultEmojis = [
 export function getRandomEmoji(): string {
   const randomIndex = Math.floor(Math.random() * defaultEmojis.length);
   return defaultEmojis[randomIndex];
+}
+
+/**
+ * Get a random emoji with its label from the default emoji list.
+ *
+ * @returns {{ emoji: string, label: string }} A random emoji with its label.
+ *
+ * @example
+ * getRandomEmojiWithLabel(); // Returns { emoji: "😀", label: "Grinning Face" }
+ */
+export function getRandomEmojiWithLabel(): { emoji: string; label: string } {
+  const emoji = getRandomEmoji();
+  const label = getEmojiLabel(emoji);
+  return { emoji, label };
 }
 
 // ============================================================================

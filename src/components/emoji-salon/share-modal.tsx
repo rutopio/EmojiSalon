@@ -1,3 +1,12 @@
+import {
+  ClipboardIcon,
+  FacebookLogoIcon,
+  FileSvgIcon,
+  GithubLogoIcon,
+  LinkIcon,
+  XLogoIcon,
+} from "@phosphor-icons/react";
+
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -5,6 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import { Separator } from "~/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
@@ -17,15 +27,6 @@ import {
   shareToFacebook,
   shareToTwitter,
 } from "~/lib/share-utils";
-
-import {
-  ClipboardIcon,
-  FacebookIcon,
-  GitHubIcon,
-  LinkIcon,
-  SvgFileIcon,
-  TwitterIcon,
-} from "./icons";
 
 interface ShareModalProps {
   open: boolean;
@@ -54,19 +55,14 @@ export function ShareModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Share Your Emoji</DialogTitle>
+          <DialogTitle>Share Your Customized Emoji</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-wrap justify-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="bg-[#444] text-white hover:text-[#3b5998]"
-                onClick={shareToTwitter}
-              >
-                <TwitterIcon className="h-5 w-5" />
+              <Button variant="outline" size="icon" onClick={shareToTwitter}>
+                <XLogoIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Tweet</TooltipContent>
@@ -74,13 +70,8 @@ export function ShareModal({
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="bg-[#444] text-white hover:text-[#55acee]"
-                onClick={shareToFacebook}
-              >
-                <FacebookIcon className="h-5 w-5" />
+              <Button variant="outline" size="icon" onClick={shareToFacebook}>
+                <FacebookLogoIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Share on Facebook</TooltipContent>
@@ -88,13 +79,8 @@ export function ShareModal({
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="bg-[#444] text-white hover:text-[#dd4b39]"
-                onClick={handleDownloadSVG}
-              >
-                <SvgFileIcon className="h-5 w-5" />
+              <Button variant="outline" size="icon" onClick={handleDownloadSVG}>
+                <FileSvgIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Download SVG</TooltipContent>
@@ -102,13 +88,8 @@ export function ShareModal({
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="bg-[#444] text-white hover:text-[#bd081c]"
-                onClick={onCopyImage}
-              >
-                <ClipboardIcon className="h-5 w-5" />
+              <Button variant="outline" size="icon" onClick={onCopyImage}>
+                <ClipboardIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Copy Image</TooltipContent>
@@ -117,12 +98,11 @@ export function ShareModal({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="secondary"
+                variant="outline"
                 size="icon"
-                className="bg-[#444] text-white hover:text-[#833ab4]"
                 onClick={copyLinkToClipboard}
               >
-                <LinkIcon className="h-5 w-5" />
+                <LinkIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Copy Link</TooltipContent>
@@ -135,12 +115,8 @@ export function ShareModal({
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="bg-[#444] text-white hover:text-[#ffb11b]"
-                >
-                  <GitHubIcon className="h-5 w-5" />
+                <Button variant="outline" size="icon">
+                  <GithubLogoIcon className="size-5" />
                 </Button>
               </a>
             </TooltipTrigger>
@@ -148,7 +124,7 @@ export function ShareModal({
           </Tooltip>
         </div>
 
-        <div className="mt-2 text-center text-xs">
+        <div className="text-center text-xs">
           <p>
             ✓{" "}
             <a
@@ -162,7 +138,7 @@ export function ShareModal({
           </p>
         </div>
 
-        <hr className="my-4" />
+        <Separator className="my-4" />
 
         <div className="flex flex-col gap-4 lg:flex-row">
           <div className="flex justify-center lg:w-1/3">

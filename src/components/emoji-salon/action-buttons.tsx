@@ -1,4 +1,19 @@
+import {
+  ArrowCounterClockwiseIcon,
+  DiceFiveIcon,
+  DownloadSimpleIcon,
+  ImageIcon,
+  PaletteIcon,
+  ShareNetworkIcon,
+  SmileyWinkIcon,
+} from "@phosphor-icons/react";
+
 import { Button } from "~/components/ui/button";
+import {
+  EmojiPicker,
+  EmojiPickerContent,
+  EmojiPickerSearch,
+} from "~/components/ui/emoji-picker";
 import {
   Popover,
   PopoverContent,
@@ -9,17 +24,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-
-import { FrimousseEmojiPicker } from "./FrimousseEmojiPicker";
-import {
-  DiceIcon,
-  DownloadIcon,
-  EmojiIcon,
-  ImageIcon,
-  PaletteIcon,
-  ResetIcon,
-  ShareIcon,
-} from "./icons";
 
 interface ActionButtonsProps {
   onRandomEmoji: () => void;
@@ -64,7 +68,7 @@ export function ActionButtons({
                 <TooltipTrigger asChild>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="bg-white shadow-md">
-                      <EmojiIcon className="h-5 w-5" />
+                      <SmileyWinkIcon className="size-5" />
                       <span className="ml-2">Select an Emoji</span>
                     </Button>
                   </PopoverTrigger>
@@ -77,7 +81,15 @@ export function ActionButtons({
                 side="bottom"
                 sideOffset={8}
               >
-                <FrimousseEmojiPicker onEmojiSelect={handleEmojiSelect} />
+                <EmojiPicker
+                  className="h-[326px] rounded-lg border shadow-md"
+                  onEmojiSelect={({ emoji }) => {
+                    handleEmojiSelect(emoji);
+                  }}
+                >
+                  <EmojiPickerSearch />
+                  <EmojiPickerContent />
+                </EmojiPicker>
               </PopoverContent>
             </Popover>
           )}
@@ -90,7 +102,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onRandomEmoji}
               >
-                <DiceIcon className="h-5 w-5" />
+                <DiceFiveIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Random Emoji</TooltipContent>
@@ -106,7 +118,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onRandomColors}
               >
-                <PaletteIcon className="h-5 w-5" />
+                <PaletteIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Random Colors</TooltipContent>
@@ -120,7 +132,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onReset}
               >
-                <ResetIcon className="h-5 w-5" />
+                <ArrowCounterClockwiseIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Reset Colors</TooltipContent>
@@ -134,7 +146,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onDownloadImage}
               >
-                <DownloadIcon className="h-5 w-5" />
+                <DownloadSimpleIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Download Image</TooltipContent>
@@ -148,7 +160,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onCopyImage}
               >
-                <ImageIcon className="h-5 w-5" />
+                <ImageIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Copy/Share Image</TooltipContent>
@@ -162,7 +174,7 @@ export function ActionButtons({
                 className="bg-white shadow-md"
                 onClick={onShare}
               >
-                <ShareIcon className="h-5 w-5" />
+                <ShareNetworkIcon className="size-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Share</TooltipContent>
@@ -173,16 +185,11 @@ export function ActionButtons({
   }
 
   return (
-    <div className="mt-8 hidden justify-center gap-2 lg:flex">
+    <div className="hidden gap-2 lg:grid lg:grid-cols-5">
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white shadow-md hover:text-[#3b5998]"
-            onClick={onRandomEmoji}
-          >
-            <DiceIcon className="h-5 w-5" />
+          <Button variant="outline" size="icon" onClick={onRandomEmoji}>
+            <DiceFiveIcon className="size-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Random Emoji</TooltipContent>
@@ -190,13 +197,8 @@ export function ActionButtons({
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white shadow-md hover:text-[#55acee]"
-            onClick={onRandomColors}
-          >
-            <PaletteIcon className="h-5 w-5" />
+          <Button variant="outline" size="icon" onClick={onRandomColors}>
+            <PaletteIcon className="size-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Random Colors</TooltipContent>
@@ -204,13 +206,8 @@ export function ActionButtons({
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white shadow-md hover:text-[#dd4b39]"
-            onClick={onReset}
-          >
-            <ResetIcon className="h-5 w-5" />
+          <Button variant="outline" size="icon" onClick={onReset}>
+            <ArrowCounterClockwiseIcon className="size-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Reset Colors</TooltipContent>
@@ -218,13 +215,8 @@ export function ActionButtons({
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white shadow-md hover:text-[#bd081c]"
-            onClick={onDownloadImage}
-          >
-            <DownloadIcon className="h-5 w-5" />
+          <Button variant="outline" size="icon" onClick={onDownloadImage}>
+            <DownloadSimpleIcon className="size-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Download Image</TooltipContent>
@@ -232,13 +224,8 @@ export function ActionButtons({
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-white shadow-md hover:text-[#833ab4]"
-            onClick={onShare}
-          >
-            <ShareIcon className="h-5 w-5" />
+          <Button variant="outline" size="icon" onClick={onShare}>
+            <ShareNetworkIcon className="size-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Share</TooltipContent>

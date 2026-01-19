@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @import "tailwindcss" source("./");
 
 @import "tw-animate-css";
@@ -5,7 +7,32 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Twemoji font for consistent emoji rendering */
+@font-face {
+  font-family: "Twemoji Mozilla";
+  src:
+    url("/font/twemoji.woff2") format("woff2"),
+    url("/font/Twemoji.Mozilla.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Apply Twemoji to frimousse emoji picker elements */
+[frimousse-root],
+[frimousse-emoji],
+[data-slot="emoji-picker"],
+[data-slot="emoji-picker-emoji"],
+[data-slot="emoji-picker-footer"] {
+  font-family: "Twemoji Mozilla", var(--frimousse-emoji-font) !important;
+  font-variant-emoji: emoji;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
 :root {
+  --frimousse-emoji-font:
+    "Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji", sans-serif;
+  --font-sans: "Inter", sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

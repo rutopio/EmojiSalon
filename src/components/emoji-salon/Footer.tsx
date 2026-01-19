@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <div className="mt-8 text-center font-mono text-sm">
+    <div className="text-center font-mono text-sm">
       <p>
         created by{" "}
         <a

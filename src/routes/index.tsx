@@ -10,16 +10,17 @@ import {
   ColorPickerPopover,
   EmojiDisplay,
   Footer,
-  FrimousseEmojiPicker,
   ShareModal,
 } from "~/components/emoji-salon";
+import { EmojiPicker } from "~/components/emoji-salon/emoji-picker";
 import {
   emojiToUnicode,
   fetchEmojiData,
+  getEmojiLabel,
   getOriginalPaletteData,
   getOverrideStyleString,
   getRandomColor,
-  getRandomEmoji,
+  getRandomEmojiWithLabel,
   normalizeColor,
   parsePaletteString,
   triggerDownload,
@@ -49,6 +50,7 @@ function EmojiSalonPage() {
 
   // State
   const [currentEmoji, setCurrentEmoji] = useState<string>("");
+  const [currentEmojiLabel, setCurrentEmojiLabel] = useState<string>("");
   const [pathArray, setPathArray] = useState<string[]>([]);
   const [paletteArray, setPaletteArray] = useState<string[]>([]);
   const [originalPaletteColors, setOriginalPaletteColors] = useState<string[]>(
@@ -123,8 +125,9 @@ function EmojiSalonPage() {
 
   // Handle emoji selection from picker
   const handleEmojiSelect = useCallback(
-    (emoji: string) => {
+    (emoji: string, label: string) => {
       setEmojiPickerModalOpen(false);
+      setCurrentEmojiLabel(label);
       updateEmoji(emoji, false);
     },
     [updateEmoji]
@@ -139,15 +142,22 @@ function EmojiSalonPage() {
         try {
           const emoji = unicodeToEmoji(search.emoji);
           if (emoji) {
+            setCurrentEmojiLabel(getEmojiLabel(emoji));
             updateEmoji(emoji, !!search.palette, search.palette);
           } else {
-            updateEmoji(getRandomEmoji(), false);
+            const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
+            setCurrentEmojiLabel(label);
+            updateEmoji(randomEmoji, false);
           }
         } catch {
-          updateEmoji(getRandomEmoji(), false);
+          const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
+          setCurrentEmojiLabel(label);
+          updateEmoji(randomEmoji, false);
         }
       } else {
-        updateEmoji(getRandomEmoji(), false);
+        const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
+        setCurrentEmojiLabel(label);
+        updateEmoji(randomEmoji, false);
       }
       setIsInitialized(true);
     }, 0);
@@ -182,7 +192,9 @@ function EmojiSalonPage() {
 
   // Random emoji
   const handleRandomEmoji = useCallback(() => {
-    updateEmoji(getRandomEmoji(), false);
+    const { emoji, label } = getRandomEmojiWithLabel();
+    setCurrentEmojiLabel(label);
+    updateEmoji(emoji, false);
   }, [updateEmoji]);
 
   // Random colors
@@ -341,77 +353,81 @@ function EmojiSalonPage() {
   const referenceSvgHTML = generateReferenceSVG();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 p-4">
-      {/* Hidden Canvas */}
-      <canvas ref={canvasRef} className="hidden" width={256} height={256} />
+    <div className="h-dvh overflow-hidden bg-neutral-50 p-8">
+      <div className="container m-auto flex min-h-dvh flex-col items-center justify-center">
+        {/* Hidden Canvas */}
+        <canvas ref={canvasRef} className="hidden" width={256} height={256} />
 
-      {/* Main Content */}
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-3">
-          {/* Emoji Picker - Desktop */}
-          <div className="hidden justify-center lg:flex">
-            <FrimousseEmojiPicker onEmojiSelect={handleEmojiSelect} />
+        {/* Main Content */}
+        <div className="flex flex-col items-center justify-center gap-8">
+          <div className="grid grid-cols-1 items-center lg:grid-cols-3 lg:gap-16">
+            {/* Emoji Picker - Desktop */}
+            <EmojiPicker
+              onEmojiSelect={handleEmojiSelect}
+              selectedEmoji={currentEmoji}
+              selectedEmojiLabel={currentEmojiLabel}
+            />
+
+            {/* Mobile Buttons */}
+            {/* <ActionButtons
+              variant="mobile"
+              onRandomEmoji={handleRandomEmoji}
+              onRandomColors={handleRandomColors}
+              onReset={handleReset}
+              onDownloadImage={handleDownloadImage}
+              onCopyImage={handleCopyImage}
+              onShare={handleShare}
+              onEmojiSelect={handleEmojiSelect}
+              emojiPickerOpen={emojiPickerModalOpen}
+              onEmojiPickerOpenChange={setEmojiPickerModalOpen}
+            /> */}
+
+            {/* Customized Emoji Display */}
+            <EmojiDisplay svgHTML={svgHTML} variant="customized" />
+
+            {/* Reference Emoji Display - Desktop */}
+            <EmojiDisplay svgHTML={referenceSvgHTML} variant="reference" />
           </div>
 
-          {/* Mobile Buttons */}
+          {/* Desktop Buttons */}
           <ActionButtons
-            variant="mobile"
+            variant="desktop"
             onRandomEmoji={handleRandomEmoji}
             onRandomColors={handleRandomColors}
             onReset={handleReset}
             onDownloadImage={handleDownloadImage}
             onCopyImage={handleCopyImage}
             onShare={handleShare}
-            onEmojiSelect={handleEmojiSelect}
-            emojiPickerOpen={emojiPickerModalOpen}
-            onEmojiPickerOpenChange={setEmojiPickerModalOpen}
           />
 
-          {/* Customized Emoji Display */}
-          <EmojiDisplay svgHTML={svgHTML} variant="customized" />
-
-          {/* Reference Emoji Display - Desktop */}
-          <EmojiDisplay svgHTML={referenceSvgHTML} variant="reference" />
-        </div>
-
-        {/* Desktop Buttons */}
-        <ActionButtons
-          variant="desktop"
-          onRandomEmoji={handleRandomEmoji}
-          onRandomColors={handleRandomColors}
-          onReset={handleReset}
-          onDownloadImage={handleDownloadImage}
-          onCopyImage={handleCopyImage}
-          onShare={handleShare}
-        />
-
-        {/* Color Pickers - React Component based */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {customizedPaletteColors.map((color, idx) => (
-              <ColorPickerPopover
-                key={`color-picker-${idx}`}
-                color={color}
-                onColorChange={(newColor) => handleColorChange(idx, newColor)}
-                index={idx}
-              />
-            ))}
+          {/* Color Pickers - React Component based */}
+          <div className="flex justify-center">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {customizedPaletteColors.map((color, idx) => (
+                <ColorPickerPopover
+                  key={`color-picker-${idx}`}
+                  color={color}
+                  onColorChange={(newColor) => handleColorChange(idx, newColor)}
+                  index={idx}
+                />
+              ))}
+            </div>
           </div>
+
+          {/* Footer */}
+          <Footer />
         </div>
 
-        {/* Footer */}
-        <Footer />
+        {/* Share Modal */}
+        <ShareModal
+          open={shareModalOpen}
+          onOpenChange={setShareModalOpen}
+          currentEmoji={currentEmoji}
+          resultImageSrc={resultImageSrc}
+          svgData={svgHTML}
+          onCopyImage={handleCopyImage}
+        />
       </div>
-
-      {/* Share Modal */}
-      <ShareModal
-        open={shareModalOpen}
-        onOpenChange={setShareModalOpen}
-        currentEmoji={currentEmoji}
-        resultImageSrc={resultImageSrc}
-        svgData={svgHTML}
-        onCopyImage={handleCopyImage}
-      />
     </div>
   );
 }

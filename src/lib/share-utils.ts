@@ -96,6 +96,11 @@ export function copyLinkToClipboard(): void {
  * // }
  */
 export function generateCSSCode(): string {
+  // SSR guard: window is not available on server
+  if (typeof window === "undefined") {
+    return "";
+  }
+
   const hash = window.location.hash.substring(1);
   const parts = hash.split("-");
 
