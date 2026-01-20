@@ -133,7 +133,7 @@ export default function ShareModal() {
 
             <div className="flex flex-col items-center justify-center gap-2">
               <a
-                href="https://github.com/rutopio/EmojiSalon"
+                href="https://github.com/rutopio/EmojiSalon/issues"
                 target="_blank"
                 rel="noreferrer noopener"
               >

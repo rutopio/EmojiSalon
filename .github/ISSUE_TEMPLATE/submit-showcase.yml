@@ -1,0 +1,45 @@
+name: Submit Showcase
+
+description: Submit your own showcase creation to be featured on the Showcase page
+
+title: "[Submit Showcase]"
+
+labels:
+  - showcase
+
+body:
+  - type: input
+    id: full-url
+    attributes:
+      label: Full URL
+      description: The complete share URL from your creation. You can paste the full URL here, or fill in the Emoji Code and Palette Code fields below separately.
+      placeholder: e.g., https://emojisalon.com/?emoji=u1f369&palette=4_424997-623_b04f91-604_385da6-3_6e66a7-125_8d3781
+    validations:
+      required: false
+
+  - type: input
+    id: emoji-code
+    attributes:
+      label: Emoji Code
+      description: The emoji code from the URL. This is the string after "emoji=" in the share URL. For example, `u1f369` for 🍩
+      placeholder: e.g., u1f369
+    validations:
+      required: true
+
+  - type: input
+    id: palette-code
+    attributes:
+      label: Palette Code
+      description: The palette code from the URL. This is the string after "palette=" in the share URL. For example, `4_424997-623_b04f91-604_385da6-3_6e66a7-125_8d3781`
+      placeholder: e.g., 4_424997-623_b04f91-604_385da6-3_6e66a7-125_8d3781
+    validations:
+      required: true
+
+  - type: input
+    id: creation-name
+    attributes:
+      label: Name of Your Creation
+      description: The name that will be displayed on the Showcase page. For example, `Blueberry Doughnut`
+      placeholder: e.g., Blueberry Doughnut
+    validations:
+      required: true

@@ -118,38 +118,66 @@ function AboutPage() {
               Copyright & License
             </h2>
             <div className="text-muted-foreground space-y-3 leading-relaxed">
-              <p>
-                Your creations are based on{" "}
-                <a
-                  href="https://twemoji.twitter.com/"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="hover:text-foreground underline underline-offset-4"
-                >
-                  Twemoji
-                </a>
-                , licensed under{" "}
-                <a
-                  href="https://creativecommons.org/licenses/by/4.0/"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="hover:text-foreground underline underline-offset-4"
-                >
-                  CC-BY 4.0
-                </a>{" "}
-                (graphics).
-              </p>
-              <p>
-                This license enables reusers to distribute, remix, adapt, and
-                build upon the material in any medium or format, so long as
-                attribution is given to the creator. The license allows for
-                commercial use.
-              </p>
-              <p className="font-medium">
-                I do not own any copyright to your work. You are free to use
-                your customized emojis as you wish, following the CC-BY 4.0
-                license terms.
-              </p>
+              {/* Graphics License */}
+              <div className="space-y-3">
+                <h3 className="font-title-sans text-xl font-semibold">
+                  Graphics
+                </h3>
+                <div className="flex justify-center py-2">
+                  <img
+                    src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png"
+                    alt="CC-BY 4.0 License"
+                    className="h-8 w-auto"
+                  />
+                </div>
+                <p>
+                  Your creation is based on{" "}
+                  <a
+                    href="https://github.com/twitter/twemoji"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-foreground underline underline-offset-4"
+                  >
+                    Twemoji
+                  </a>
+                  , licensed under{" "}
+                  <a
+                    href="https://creativecommons.org/licenses/by/4.0/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-foreground underline underline-offset-4"
+                  >
+                    CC-BY 4.0
+                  </a>{" "}
+                  (graphic).
+                </p>
+                <p>
+                  This license enables reusers to distribute, remix, adapt, and
+                  build upon the material in any medium or format, so long as
+                  attribution is given to the creator. The license allows for
+                  commercial use.
+                </p>
+                <p className="font-medium">
+                  The author does not own any copyright to your work.
+                </p>
+              </div>
+
+              {/* Code License */}
+              <div className="space-y-3 border-t pt-4">
+                <h3 className="font-title-sans text-xl font-semibold">Code</h3>
+                <p>
+                  Code licensed under the{" "}
+                  <a
+                    href="http://opensource.org/licenses/MIT"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover:text-foreground underline underline-offset-4"
+                  >
+                    MIT License
+                  </a>
+                  .
+                </p>
+              </div>
             </div>
           </section>
 

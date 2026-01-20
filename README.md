@@ -2,7 +2,20 @@
 
 # Emoji Salon - Coloring Your Emoji
 
-https://emojisalon.pages.dev
+🔗  Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev)  🔗
+
+![Npm](https://img.shields.io/badge/npm-v10.8.2-CB3837?style=flat-square&logo=npm&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-v20.19.6-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat-square&logo=typescript)
+![React](https://img.shields.io/badge/React-19.2.3-blue?style=flat-square&logo=react)
+![TanStack Start](https://img.shields.io/badge/TanStack_Start-1.141.7-black?style=flat-square&logo=tanstack)
+
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38bdf8?style=flat-square&logo=tailwind-css)
+![ShadCN](https://img.shields.io/badge/shadcn%2Fui-3.6.3-000000?style=flat-square&logo=shadcnui&logoColor=white)
+
+Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?logo=cloudflarepages&logoColor=fff&style=flat-square)
 
 ![](public/social.png)
 
@@ -105,6 +118,8 @@ See [`preprocess/README.md`](./preprocess/README.md) for detailed instructions o
 
 ## Copyright
 
+### Graphics
+
 <div align="center">
 <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" style="width: 100pt;">
 </div>
@@ -114,6 +129,10 @@ Your creation is based on [Twemoji](https://github.com/twitter/twemoji), license
 This license enables reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.
 
 The author does not own any copyright to your work.
+
+### Code
+
+Code licensed under the MIT License: http://opensource.org/licenses/MIT
 
 ## Special Thanks
 
