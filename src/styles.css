@@ -242,3 +242,7 @@
     max-width: 1536px;
   }
 }
+
+html {
+  overscroll-behavior-y: none;
+}

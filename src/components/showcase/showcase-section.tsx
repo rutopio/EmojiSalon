@@ -178,11 +178,11 @@ export default function ShowcaseSection({
   const hasMultipleVariants = variants.length > 1;
 
   return (
-    <div className={`bg-card rounded-lg border p-6 ${className}`}>
+    <div className={`bg-card rounded-lg border p-4 lg:p-6 ${className}`}>
       {/* Hidden canvas for image generation */}
       <canvas ref={canvasRef} className="hidden" />
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4 lg:gap-8">
         {/* Unicode label and action buttons */}
         <div className="relative flex w-full items-center justify-start lg:justify-center">
           <span className="font-mono text-base">{unicodeDisplay}</span>

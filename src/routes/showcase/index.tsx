@@ -46,7 +46,7 @@ function ShowcasePage() {
           <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
             Explore creative emoji color variations
           </p>
-          <div className="py-8">
+          <div className="">
             <a href={GITHUB_ISSUE_BASE_URL}>
               <Button className="">
                 <MagicWandIcon className="mr-2 size-4" />
@@ -56,7 +56,7 @@ function ShowcasePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
           {showcaseData.sections.map((section) => (
             <ShowcaseSection
               key={section.emoji}

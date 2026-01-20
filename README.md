@@ -6,7 +6,7 @@
 
 ![Npm](https://img.shields.io/badge/npm-v10.8.2-CB3837?style=flat-square&logo=npm&logoColor=white)
 ![Node](https://img.shields.io/badge/Node.js-v20.19.6-339933?style=flat-square&logo=nodedotjs&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![License: CC_BY_4.0(Graphics)_/_MIT(Code)](<https://img.shields.io/badge/License-CC_BY_4.0(Graphics)_/_MIT(Code)-yellow.svg>)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat-square&logo=typescript)
 ![React](https://img.shields.io/badge/React-19.2.3-blue?style=flat-square&logo=react)
@@ -14,6 +14,7 @@
 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38bdf8?style=flat-square&logo=tailwind-css)
 ![ShadCN](https://img.shields.io/badge/shadcn%2Fui-3.6.3-000000?style=flat-square&logo=shadcnui&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.2.1-9135FF?style=flat-square&logo=vite&logoColor=white)
 
 Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?logo=cloudflarepages&logoColor=fff&style=flat-square)
 
@@ -28,6 +29,8 @@ Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F380
 EmojiSalon uses [Twemoji](https://github.com/twitter/twemoji) SVG data for emoji rendering. You can select any emoji, customize its colors, and download your creation as SVG or PNG for personal or commercial use.
 
 ## Usage
+
+Live Page: [https://emojisalon.pages.dev/showcase](https://emojisalon.pages.dev/showcase)
 
 ### Extend Emoji & For Fun
 

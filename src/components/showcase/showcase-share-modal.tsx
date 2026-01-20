@@ -144,7 +144,7 @@ export default function ShowcaseShareModal({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <div className="mx-auto grid w-fit grid-cols-5 justify-center gap-4">
+          <div className="mx-auto grid w-fit grid-cols-5 items-start justify-start gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
                 variant="outline"
@@ -153,7 +153,7 @@ export default function ShowcaseShareModal({
               >
                 <XLogoIcon className="size-5" />
               </Button>
-              <div className="text-xs">X (Twitter)</div>
+              <div className="text-center text-xs">X (Twitter)</div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex items-center justify-center">
@@ -165,28 +165,28 @@ export default function ShowcaseShareModal({
                   <FacebookLogoIcon className="size-5" />
                 </Button>
               </div>
-              <div className="text-xs">Facebook</div>
+              <div className="text-center text-xs">Facebook</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
               <Button variant="outline" size="icon" onClick={handleDownloadSVG}>
                 <FileSvgIcon className="size-5" />
               </Button>
-              <div className="text-xs">Save SVG</div>
+              <div className="text-center text-xs">Save SVG</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
               <Button variant="outline" size="icon" onClick={handleCopyImage}>
                 <ClipboardIcon className="size-5" />
               </Button>
-              <div className="text-xs">Copy Image</div>
+              <div className="text-center text-xs">Copy Image</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
               <Button variant="outline" size="icon" onClick={handleCopyLink}>
                 <LinkIcon className="size-5" />
               </Button>
-              <div className="text-xs">Copy Link</div>
+              <div className="text-center text-xs">Copy Link</div>
             </div>
           </div>
 
