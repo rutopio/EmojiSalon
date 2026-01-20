@@ -1,9 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import {
-  CaretRightIcon,
-  GithubLogoIcon,
-  ListIcon,
-} from "@phosphor-icons/react";
+import { CaretRightIcon, ListIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,26 +32,26 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="bg-background sticky top-0 z-10 container hidden w-full items-center justify-between py-4 lg:flex">
+      <nav className="bg-background font-title-sans sticky top-0 z-10 container hidden w-full items-center justify-between py-4 lg:flex">
         <Link to="/">
-          <div className="font-title-sans text-xl font-bold tracking-wider">
-            EmojiSalon
-          </div>
+          <div className="text-xl font-bold tracking-wider">EmojiSalon</div>
         </Link>
         <NavigationMenu>
-          <NavigationMenuList className="gap-2">
+          <NavigationMenuList className="gap-2 tracking-wider">
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
               >
-                <Link to="/">Create</Link>
+                <Link to="/">
+                  <span>Create</span>
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
               >
                 <Link to="/showcase">Showcase</Link>
               </NavigationMenuLink>
@@ -63,7 +59,7 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
               >
                 <Link to="/about">About</Link>
               </NavigationMenuLink>

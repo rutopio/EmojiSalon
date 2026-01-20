@@ -196,7 +196,6 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
 
   // Initialize: load emoji from URL or localStorage or random (only on home page)
   useEffect(() => {
-    if (isInitialized) return;
     // Skip initialization if not on home page
     if (location.pathname !== "/") return;
 
@@ -217,8 +216,8 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
         }
       }
 
-      // 2. If URL failed, try localStorage
-      if (!emojiLoaded) {
+      // 2. If URL failed and not yet initialized, try localStorage
+      if (!emojiLoaded && !isInitialized) {
         const storedEmoji = localStorage.getItem("emojisalon:emoji");
         const storedPalette = localStorage.getItem("emojisalon:palette");
 
@@ -236,14 +235,16 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
         }
       }
 
-      // 3. If both URL and localStorage failed, use random emoji
-      if (!emojiLoaded) {
+      // 3. If both URL and localStorage failed and not yet initialized, use random emoji
+      if (!emojiLoaded && !isInitialized) {
         const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
         setCurrentEmojiLabel(label);
         updateEmoji(randomEmoji, false);
       }
 
-      setIsInitialized(true);
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
     }, 0);
 
     return () => clearTimeout(timer);
