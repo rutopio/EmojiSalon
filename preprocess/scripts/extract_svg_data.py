@@ -3,7 +3,7 @@
 
 This script parses SVG files from the Twemoji repository and extracts
 the path data (d attribute) and fill colors for each emoji. The extracted
-data is saved as JSON files for use in the Emoji Salon application.
+data is saved as JSON files for use in the EmojiSalon application.
 
 SVG Source: https://github.com/twitter/twemoji
 

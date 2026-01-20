@@ -1,5 +1,5 @@
 /**
- * @fileoverview Utility functions for Emoji Salon application.
+ * @fileoverview Utility functions for EmojiSalon application.
  * Provides functions for emoji manipulation, color conversion,
  * URL encoding/decoding, and data fetching.
  */

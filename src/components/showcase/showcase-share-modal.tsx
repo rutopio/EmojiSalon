@@ -211,7 +211,7 @@ export default function ShowcaseShareModal({
               {imageSrc && (
                 <img
                   src={imageSrc}
-                  alt="Result"
+                  alt="Customized emoji preview"
                   className="aspect-square w-full object-contain"
                 />
               )}
@@ -231,7 +231,7 @@ export default function ShowcaseShareModal({
                 </Button>
               </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs">
-                <code>{`<span class="mod-emoji"> ${emoji} </span>`}</code>
+                <code className="font-mono">{`<span class="mod-emoji"> ${emoji} </span>`}</code>
               </pre>
 
               <div className="mt-4 flex items-center gap-2">
@@ -247,7 +247,7 @@ export default function ShowcaseShareModal({
                 </Button>
               </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs whitespace-pre-wrap">
-                <code>{cssCode}</code>
+                <code className="font-mono">{cssCode}</code>
               </pre>
             </div>
           </div>

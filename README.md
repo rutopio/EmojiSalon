@@ -1,6 +1,6 @@
 <div align="center">
 
-# Emoji Salon - Coloring Your Emoji
+# EmojiSalon - Coloring Your Emoji
 
 🔗 Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev) 🔗
 
@@ -19,13 +19,13 @@ Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F380
 
 ![](public/social.png)
 
-**Emoji Salon** allows you to customize the colors of emojis, just like dressing them up with various cosmetics or coloring them with different paints.
+**EmojiSalon** allows you to customize the colors of emojis, just like dressing them up with various cosmetics or coloring them with different paints.
 
 </div>
 
 ## Introduction
 
-Emoji Salon uses [Twemoji](https://github.com/twitter/twemoji) SVG data for emoji rendering. You can select any emoji, customize its colors, and download your creation as SVG or PNG for personal or commercial use.
+EmojiSalon uses [Twemoji](https://github.com/twitter/twemoji) SVG data for emoji rendering. You can select any emoji, customize its colors, and download your creation as SVG or PNG for personal or commercial use.
 
 ## Usage
 
@@ -47,30 +47,44 @@ Adapt emojis for different cultural contexts or create region-specific variation
 
 ### Accessibility
 
-For people with color vision deficiencies or color blindness, identifying certain emojis can be challenging when colors are too similar or overly vibrant.
+Emoji accessibility is not just a binary between being able to see emoji perfectly and not being able to see them at all — it is a spectrum that accounts for multiple experiences.
 
-For example, distinguishing between:
+#### Challenges for Visually Impaired Users
 
-- Italy and Ireland
-- Romania and Chad
-- Latvia and Austria
-- Monaco and Indonesia
+For people with color vision deficiencies, color blindness, or low vision, identifying certain emojis can be challenging:
 
-Most current emoji designs do not consider accessibility needs. Emoji Salon provides a way to create easily distinguishable emojis for such individuals.
+- **Similar colors**: Emoji may appear blurry or distorted, making it difficult to distinguish between similar-looking icons
+- **Color-based identification**: Many users identify emoji by color or general shape rather than fine details
+- **Multiple emoji in sequence**: When several emoji appear in a row, they can be hard to tell apart, especially with similar colors
+- **Small keyboard icons**: Emoji keyboards have small icons arranged closely together, making selection difficult
 
-See more:
+#### Commonly Confused Emoji
+
+**Flag emoji** with similar color schemes are particularly problematic:
+
+- 🇮🇹 Italy vs 🇮🇪 Ireland
+- 🇷🇴 Romania vs 🇹🇩 Chad
+- 🇱🇻 Latvia vs 🇦🇹 Austria
+- 🇲🇨 Monaco vs 🇮🇩 Indonesia
+
+**Heart emoji** colors can also be easily confused:
+
+- ❤️ Red vs 💜 Purple
+- 💙 Blue vs 💜 Purple
+- 💚 Green vs 🧡 Orange
+
+#### How EmojiSalon Helps
+
+Most current emoji designs do not consider these accessibility needs. EmojiSalon provides a solution by allowing users to:
+
+- Customize emoji colors for better personal distinction
+- Create high-contrast variants tailored to individual visual needs
+- Generate easily distinguishable emoji for users with specific color vision deficiencies
+
+#### See More
 
 - [Emoji And Low Vision - Veronica With Four Eyes](https://veroniiiica.com/emoji-and-low-vision/)
 - [Are you emoji colour blind? - Colour Blind Vision](https://www.facebook.com/ColourBlindVision/posts/are-you-emoji-colour-blinda-strange-concept-to-say-nevertheless-how-many-times-h/678523570194699/)
-
-## Tech Stack
-
-- [React 19](https://react.dev) + [TypeScript](https://www.typescriptlang.org/)
-- [TanStack Start](https://tanstack.com/start/latest) + [TanStack Router](https://tanstack.com/router/latest)
-- [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
-- [Vite](https://vite.dev/)
-- [Frimousse](https://frimousse.liveblocks.io/) - Lightweight, unstyled emoji picker
-- [Coloris](https://github.com/mdbassit/Coloris) - Color picker component
 
 ## Getting Started
 
@@ -98,7 +112,7 @@ See more:
 ## Building for Production
 
 ```bash
-pnpm build
+pnpm run build
 ```
 
 Refer to the [TanStack Start hosting docs](https://tanstack.com/start/latest/docs/framework/react/guide/hosting) for deploying to various platforms.

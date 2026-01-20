@@ -18,6 +18,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { GITHUB_REPO_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /**
@@ -70,7 +71,7 @@ export default function Navbar() {
                 className={navigationMenuTriggerStyle()}
               >
                 <a
-                  href="https://github.com/rutopio/EmojiSalon"
+                  href={GITHUB_REPO_URL}
                   target="_blank"
                   rel="noreferrer noopener"
                 >
@@ -132,7 +133,7 @@ export default function Navbar() {
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <a
-                  href="https://github.com/rutopio/EmojiSalon"
+                  href={GITHUB_REPO_URL}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="flex items-center gap-2"

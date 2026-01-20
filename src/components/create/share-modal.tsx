@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { GITHUB_ISSUE_BASE_URL, GITHUB_REPO_URL } from "@/lib/constants";
 import {
   copyCSSCode,
   copyHTMLCode,
@@ -85,6 +86,7 @@ export default function ShareModal() {
           <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
+                aria-label="Share to X (Twitter)"
                 variant="outline"
                 size="icon"
                 onClick={() => shareToTwitter()}
@@ -96,6 +98,7 @@ export default function ShareModal() {
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex items-center justify-center">
                 <Button
+                  aria-label="Share to Facebook"
                   variant="outline"
                   size="icon"
                   onClick={() => shareToFacebook()}
@@ -107,14 +110,24 @@ export default function ShareModal() {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleDownloadSVG}>
+              <Button
+                aria-label="Save SVG"
+                variant="outline"
+                size="icon"
+                onClick={handleDownloadSVG}
+              >
                 <FileSvgIcon className="size-5" />
               </Button>
               <div className="text-xs">Save SVG</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleCopyImage}>
+              <Button
+                aria-label="Copy image to clipboard"
+                variant="outline"
+                size="icon"
+                onClick={handleCopyImage}
+              >
                 <ClipboardIcon className="size-5" />
               </Button>
               <div className="text-xs">Copy Image</div>
@@ -122,6 +135,7 @@ export default function ShareModal() {
 
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
+                aria-label="Copy link to clipboard"
                 variant="outline"
                 size="icon"
                 onClick={() => copyLinkToClipboard()}
@@ -133,11 +147,15 @@ export default function ShareModal() {
 
             <div className="flex flex-col items-center justify-center gap-2">
               <a
-                href="https://github.com/rutopio/EmojiSalon/issues"
+                href={GITHUB_ISSUE_BASE_URL}
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                <Button variant="outline" size="icon">
+                <Button
+                  aria-label="Submit to showcase"
+                  variant="outline"
+                  size="icon"
+                >
                   <GithubIcon />
                 </Button>
               </a>
@@ -149,7 +167,7 @@ export default function ShareModal() {
             <CheckCircleIcon className="size-4" />
             <p>
               <a
-                href="https://github.com/rutopio/EmojiSalon#copyright"
+                href={GITHUB_REPO_URL + "#copyright"}
                 target="_blank"
                 rel="noreferrer noopener"
                 className="underline"
@@ -166,7 +184,7 @@ export default function ShareModal() {
               {resultImageSrc && (
                 <img
                   src={resultImageSrc}
-                  alt="Result"
+                  alt="Customized emoji preview"
                   className="aspect-square w-full object-contain"
                 />
               )}
@@ -186,7 +204,7 @@ export default function ShareModal() {
                 </Button>
               </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs">
-                <code>{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
+                <code className="font-mono">{`<span class="mod-emoji"> ${currentEmoji} </span>`}</code>
               </pre>
 
               <div className="mt-4 flex items-center gap-2">
@@ -202,7 +220,7 @@ export default function ShareModal() {
                 </Button>
               </div>
               <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs whitespace-pre-wrap">
-                <code>{cssCode}</code>
+                <code className="font-mono">{cssCode}</code>
               </pre>
             </div>
           </div>

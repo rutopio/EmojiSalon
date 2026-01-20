@@ -36,7 +36,7 @@ export default function EmojiPreview({
         <div className="flex size-24 items-center justify-center lg:size-32">
           <Skeleton className="size-24 lg:size-32" />
         </div>
-        <span className="text-center text-sm text-neutral-500">{label}</span>
+        <span className="text-center text-sm">{label}</span>
       </div>
     );
   }
@@ -47,9 +47,7 @@ export default function EmojiPreview({
         dangerouslySetInnerHTML={{ __html: svg }}
         className="size-24 lg:size-32 [&>svg]:h-full [&>svg]:w-full"
       />
-      <span className="text-center text-sm text-neutral-600 group-hover:text-neutral-900">
-        {label}
-      </span>
+      <span className="text-center text-sm">{label}</span>
     </div>
   );
 }

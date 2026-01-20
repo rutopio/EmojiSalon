@@ -1,5 +1,5 @@
 /**
- * @fileoverview Root route component for Emoji Salon application.
+ * @fileoverview Root route component for EmojiSalon application.
  * Defines the root layout, metadata, and provides global context providers.
  */
 
@@ -38,12 +38,12 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Emoji Salon - Coloring Your Emoji",
+        title: "EmojiSalon - Coloring Your Emoji",
       },
       {
         name: "description",
         content:
-          "Customize your emoji colors with Emoji Salon! Create unique emoji variations and download as SVG or PNG.",
+          "Customize your emoji colors with EmojiSalon! Create unique emoji variations and download as SVG or PNG.",
       },
       {
         name: "theme-color",
@@ -51,11 +51,11 @@ export const Route = createRootRouteWithContext<{
       },
       {
         property: "og:title",
-        content: "Emoji Salon - Coloring Your Emoji",
+        content: "EmojiSalon - Coloring Your Emoji",
       },
       {
         property: "og:description",
-        content: "Customize your emoji colors with Emoji Salon!",
+        content: "Customize your emoji colors with EmojiSalon!",
       },
       {
         property: "og:image",

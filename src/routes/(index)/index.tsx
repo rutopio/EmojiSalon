@@ -41,8 +41,8 @@ export const Route = createFileRoute("/(index)/")({
   head: () => ({
     meta: [
       {
-        title: "Create | Emoji Salon - Coloring Your Emoji",
-        description: "Customize your emoji colors with Emoji Salon!",
+        title: "Create | EmojiSalon - Coloring Your Emoji",
+        description: "Customize your emoji colors with EmojiSalon!",
       },
     ],
   }),

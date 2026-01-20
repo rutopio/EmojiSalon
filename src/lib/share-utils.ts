@@ -1,5 +1,5 @@
 /**
- * @fileoverview Sharing utility functions for Emoji Salon application.
+ * @fileoverview Sharing utility functions for EmojiSalon application.
  * Provides functions for sharing customized emojis via social media,
  * copying links to clipboard, generating CSS code, and downloading files.
  */
@@ -173,7 +173,7 @@ export function downloadSVG(svgData: string, emoji: string): void {
   const url = URL.createObjectURL(svgBlob);
   const filename = `${emojiToUnicode(emoji)}-EmojiSalon.svg`;
   triggerDownload(url, filename);
-  toast.success("SVG downloaded.", {
+  toast.success("SVG downloading....", {
     description: filename,
   });
 }

@@ -117,3 +117,14 @@ export const TWITTER_SHARE_BASE_URL = "https://twitter.com/intent/tweet";
  * Base URL for Facebook share dialog.
  */
 export const FACEBOOK_SHARE_BASE_URL = "https://www.facebook.com/sharer.php";
+
+/**
+ * Base URL for GitHub issue submission template.
+ */
+export const GITHUB_ISSUE_BASE_URL =
+  "https://github.com/rutopio/EmojiSalon/issues/new?template=submit-showcase.yml";
+
+/**
+ * Base URL for GitHub repository.
+ */
+export const GITHUB_REPO_URL = "https://github.com/rutopio/EmojiSalon";

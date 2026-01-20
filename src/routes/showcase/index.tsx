@@ -9,6 +9,7 @@ import PageLayout from "@/layout";
 
 import ShowcaseSection from "@/components/showcase/showcase-section";
 import { Button } from "@/components/ui/button";
+import { GITHUB_ISSUE_BASE_URL } from "@/lib/constants";
 
 import showcaseData from "@/data/showcase/showcase-data.json";
 
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/showcase/")({
   head: () => ({
     meta: [
       {
-        title: "Showcase | Emoji Salon - Coloring Your Emoji",
+        title: "Showcase | EmojiSalon - Coloring Your Emoji",
         description: "Explore creative emoji color variations",
       },
     ],
@@ -38,15 +39,15 @@ function ShowcasePage() {
   return (
     <PageLayout>
       <div className="container flex-1 lg:py-16">
-        <div className="mb-8 flex flex-col items-center gap-4 lg:text-center">
-          <div className="font-title-sans text-4xl font-bold tracking-wide lg:text-5xl">
+        <div className="flex flex-col items-start gap-4 lg:items-center">
+          <h1 className="font-title-sans text-4xl font-bold tracking-wide text-balance lg:text-5xl">
             Showcase
-          </div>
-          <div className="text-muted-foreground text-lg lg:text-xl">
+          </h1>
+          <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
             Explore creative emoji color variations
-          </div>
+          </p>
           <div className="py-8">
-            <a href="https://github.com/rutopio/EmojiSalon/issues">
+            <a href={GITHUB_ISSUE_BASE_URL}>
               <Button className="">
                 <MagicWandIcon className="mr-2 size-4" />
                 Submit Your Own

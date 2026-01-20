@@ -1,5 +1,5 @@
 /**
- * @fileoverview About page route for Emoji Salon.
+ * @fileoverview About page route for EmojiSalon.
  * Provides information about the application, how it works, accessibility,
  * copyright, and open source details.
  */
@@ -15,8 +15,8 @@ export const Route = createFileRoute("/about/")({
   head: () => ({
     meta: [
       {
-        title: "About | Emoji Salon - Coloring Your Emoji",
-        description: "Learn more about Emoji Salon",
+        title: "About | EmojiSalon - Coloring Your Emoji",
+        description: "Learn more about EmojiSalon",
       },
     ],
   }),
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/about/")({
 
 /**
  * About page component.
- * Displays information about Emoji Salon including how it works,
+ * Displays information about EmojiSalon including how it works,
  * accessibility features, copyright information, and open source details.
  *
  * @returns About page component.
@@ -36,23 +36,23 @@ function AboutPage() {
         <div className="mx-auto max-w-3xl space-y-12">
           {/* Hero section */}
           <section className="space-y-4 lg:text-center">
-            <h1 className="font-title-sans text-4xl font-bold tracking-wide lg:text-5xl">
-              About Emoji Salon
+            <h1 className="font-title-sans text-4xl font-bold tracking-wide text-balance lg:text-5xl">
+              About EmojiSalon
             </h1>
-            <p className="text-muted-foreground text-lg lg:text-xl">
-              Emoji Salon allows you to customize the colors of emojis, just
-              like dressing them up with various cosmetics or coloring them with
+            <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
+              EmojiSalon allows you to customize the colors of emojis, just like
+              dressing them up with various cosmetics or coloring them with
               different paints.
             </p>
           </section>
 
           {/* How it works section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
               How It Works
             </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Emoji Salon uses Twemoji SVG data for emoji rendering. You can
+            <p className="text-muted-foreground leading-relaxed text-pretty">
+              EmojiSalon uses Twemoji SVG data for emoji rendering. You can
               select any emoji, customize its colors using an intuitive color
               palette system, and download your creation as SVG or PNG for
               personal or commercial use. The tool provides full creative
@@ -62,31 +62,102 @@ function AboutPage() {
           </section>
 
           {/* Accessibility section */}
-          <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
+          <section className="space-y-6">
+            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
               Accessibility
             </h2>
-            <div className="text-muted-foreground space-y-3 leading-relaxed">
-              <p>
-                For some people with color vision deficiencies or color
-                blindness, it may be challenging to correctly identify certain
-                emojis that are too similar in color or overly vibrant.
+            <p className="text-muted-foreground leading-relaxed text-pretty">
+              Emoji accessibility is not just a binary between being able to see
+              emoji perfectly and not being able to see them at all — it is a
+              spectrum that accounts for multiple experiences.
+            </p>
+
+            {/* Challenges */}
+            <div className="space-y-3">
+              <h3 className="font-title-sans text-xl font-semibold">
+                Challenges for Visually Impaired Users
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                For people with color vision deficiencies, color blindness, or
+                low vision, identifying certain emojis can be challenging:
               </p>
-              <p>
-                For instance, the flags of 🇮🇹 Italy and 🇮🇪 Ireland; 🇷🇴 Romania
-                and 🇹🇩 Chad; 🇱🇻 Latvia and 🇦🇹 Austria; 🇲🇨 Monaco and 🇮🇩
-                Indonesia can be difficult to distinguish due to their similar
-                color schemes.
+              <ul className="text-muted-foreground list-inside list-disc space-y-1 pl-2">
+                <li>
+                  <strong>Similar colors:</strong> Emoji may appear blurry or
+                  distorted, making it difficult to distinguish between
+                  similar-looking icons
+                </li>
+                <li>
+                  <strong>Color-based identification:</strong> Many users
+                  identify emoji by color or general shape rather than fine
+                  details
+                </li>
+                <li>
+                  <strong>Multiple emoji in sequence:</strong> When several
+                  emoji appear in a row, they can be hard to tell apart,
+                  especially with similar colors
+                </li>
+                <li>
+                  <strong>Small keyboard icons:</strong> Emoji keyboards have
+                  small icons arranged closely together, making selection
+                  difficult
+                </li>
+              </ul>
+            </div>
+
+            {/* Commonly Confused Emoji */}
+            <div className="space-y-3">
+              <h3 className="font-title-sans text-xl font-semibold">
+                Commonly Confused Emoji
+              </h3>
+              <div className="text-muted-foreground space-y-2">
+                <p>
+                  <strong>Flag emoji</strong> with similar color schemes are
+                  particularly problematic:
+                </p>
+                <ul className="list-inside list-disc space-y-1 pl-2">
+                  <li>🇮🇹 Italy / 🇮🇪 Ireland</li>
+                  <li>🇷🇴 Romania / 🇹🇩 Chad</li>
+                  <li>🇱🇻 Latvia / 🇦🇹 Austria</li>
+                  <li>🇲🇨 Monaco / 🇮🇩 Indonesia</li>
+                </ul>
+                <p className="pt-2">
+                  <strong>Heart emoji</strong> colors can also be easily
+                  confused:
+                </p>
+                <ul className="list-inside list-disc space-y-1 pl-2">
+                  <li>❤️ Red / 💜 Purple</li>
+                  <li>💙 Blue / 💜 Purple</li>
+                  <li>💚 Green / 🧡 Orange</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* How EmojiSalon Helps */}
+            <div className="space-y-3">
+              <h3 className="font-title-sans text-xl font-semibold">
+                How EmojiSalon Helps
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Most current emoji designs do not consider these accessibility
+                needs. EmojiSalon provides a solution by allowing users to:
               </p>
-              <p>
-                However, most current emoji designs do not take these
-                accessibility concerns into consideration. Emoji Salon aims to
-                provide a solution by allowing users to create easily
-                distinguishable emoji variants tailored to individual needs,
-                making digital communication more inclusive and accessible for
-                everyone.
-              </p>
-              <p className="pt-2">See more:</p>
+              <ul className="text-muted-foreground list-inside list-disc space-y-1 pl-2">
+                <li>Customize emoji colors for better personal distinction</li>
+                <li>
+                  Create high-contrast variants tailored to individual visual
+                  needs
+                </li>
+                <li>
+                  Generate easily distinguishable emoji for users with specific
+                  color vision deficiencies
+                </li>
+              </ul>
+            </div>
+
+            {/* See more */}
+            <div className="text-muted-foreground space-y-2">
+              <p>See more:</p>
               <ul className="list-inside list-disc space-y-1 pl-2">
                 <li>
                   <a
@@ -114,7 +185,7 @@ function AboutPage() {
 
           {/* Copyright section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
               Copyright & License
             </h2>
             <div className="text-muted-foreground space-y-3 leading-relaxed">
@@ -126,7 +197,7 @@ function AboutPage() {
                 <div className="flex justify-center py-2">
                   <img
                     src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png"
-                    alt="CC-BY 4.0 License"
+                    alt="Creative Commons Attribution 4.0 International License badge"
                     className="h-8 w-auto"
                   />
                 </div>
@@ -183,11 +254,11 @@ function AboutPage() {
 
           {/* Open source section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
               Open Source
             </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Emoji Salon is open source and available on{" "}
+            <p className="text-muted-foreground leading-relaxed text-pretty">
+              EmojiSalon is open source and available on{" "}
               <a
                 href="https://github.com/rutopio/EmojiSalon"
                 target="_blank"

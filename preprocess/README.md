@@ -1,6 +1,6 @@
 # Preprocessing Pipeline
 
-This directory contains scripts and data for preprocessing Twemoji assets into the JSON format used by Emoji Salon.
+This directory contains scripts and data for preprocessing Twemoji assets into the JSON format used by EmojiSalon.
 
 ## Overview
 

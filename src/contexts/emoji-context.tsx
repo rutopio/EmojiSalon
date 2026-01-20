@@ -1,7 +1,7 @@
 /**
  * @fileoverview Emoji context provider for sharing emoji state across components.
  * Provides centralized state management for emoji selection, color customization,
- * SVG generation, and sharing functionality in the Emoji Salon application.
+ * SVG generation, and sharing functionality in the EmojiSalon application.
  */
 
 import {
@@ -519,7 +519,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
    */
   const handleDownloadImage = useCallback(() => {
     updateCanvas(CANVAS_ACTION.DOWNLOAD);
-    toast.success("Image downloaded.", {
+    toast.success("Image downloading....", {
       description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.png`,
     });
   }, [updateCanvas, currentEmoji]);

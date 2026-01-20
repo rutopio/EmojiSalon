@@ -158,7 +158,7 @@ export default function ShowcaseSection({
   const handleDownload = useCallback(() => {
     generateImage((dataUrl) => {
       triggerDownload(dataUrl, `${emoji}-EmojiSalon.png`);
-      toast.success("Image downloaded", {
+      toast.success("Image downloading...", {
         description: `${emoji}-EmojiSalon.png`,
       });
     });
@@ -185,11 +185,10 @@ export default function ShowcaseSection({
       <div className="flex flex-col gap-8">
         {/* Unicode label and action buttons */}
         <div className="relative flex w-full items-center justify-start lg:justify-center">
-          <span className="text-primary font-mono text-base">
-            {unicodeDisplay}
-          </span>
+          <span className="font-mono text-base">{unicodeDisplay}</span>
           <div className="absolute -top-1 right-0 flex items-center gap-2">
             <Button
+              aria-label="Edit emoji"
               variant="outline"
               size="xs"
               onClick={() => handleNavigate(firstVariant.palette)}
@@ -198,6 +197,7 @@ export default function ShowcaseSection({
               <PencilSimpleIcon />
             </Button>
             <Button
+              aria-label="Download image"
               variant="outline"
               size="xs"
               onClick={handleDownload}
@@ -206,6 +206,7 @@ export default function ShowcaseSection({
               <DownloadSimpleIcon />
             </Button>
             <Button
+              aria-label="Share emoji"
               variant="outline"
               size="xs"
               onClick={handleShare}
@@ -229,12 +230,12 @@ export default function ShowcaseSection({
           <ArrowRightIcon
             size={20}
             weight="bold"
-            className="text-primary hidden lg:block"
+            className="text-muted-foreground hidden text-sm lg:block"
           />
           <ArrowDownIcon
             size={20}
             weight="bold"
-            className="text-primary block lg:hidden"
+            className="text-muted-foreground block text-sm lg:hidden"
           />
 
           {/* Variant previews */}

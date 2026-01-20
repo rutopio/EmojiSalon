@@ -64,7 +64,7 @@ function EyeDropperButton() {
           );
       }}
     >
-      <EyedropperIcon className="h-4 w-4" />
+      <EyedropperIcon className="size-4" />
     </AriaButton>
   );
 }

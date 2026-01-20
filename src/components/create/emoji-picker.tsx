@@ -1,7 +1,7 @@
 /**
  * @fileoverview Emoji picker component using emoji-mart library.
  * Provides an emoji selection interface with custom styling to match
- * the Emoji Salon design system.
+ * the EmojiSalon design system.
  *
  * @see https://github.com/missive/emoji-mart
  */
