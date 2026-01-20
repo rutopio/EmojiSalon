@@ -2,7 +2,7 @@
 
 # Emoji Salon - Coloring Your Emoji
 
-🔗  Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev)  🔗
+🔗 Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev) 🔗
 
 ![Npm](https://img.shields.io/badge/npm-v10.8.2-CB3837?style=flat-square&logo=npm&logoColor=white)
 ![Node](https://img.shields.io/badge/Node.js-v20.19.6-339933?style=flat-square&logo=nodedotjs&logoColor=white)

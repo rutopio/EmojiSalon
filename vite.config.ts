@@ -1,6 +1,5 @@
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
@@ -14,16 +13,14 @@ export default defineConfig({
     exclude: ["@tanstack/start-server-core"],
   },
   plugins: [
-    // https://tanstack.com/start/latest/docs/framework/react/guide/hosting
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     devtools(),
     tanstackStart({
       prerender: {
-        // Enable static prerendering
-        enabled: true,
+        // Disable prerendering for Cloudflare Pages (runtime SSR)
+        enabled: false,
       },
     }),
-    // https://tanstack.com/start/latest/docs/framework/react/guide/hosting
+    // Nitro handles Cloudflare Pages compatibility
     nitro(),
     viteReact({
       // https://react.dev/learn/react-compiler
