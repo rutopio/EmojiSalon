@@ -1,20 +1,35 @@
+/**
+ * @fileoverview Main emoji customization page route.
+ * Provides the interface for selecting emojis, customizing colors,
+ * and downloading or sharing customized emojis.
+ */
+
 import { createFileRoute } from "@tanstack/react-router";
+import { useEmoji } from "@/contexts/emoji-context";
+import PageLayout from "@/layout";
+
 import ActionButtons from "@/components/create/action-buttons";
 import ColorPalettePickers from "@/components/create/color-palette-pickers";
 import EmojiDisplay from "@/components/create/emoji-display";
 import DesktopEmojiPicker from "@/components/create/emoji-picker";
 import ShareModal from "@/components/create/share-modal";
 import { Spinner } from "@/components/ui/spinner";
-import { useEmoji } from "@/contexts/emoji-context";
 import useIsClient from "@/hooks/use-is-client";
-import PageLayout from "@/layout";
 
-// Define search params type
+/**
+ * Search parameters for the emoji customization page.
+ */
 interface EmojiSearchParams {
+  /** Unicode emoji identifier from URL. */
   emoji?: string;
+  /** Palette override string from URL. */
   palette?: string;
 }
 
+/**
+ * Main emoji customization page route configuration.
+ * Validates search parameters and provides page metadata.
+ */
 export const Route = createFileRoute("/(index)/")({
   component: EmojiSalonPage,
   validateSearch: (search: Record<string, unknown>): EmojiSearchParams => {
@@ -33,11 +48,18 @@ export const Route = createFileRoute("/(index)/")({
   }),
 });
 
+/**
+ * Main emoji customization page component.
+ * Displays emoji picker, color customization controls, and emoji previews.
+ * Shows loading spinner during SSR to prevent hydration mismatches.
+ *
+ * @returns Emoji customization page component.
+ */
 function EmojiSalonPage() {
   const { canvasRef } = useEmoji();
   const isClient = useIsClient();
 
-  // Show loading state during SSR
+  // Show loading state during SSR to prevent hydration mismatches
   if (!isClient) {
     return (
       <div className="flex h-dvh items-center justify-center">
@@ -48,7 +70,7 @@ function EmojiSalonPage() {
 
   return (
     <PageLayout>
-      {/* Hidden Canvas for image export */}
+      {/* Hidden canvas for image export */}
       <canvas ref={canvasRef} className="hidden" width={256} height={256} />
 
       <div className="container flex flex-1 flex-col items-center justify-between gap-16 lg:justify-center">

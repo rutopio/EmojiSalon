@@ -1,6 +1,7 @@
 /**
- * ShowcaseSection - A card displaying one emoji with its variant(s).
- * Supports single variant (1 original -> 1 modified) or multiple variants.
+ * @fileoverview Showcase section component for displaying emoji variants.
+ * Displays an emoji card with original and customized variants, supporting
+ * both single and multiple variant displays.
  */
 
 import { useCallback, useRef, useState } from "react";
@@ -12,36 +13,66 @@ import {
   PencilSimpleIcon,
   ShareNetworkIcon,
 } from "@phosphor-icons/react";
+import { toast } from "sonner";
+
 import EmojiPreview from "@/components/showcase/emoji-preview";
 import ShowcaseShareModal from "@/components/showcase/showcase-share-modal";
 import { Button } from "@/components/ui/button";
 import { useEmojiSVG, useVariantSVG } from "@/hooks/use-emoji-svg";
 import { triggerDownload, unicodeToEmoji } from "@/lib/emoji-utils";
-import { toast } from "sonner";
 
+/**
+ * Variant data structure for emoji customization.
+ */
 interface Variant {
+  /** Color palette string identifier. */
   palette: string;
+  /** Display name for the variant. */
   name: string;
 }
 
+/**
+ * Props for the ShowcaseSection component.
+ */
 interface ShowcaseSectionProps {
+  /** Unicode emoji identifier. */
   emoji: string;
+  /** Array of variant configurations. */
   variants: Variant[];
+  /** Optional CSS class name. */
   className?: string;
 }
 
-function VariantPreview({
-  emoji,
-  variant,
-}: {
+/**
+ * Props for the VariantPreview component.
+ */
+interface VariantPreviewProps {
+  /** Unicode emoji identifier. */
   emoji: string;
+  /** Variant configuration. */
   variant: Variant;
-}) {
+}
+
+/**
+ * Preview component for a single emoji variant.
+ * Loads and displays the SVG for a specific emoji variant.
+ *
+ * @param props - Component props.
+ * @returns Emoji preview component for the variant.
+ */
+function VariantPreview({ emoji, variant }: VariantPreviewProps) {
   const { svg, isLoading } = useVariantSVG(emoji, variant.palette);
 
   return <EmojiPreview svg={svg} label={variant.name} isLoading={isLoading} />;
 }
 
+/**
+ * Showcase section component for displaying emoji with variants.
+ * Shows original emoji alongside customized variants with download and share options.
+ *
+ * @param props - Component props.
+ * @returns Showcase section card component.
+ */
 export default function ShowcaseSection({
   emoji,
   variants,
@@ -62,6 +93,11 @@ export default function ShowcaseSection({
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
 
+  /**
+   * Navigates to the main page with the specified emoji and palette.
+   *
+   * @param palette - Optional palette identifier to pre-select.
+   */
   const handleNavigate = (palette?: string) => {
     navigate({
       to: "/",
@@ -72,6 +108,12 @@ export default function ShowcaseSection({
     });
   };
 
+  /**
+   * Generates a PNG image from the modified SVG.
+   * Uses a hidden canvas to render the SVG and convert it to a data URL.
+   *
+   * @param callback - Function called with the generated image data URL.
+   */
   const generateImage = useCallback(
     (callback: (dataUrl: string) => void) => {
       const canvas = canvasRef.current;
@@ -81,20 +123,20 @@ export default function ShowcaseSection({
       if (!ctx) return;
 
       const imagePadding = 50;
-      const scaleProp = 10;
+      const scaleFactor = 10;
       const baseSize = 256;
 
-      canvas.width = baseSize * scaleProp + imagePadding;
-      canvas.height = baseSize * scaleProp + imagePadding;
-      ctx.scale(scaleProp, scaleProp);
+      canvas.width = baseSize * scaleFactor + imagePadding;
+      canvas.height = baseSize * scaleFactor + imagePadding;
+      ctx.scale(scaleFactor, scaleFactor);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const img = new Image();
       img.onload = () => {
         ctx.drawImage(
           img,
-          imagePadding / scaleProp / 2,
-          imagePadding / scaleProp / 2,
+          imagePadding / scaleFactor / 2,
+          imagePadding / scaleFactor / 2,
           baseSize,
           baseSize
         );
@@ -110,6 +152,9 @@ export default function ShowcaseSection({
     [modifiedSvg]
   );
 
+  /**
+   * Handles downloading the emoji image.
+   */
   const handleDownload = useCallback(() => {
     generateImage((dataUrl) => {
       triggerDownload(dataUrl, `${emoji}-EmojiSalon.png`);
@@ -119,6 +164,9 @@ export default function ShowcaseSection({
     });
   }, [emoji, generateImage]);
 
+  /**
+   * Handles sharing the emoji by opening the share modal.
+   */
   const handleShare = useCallback(() => {
     generateImage((dataUrl) => {
       setImageSrc(dataUrl);
@@ -135,7 +183,7 @@ export default function ShowcaseSection({
       <canvas ref={canvasRef} className="hidden" />
 
       <div className="flex flex-col gap-8">
-        {/* Unicode label */}
+        {/* Unicode label and action buttons */}
         <div className="relative flex w-full items-center justify-start lg:justify-center">
           <span className="text-primary font-mono text-base">
             {unicodeDisplay}
@@ -168,7 +216,7 @@ export default function ShowcaseSection({
           </div>
         </div>
 
-        {/* Content */}
+        {/* Emoji previews */}
         <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:gap-12">
           {/* Original emoji */}
           <EmojiPreview
@@ -177,7 +225,7 @@ export default function ShowcaseSection({
             isLoading={isLoading}
           />
 
-          {/* Arrow */}
+          {/* Arrow indicator */}
           <ArrowRightIcon
             size={20}
             weight="bold"
@@ -189,14 +237,12 @@ export default function ShowcaseSection({
             className="text-primary block lg:hidden"
           />
 
-          {/* Variants */}
+          {/* Variant previews */}
           {hasMultipleVariants ? (
-            // Multiple variants: render each separately
             variants.map((variant, index) => (
               <VariantPreview key={index} emoji={emoji} variant={variant} />
             ))
           ) : (
-            // Single variant: use the already loaded modifiedSvg
             <EmojiPreview
               svg={modifiedSvg}
               label={firstVariant.name}
@@ -205,7 +251,7 @@ export default function ShowcaseSection({
           )}
         </div>
 
-        {/* Share Modal */}
+        {/* Share modal */}
         <ShowcaseShareModal
           open={shareModalOpen}
           onOpenChange={setShareModalOpen}

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Share modal component for sharing customized emoji.
+ * Provides options to share via social media, download SVG, copy image/link,
+ * and view HTML/CSS code for the customized emoji.
+ */
+
 import {
   CheckCircleIcon,
   ClipboardIcon,
@@ -28,8 +34,11 @@ import {
 } from "@/lib/share-utils";
 
 /**
- * Modal component for sharing customized emoji.
- * Uses useEmoji hook for state and handlers.
+ * Share modal component for customized emoji.
+ * Displays sharing options including social media links, download,
+ * copy functionality, and code snippets.
+ *
+ * @returns Share modal dialog component.
  */
 export default function ShareModal() {
   const {
@@ -50,10 +59,19 @@ export default function ShareModal() {
     originalPaletteIndex
   );
 
+  /**
+   * Handles SVG file download.
+   */
   const handleDownloadSVG = () => downloadSVG(svgHTML, currentEmoji);
 
+  /**
+   * Handles copying HTML code to clipboard.
+   */
   const handleCopyHTMLCode = () => copyHTMLCode(currentEmoji);
 
+  /**
+   * Handles copying CSS code to clipboard.
+   */
   const handleCopyCSSCode = () => copyCSSCode(cssCode);
 
   return (

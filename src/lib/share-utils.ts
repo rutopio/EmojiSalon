@@ -1,29 +1,23 @@
 /**
  * @fileoverview Sharing utility functions for Emoji Salon application.
- *
- * This module provides functions for sharing customized emojis via social media,
+ * Provides functions for sharing customized emojis via social media,
  * copying links to clipboard, generating CSS code, and downloading files.
- *
- * @module share-utils
  */
+
+import { toast } from "sonner";
 
 import {
   FACEBOOK_SHARE_BASE_URL,
   TWITTER_SHARE_BASE_URL,
 } from "@/lib/constants";
 import { emojiToUnicode, triggerDownload } from "@/lib/emoji-utils";
-import { toast } from "sonner";
-
-// ============================================================================
-// URL Generation Functions
-// ============================================================================
 
 /**
- * Generate a shareable URL for a specific emoji/palette combination.
+ * Generates a shareable URL for a specific emoji/palette combination.
  *
- * @param {string} emoji - The emoji character.
- * @param {string} palette - The palette override string.
- * @returns {string} The shareable URL.
+ * @param emoji - The emoji character.
+ * @param palette - The palette override string.
+ * @returns The shareable URL with emoji and palette parameters.
  *
  * @example
  * generateShareURL("😀", "0-ff0000"); // Returns "https://example.com/?emoji=1f600&palette=0-ff0000"
@@ -34,18 +28,12 @@ export function generateShareURL(emoji: string, palette: string): string {
   return `${baseURL}/?emoji=${emojiUnicode}&palette=${palette}`;
 }
 
-// ============================================================================
-// Social Sharing Functions
-// ============================================================================
-
 /**
- * Share to Twitter/X.
- *
+ * Shares to Twitter/X.
  * Opens a new browser tab with a pre-filled tweet containing
  * the #EmojiSalon hashtag and the specified URL.
  *
- * @param {string} [url] - The URL to share. Defaults to current page URL.
- * @returns {void}
+ * @param url - Optional URL to share. Defaults to current page URL.
  *
  * @example
  * shareToTwitter(); // Opens Twitter with "#EmojiSalon https://..."
@@ -60,13 +48,11 @@ export function shareToTwitter(url?: string): void {
 }
 
 /**
- * Share to Facebook.
- *
+ * Shares to Facebook.
  * Opens a new browser tab with the Facebook share dialog
  * pre-filled with the specified URL.
  *
- * @param {string} [url] - The URL to share. Defaults to current page URL.
- * @returns {void}
+ * @param url - Optional URL to share. Defaults to current page URL.
  *
  * @example
  * shareToFacebook(); // Opens Facebook share dialog
@@ -79,18 +65,11 @@ export function shareToFacebook(url?: string): void {
   toast.success("Shared to Facebook.");
 }
 
-// ============================================================================
-// Clipboard Functions
-// ============================================================================
-
 /**
- * Copy a URL to the clipboard.
+ * Copies a URL to the clipboard.
+ * Uses the modern Clipboard API. Requires a secure context (HTTPS).
  *
- * Uses the modern Clipboard API. Note that this may require
- * user permission or a secure context (HTTPS).
- *
- * @param {string} [url] - The URL to copy. Defaults to current page URL.
- * @returns {void}
+ * @param url - Optional URL to copy. Defaults to current page URL.
  *
  * @example
  * copyLinkToClipboard(); // Copies current URL to clipboard
@@ -105,10 +84,9 @@ export function copyLinkToClipboard(url?: string): void {
 }
 
 /**
- * Copy HTML code for displaying the emoji to the clipboard.
+ * Copies HTML code for displaying the emoji to the clipboard.
  *
- * @param {string} emoji - The emoji character.
- * @returns {void}
+ * @param emoji - The emoji character.
  */
 export function copyHTMLCode(emoji: string): void {
   const htmlCode = `<span class="mod-emoji"> ${emoji} </span>`;
@@ -119,32 +97,26 @@ export function copyHTMLCode(emoji: string): void {
 }
 
 /**
- * Copy CSS code to the clipboard.
+ * Copies CSS code to the clipboard.
  *
- * @param {string} cssCode - The CSS code string.
- * @returns {void}
+ * @param cssCode - The CSS code string to copy.
  */
 export function copyCSSCode(cssCode: string): void {
   navigator.clipboard.writeText(cssCode);
   toast.success("CSS code copied to clipboard.");
 }
 
-// ============================================================================
-// Code Generation Functions
-// ============================================================================
-
 /**
- * Generate CSS code for using the customized emoji with Twemoji COLR font.
- *
+ * Generates CSS code for using the customized emoji with Twemoji COLR font.
  * The generated CSS includes:
  * - @font-face declaration for the Twemoji font
  * - A .mod-emoji class that applies the font
  * - @font-palette-values with color overrides (if any)
  *
- * @param {string[]} customizedColors - Current customized palette colors
- * @param {string[]} originalColors - Original palette colors
- * @param {number[]} originalIndex - Original palette indices
- * @returns {string} Complete CSS code for displaying the customized emoji.
+ * @param customizedColors - Current customized palette colors.
+ * @param originalColors - Original palette colors.
+ * @param originalIndex - Original palette indices.
+ * @returns Complete CSS code for displaying the customized emoji.
  */
 export function generateCSSCode(
   customizedColors: string[],
@@ -182,19 +154,13 @@ export function generateCSSCode(
 }`;
 }
 
-// ============================================================================
-// Download Functions
-// ============================================================================
-
 /**
- * Download the customized emoji as an SVG file.
- *
+ * Downloads the customized emoji as an SVG file.
  * Creates a blob from the SVG data and triggers a download
  * with a filename based on the emoji's unicode identifier.
  *
- * @param {string} svgData - The SVG content as a string.
- * @param {string} emoji - The emoji character (used for filename).
- * @returns {void}
+ * @param svgData - The SVG content as a string.
+ * @param emoji - The emoji character (used for filename).
  *
  * @example
  * const svgContent = '<svg xmlns="...">...</svg>';

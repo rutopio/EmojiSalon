@@ -1,8 +1,18 @@
+/**
+ * @fileoverview Showcase page route for displaying emoji color variations.
+ * Displays a collection of customized emoji variants from showcase data.
+ */
+
 import { createFileRoute } from "@tanstack/react-router";
-import ShowcaseSection from "@/components/showcase/showcase-section";
-import showcaseData from "@/data/showcase/showcase-data.json";
 import PageLayout from "@/layout";
 
+import ShowcaseSection from "@/components/showcase/showcase-section";
+
+import showcaseData from "@/data/showcase/showcase-data.json";
+
+/**
+ * Showcase page route configuration.
+ */
 export const Route = createFileRoute("/showcase/")({
   component: ShowcasePage,
   head: () => ({
@@ -15,6 +25,13 @@ export const Route = createFileRoute("/showcase/")({
   }),
 });
 
+/**
+ * Showcase page component.
+ * Displays a grid of emoji variants from the showcase data.
+ * Each section shows original and customized emoji variations.
+ *
+ * @returns Showcase page component.
+ */
 function ShowcasePage() {
   return (
     <PageLayout>

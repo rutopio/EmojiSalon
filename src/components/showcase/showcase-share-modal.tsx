@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Share modal component for showcase page emoji variants.
+ * Provides sharing options for individual emoji variants displayed in the showcase.
+ * Each showcase section can share its own emoji variant independently.
+ */
+
 import { useMemo } from "react";
 import {
   CheckCircleIcon,
@@ -9,7 +15,6 @@ import {
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
-// import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,21 +34,37 @@ import {
   shareToTwitter,
 } from "@/lib/share-utils";
 
+/**
+ * Props for the ShowcaseShareModal component.
+ */
 interface ShowcaseShareModalProps {
+  /** Whether the modal is open. */
   open: boolean;
+  /** Callback to handle modal open state changes. */
   onOpenChange: (open: boolean) => void;
+  /** The emoji character. */
   emoji: string;
+  /** Color palette identifier. */
   palette: string;
+  /** SVG data string for the customized emoji. */
   svgData: string;
+  /** Data URL of the generated image. */
   imageSrc: string;
+  /** Array of customized palette colors. */
   customizedPaletteColors: string[];
+  /** Array of original palette colors. */
   originalPaletteColors: string[];
+  /** Array of original palette color indices. */
   originalPaletteIndex: number[];
 }
 
 /**
- * Share modal specifically for Showcase page sections.
- * Each section can share its own emoji variant independently.
+ * Share modal component for showcase emoji variants.
+ * Displays sharing options including social media links, download,
+ * copy functionality, and code snippets for a specific emoji variant.
+ *
+ * @param props - Component props.
+ * @returns Share modal dialog component.
  */
 export default function ShowcaseShareModal({
   open,
@@ -68,14 +89,29 @@ export default function ShowcaseShareModal({
     originalPaletteIndex
   );
 
+  /**
+   * Handles sharing to Twitter/X.
+   */
   const handleShareToTwitter = () => shareToTwitter(shareURL);
 
+  /**
+   * Handles sharing to Facebook.
+   */
   const handleShareToFacebook = () => shareToFacebook(shareURL);
 
+  /**
+   * Handles copying the share link to clipboard.
+   */
   const handleCopyLink = () => copyLinkToClipboard(shareURL);
 
+  /**
+   * Handles downloading the SVG file.
+   */
   const handleDownloadSVG = () => downloadSVG(svgData, emoji);
 
+  /**
+   * Handles copying the image to clipboard.
+   */
   const handleCopyImage = async () => {
     try {
       const response = await fetch(imageSrc);
@@ -90,8 +126,14 @@ export default function ShowcaseShareModal({
     }
   };
 
+  /**
+   * Handles copying HTML code to clipboard.
+   */
   const handleCopyHTMLCode = () => copyHTMLCode(emoji);
 
+  /**
+   * Handles copying CSS code to clipboard.
+   */
   const handleCopyCSSCode = () => copyCSSCode(cssCode);
 
   return (
@@ -146,19 +188,6 @@ export default function ShowcaseShareModal({
               </Button>
               <div className="text-xs">Copy Link</div>
             </div>
-
-            {/* <div className="flex flex-col items-center justify-center gap-2">
-              <a
-                href="https://github.com/rutopio/EmojiSalon"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <Button variant="outline" size="icon">
-                  <GithubIcon />
-                </Button>
-              </a>
-              <div className="text-xs">Submit Showcase</div>
-            </div> */}
           </div>
 
           <div className="mx-auto flex items-center gap-2 text-center text-sm">

@@ -1,13 +1,10 @@
 /**
  * @fileoverview Utility functions for Emoji Salon application.
- *
- * This module provides functions for emoji manipulation, color conversion,
- * URL encoding/decoding, and data fetching for the Emoji Salon application.
- *
- * @module emoji-utils
+ * Provides functions for emoji manipulation, color conversion,
+ * URL encoding/decoding, and data fetching.
  */
+import { DEFAULT_EMOJIS } from "@/lib/constants";
 
-// Category data imports for complete emoji coverage
 import defaultEmojisSVGData from "@/data/default-emojis-data.json";
 import emojiCategories from "@/data/emoji-categories.json";
 import activityData from "@/data/emoji-category/activity.json";
@@ -21,26 +18,19 @@ import symbolsData from "@/data/emoji-category/symbols.json";
 import emojiNames from "@/data/emoji-names.json";
 import emojiPaletteData from "@/data/emoji-palette-data.json";
 import paletteColorDataRaw from "@/data/palette-color-data.json";
-import { DEFAULT_EMOJIS } from "@/lib/constants";
-
-// ============================================================================
-// Type Definitions
-// ============================================================================
 
 /**
  * SVG data for a single emoji.
- * @typedef {Object} EmojiSVGData
- * @property {string[]} d - Array of SVG path data strings.
- * @property {(string|null)[]} f - Array of fill colors (hex strings or null).
  */
 export interface EmojiSVGData {
+  /** Array of SVG path data strings. */
   d: string[];
+  /** Array of fill colors (hex strings or null). */
   f: (string | null)[];
 }
 
 /**
  * Mapping of category names to arrays of emoji unicode identifiers.
- * @typedef {Object.<string, string[]>} EmojiCategories
  */
 export interface EmojiCategories {
   [category: string]: string[];
@@ -48,7 +38,6 @@ export interface EmojiCategories {
 
 /**
  * Mapping of emoji unicode identifiers to arrays of palette color indices.
- * @typedef {Object.<string, number[]>} EmojiPaletteData
  */
 export interface EmojiPaletteData {
   [unicode: string]: number[];
@@ -56,20 +45,14 @@ export interface EmojiPaletteData {
 
 /**
  * Mapping of emoji unicode identifiers to their SVG data.
- * @typedef {Object.<string, EmojiSVGData>} EmojiPathsAndColors
  */
 export interface EmojiPathsAndColors {
   [unicode: string]: EmojiSVGData;
 }
 
-// ============================================================================
-// Data Initialization
-// ============================================================================
-
 /**
  * Map of category names to their emoji data.
  * Used for lazy loading emoji data by category.
- * @type {Record<string, EmojiPathsAndColors>}
  */
 const categoryDataMap: Record<string, EmojiPathsAndColors> = {
   activity: activityData as unknown as EmojiPathsAndColors,
@@ -85,7 +68,6 @@ const categoryDataMap: Record<string, EmojiPathsAndColors> = {
 /**
  * Array of palette colors with '#' prefix.
  * Derived from the raw palette color data.
- * @type {string[]}
  */
 export const paletteData: string[] = (paletteColorDataRaw as string[]).map(
   (c) => "#" + c
@@ -93,13 +75,11 @@ export const paletteData: string[] = (paletteColorDataRaw as string[]).map(
 
 /**
  * Typed emoji categories data.
- * @type {EmojiCategories}
  */
 export const emojiCategoriesData = emojiCategories as EmojiCategories;
 
 /**
  * Typed emoji palette data.
- * @type {EmojiPaletteData}
  */
 export const emojiPaletteDataTyped = emojiPaletteData as EmojiPaletteData;
 
@@ -107,21 +87,15 @@ export const emojiPaletteDataTyped = emojiPaletteData as EmojiPaletteData;
  * Mutable object containing loaded emoji path and color data.
  * Initially contains only the default emojis, but can be extended
  * with category data when needed.
- * @type {EmojiPathsAndColors}
  */
 export const emojiPathsAndColors =
   defaultEmojisSVGData as unknown as EmojiPathsAndColors;
 
-// ============================================================================
-// Color Conversion Functions
-// ============================================================================
-
 /**
- * Convert an RGBA color array to a hex color string.
+ * Converts an RGBA color array to a hex color string.
  *
- * @param {number[]} rgbaColorArray - Array of color components [R, G, B, A?].
- *   Values should be in the range 0-255.
- * @returns {string} Hex color string with '#' prefix (e.g., "#ff0000").
+ * @param rgbaColorArray - Array of color components [R, G, B, A?]. Values should be in the range 0-255.
+ * @returns Hex color string with '#' prefix (e.g., "#ff0000").
  *
  * @example
  * rgbaToHexColor([255, 0, 0, 255]); // Returns "#ff0000"
@@ -139,15 +113,12 @@ export function rgbaToHexColor(rgbaColorArray: number[]): string {
 }
 
 /**
- * Normalize a color string to lowercase 6-digit hex format.
+ * Normalizes a color string to lowercase 6-digit hex format.
+ * Handles null values (returns "#000000"), 3-digit hex colors (expands to 6-digit),
+ * and case normalization.
  *
- * Handles:
- * - Null values (returns "#000000")
- * - 3-digit hex colors (expands to 6-digit)
- * - Case normalization
- *
- * @param {string|null} color - The color to normalize.
- * @returns {string} Normalized hex color string.
+ * @param color - The color to normalize.
+ * @returns Normalized hex color string.
  *
  * @example
  * normalizeColor(null);      // Returns "#000000"
@@ -165,20 +136,20 @@ export function normalizeColor(color: string | null): string {
 }
 
 /**
- * Check if two color strings are equal.
+ * Checks if two color strings are equal.
  *
- * @param {string} color1 - First color to compare.
- * @param {string} color2 - Second color to compare.
- * @returns {boolean} True if the colors are identical.
+ * @param color1 - First color to compare.
+ * @param color2 - Second color to compare.
+ * @returns True if the colors are identical.
  */
 export function areColorsEqual(color1: string, color2: string): boolean {
   return color1 === color2;
 }
 
 /**
- * Generate a random hex color.
+ * Generates a random hex color.
  *
- * @returns {string} Random hex color string with '#' prefix.
+ * @returns Random hex color string with '#' prefix.
  *
  * @example
  * getRandomColor(); // Returns something like "#a3f21b"
@@ -192,20 +163,13 @@ export function getRandomColor(): string {
   return rgbaToHexColor([r, g, b, 255]);
 }
 
-// ============================================================================
-// Emoji Conversion Functions
-// ============================================================================
-
 /**
- * Convert an emoji character to its unicode identifier.
+ * Converts an emoji character to its unicode identifier.
+ * Handles basic emojis (single code point), compound emojis with ZWJ (Zero Width Joiner),
+ * and emojis with variation selectors (FE0F/FE0E are removed for simple emojis).
  *
- * This function handles:
- * - Basic emojis (single code point)
- * - Compound emojis with ZWJ (Zero Width Joiner)
- * - Emojis with variation selectors (FE0F/FE0E are removed for simple emojis)
- *
- * @param {string} emoji - The emoji character(s) to convert.
- * @returns {string} Unicode identifier in the format "u{codepoint}" or "u{cp1}_{cp2}".
+ * @param emoji - The emoji character(s) to convert.
+ * @returns Unicode identifier in the format "u{codepoint}" or "u{cp1}_{cp2}".
  *
  * @example
  * emojiToUnicode("😀");    // Returns "u1f600"
@@ -215,17 +179,17 @@ export function emojiToUnicode(emoji: string): string {
   const res: string[] = [];
   const components = [...emoji];
 
-  components.forEach((ele) => {
-    if (ele.length === 1) {
+  components.forEach((component) => {
+    if (component.length === 1) {
       // Single byte character (ZWJ or emoji modifier)
-      res.push(ele.charCodeAt(0).toString(16));
-    } else if (ele.length === 2) {
+      res.push(component.charCodeAt(0).toString(16));
+    } else if (component.length === 2) {
       // Surrogate pair - calculate actual code point
-      const comp =
-        (ele.charCodeAt(0) - 0xd800) * 0x400 +
-        (ele.charCodeAt(1) - 0xdc00) +
+      const codePoint =
+        (component.charCodeAt(0) - 0xd800) * 0x400 +
+        (component.charCodeAt(1) - 0xdc00) +
         0x10000;
-      res.push(comp.toString(16));
+      res.push(codePoint.toString(16));
     }
   });
 
@@ -240,10 +204,10 @@ export function emojiToUnicode(emoji: string): string {
 }
 
 /**
- * Convert a unicode identifier back to an emoji character.
+ * Converts a unicode identifier back to an emoji character.
  *
- * @param {string} urlCode - Unicode identifier (e.g., "u1f600").
- * @returns {string|null} The emoji character, or null if invalid.
+ * @param urlCode - Unicode identifier (e.g., "u1f600").
+ * @returns The emoji character, or null if invalid.
  *
  * @example
  * unicodeToEmoji("u1f600"); // Returns "😀"
@@ -273,20 +237,13 @@ export function unicodeToEmoji(urlCode: string): string | null {
   }
 }
 
-// ============================================================================
-// URL Encoding/Decoding Functions
-// ============================================================================
-
 /**
- * Encode a palette override string for URL storage.
+ * Encodes a palette override string for URL storage.
+ * Compresses the palette information by removing spaces,
+ * replacing '#' with '(', and replacing ',' with ')'.
  *
- * This function compresses the palette information by:
- * - Removing spaces
- * - Replacing '#' with '('
- * - Replacing ',' with ')'
- *
- * @param {string} str - The palette override string to encode.
- * @returns {string} URL-safe encoded string.
+ * @param str - The palette override string to encode.
+ * @returns URL-safe encoded string.
  *
  * @example
  * encodeURL("3 #ff0000, 5 #00ff00"); // Returns "3(ff0000)5(00ff00)"
@@ -298,12 +255,11 @@ export function encodeURL(str: string): string {
 }
 
 /**
- * Decode a URL-encoded palette override string.
- *
+ * Decodes a URL-encoded palette override string.
  * Reverses the encoding performed by encodeURL().
  *
- * @param {string} str - The encoded string to decode.
- * @returns {string} Decoded palette override string.
+ * @param str - The encoded string to decode.
+ * @returns Decoded palette override string.
  *
  * @example
  * decodeURL("3(ff0000)5(00ff00)"); // Returns "3 #ff0000, 5 #00ff00"
@@ -315,15 +271,11 @@ export function decodeURL(str: string): string {
     .replaceAll("(", " #");
 }
 
-// ============================================================================
-// Emoji Data Functions
-// ============================================================================
-
 /**
- * Find the category that contains a given emoji.
+ * Finds the category that contains a given emoji.
  *
- * @param {string} unicode - The emoji unicode identifier.
- * @returns {string|null} Category name if found, null otherwise.
+ * @param unicode - The emoji unicode identifier.
+ * @returns Category name if found, null otherwise.
  *
  * @example
  * findEmojiCategory("u1f600"); // Returns "people"
@@ -339,14 +291,13 @@ export function findEmojiCategory(unicode: string): string | null {
 }
 
 /**
- * Fetch SVG data for an emoji.
- *
- * This function first checks the default emojis cache, then looks up
+ * Fetches SVG data for an emoji.
+ * First checks the default emojis cache, then looks up
  * the emoji's category and loads the category data if needed.
  * All data is loaded from local files bundled with the application.
  *
- * @param {string} emoji - The emoji character to fetch data for.
- * @returns {Promise<EmojiSVGData|null>} The emoji's SVG data, or null if not found.
+ * @param emoji - The emoji character to fetch data for.
+ * @returns Promise resolving to the emoji's SVG data, or null if not found.
  *
  * @example
  * const data = await fetchEmojiData("😀");
@@ -358,7 +309,7 @@ export async function fetchEmojiData(
 ): Promise<EmojiSVGData | null> {
   const unicode = emojiToUnicode(emoji);
 
-  // Check if already in the loaded data
+  // Check if already in the loaded data cache
   if (unicode in emojiPathsAndColors) {
     return emojiPathsAndColors[unicode];
   }
@@ -381,11 +332,10 @@ export async function fetchEmojiData(
 }
 
 /**
- * Get the original palette indices and colors for an emoji.
+ * Gets the original palette indices and colors for an emoji.
  *
- * @param {string} glyphId - The emoji unicode identifier.
- * @returns {{originalPaletteIndex: number[], originalPaletteColors: string[]}}
- *   Object containing unique palette indices and their corresponding colors.
+ * @param glyphId - The emoji unicode identifier.
+ * @returns Object containing unique palette indices and their corresponding colors.
  *
  * @example
  * const { originalPaletteIndex, originalPaletteColors } = getOriginalPaletteData("u1f600");
@@ -405,17 +355,16 @@ export function getOriginalPaletteData(glyphId: string): {
 }
 
 /**
- * Generate a string representing color overrides for URL encoding.
- *
+ * Generates a string representing color overrides for URL encoding.
  * Only includes colors that differ from the original palette.
  * Format: "195_f0daa3-824_6e343f" where each pair is "index_hexcolor".
  * Uses underscore instead of parentheses to avoid URL encoding.
  * All hex values are lowercase for URL consistency.
  *
- * @param {string[]} customizedPaletteColors - Array of customized colors.
- * @param {string[]} originalPaletteColors - Array of original colors.
- * @param {number[]} originalPaletteIndex - Array of palette indices.
- * @returns {string} Override string in format "index_hexcolor-index_hexcolor".
+ * @param customizedPaletteColors - Array of customized colors.
+ * @param originalPaletteColors - Array of original colors.
+ * @param originalPaletteIndex - Array of palette indices.
+ * @returns Override string in format "index_hexcolor-index_hexcolor".
  *
  * @example
  * getOverrideStyleString(
@@ -446,14 +395,13 @@ export function getOverrideStyleString(
 }
 
 /**
- * Parse a palette string from URL format back into color modifications.
- *
+ * Parses a palette string from URL format back into color modifications.
  * Expected format: "195_f0daa3-824_6e343f" (case-insensitive).
  *
- * @param {string} paletteString - The palette string from URL.
- * @param {string[]} originalPaletteColors - Array of original hex color values.
- * @param {number[]} originalPaletteIndex - Array of palette indices.
- * @returns {string[]} Array of colors with modifications applied.
+ * @param paletteString - The palette string from URL.
+ * @param originalPaletteColors - Array of original hex color values.
+ * @param originalPaletteIndex - Array of palette indices.
+ * @returns Array of colors with modifications applied.
  *
  * @example
  * parsePaletteString(
@@ -486,18 +434,14 @@ export function parsePaletteString(
   return modifiedColors;
 }
 
-// ============================================================================
-// Random Selection Functions
-// ============================================================================
-
 // Re-export from constants for backward compatibility
 export { DEFAULT_EMOJIS as defaultEmojis } from "@/lib/constants";
 
 /**
- * Get the label/name for an emoji character.
+ * Gets the label/name for an emoji character.
  *
- * @param {string} emoji - The emoji character.
- * @returns {string} The emoji label/name, or empty string if not found.
+ * @param emoji - The emoji character.
+ * @returns The emoji label/name, or empty string if not found.
  *
  * @example
  * getEmojiLabel("😀"); // Returns "Grinning Face"
@@ -508,9 +452,9 @@ export function getEmojiLabel(emoji: string): string {
 }
 
 /**
- * Get a random emoji from the default emoji list.
+ * Gets a random emoji from the default emoji list.
  *
- * @returns {string} A random emoji character.
+ * @returns A random emoji character.
  *
  * @example
  * getRandomEmoji(); // Returns a random emoji like "😀" or "🦄"
@@ -521,9 +465,9 @@ export function getRandomEmoji(): string {
 }
 
 /**
- * Get a random emoji with its label from the default emoji list.
+ * Gets a random emoji with its label from the default emoji list.
  *
- * @returns {{ emoji: string, label: string }} A random emoji with its label.
+ * @returns A random emoji with its label.
  *
  * @example
  * getRandomEmojiWithLabel(); // Returns { emoji: "😀", label: "Grinning Face" }
@@ -534,17 +478,12 @@ export function getRandomEmojiWithLabel(): { emoji: string; label: string } {
   return { emoji, label };
 }
 
-// ============================================================================
-// Download Functions
-// ============================================================================
-
 /**
- * Trigger a file download in the browser.
- *
+ * Triggers a file download in the browser.
  * Creates a temporary anchor element to initiate the download.
  *
- * @param {string} uri - The data URI or blob URL of the file.
- * @param {string} fileName - The name for the downloaded file.
+ * @param uri - The data URI or blob URL of the file.
+ * @param fileName - The name for the downloaded file.
  *
  * @example
  * triggerDownload("data:image/png;base64,...", "emoji.png");

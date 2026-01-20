@@ -1,12 +1,11 @@
 /**
- * @fileoverview Application-wide constants
+ * @fileoverview Application-wide constants.
+ * Contains UI constants, emoji defaults, and social sharing URLs.
  */
 
-// ============================================================================
-// UI Constants
-// ============================================================================
-
-/** Preset colors for the color swatch picker */
+/**
+ * Preset colors for the color swatch picker.
+ */
 export const PRESET_COLORS = [
   "#FF3B30",
   "#FF9500",
@@ -20,10 +19,6 @@ export const PRESET_COLORS = [
   "#FF2D55",
   "#8E8E93",
 ];
-
-// ============================================================================
-// Emoji Constants
-// ============================================================================
 
 /**
  * Default emojis used for random selection.
@@ -113,12 +108,12 @@ export const DEFAULT_EMOJIS = [
   "🎨",
 ];
 
-// ============================================================================
-// Social Share Constants
-// ============================================================================
-
-/** Base URL for Twitter share intent */
+/**
+ * Base URL for Twitter/X share intent.
+ */
 export const TWITTER_SHARE_BASE_URL = "https://twitter.com/intent/tweet";
 
-/** Base URL for Facebook share dialog */
+/**
+ * Base URL for Facebook share dialog.
+ */
 export const FACEBOOK_SHARE_BASE_URL = "https://www.facebook.com/sharer.php";

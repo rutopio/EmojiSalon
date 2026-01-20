@@ -1,6 +1,15 @@
+/**
+ * @fileoverview About page route for Emoji Salon.
+ * Provides information about the application, how it works, accessibility,
+ * copyright, and open source details.
+ */
+
 import { createFileRoute } from "@tanstack/react-router";
 import PageLayout from "@/layout";
 
+/**
+ * About page route configuration.
+ */
 export const Route = createFileRoute("/about/")({
   component: AboutPage,
   head: () => ({
@@ -13,12 +22,19 @@ export const Route = createFileRoute("/about/")({
   }),
 });
 
+/**
+ * About page component.
+ * Displays information about Emoji Salon including how it works,
+ * accessibility features, copyright information, and open source details.
+ *
+ * @returns About page component.
+ */
 function AboutPage() {
   return (
     <PageLayout>
       <div className="container flex flex-1 flex-col lg:py-16">
         <div className="mx-auto max-w-3xl space-y-12">
-          {/* Hero Section */}
+          {/* Hero section */}
           <section className="space-y-4 lg:text-center">
             <h1 className="font-title-sans text-4xl font-bold tracking-wide lg:text-5xl">
               About Emoji Salon
@@ -30,7 +46,7 @@ function AboutPage() {
             </p>
           </section>
 
-          {/* How It Works */}
+          {/* How it works section */}
           <section className="space-y-4">
             <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
               How It Works
@@ -45,7 +61,7 @@ function AboutPage() {
             </p>
           </section>
 
-          {/* Accessibility */}
+          {/* Accessibility section */}
           <section className="space-y-4">
             <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
               Accessibility
@@ -96,7 +112,7 @@ function AboutPage() {
             </div>
           </section>
 
-          {/* Copyright */}
+          {/* Copyright section */}
           <section className="space-y-4">
             <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
               Copyright & License
@@ -137,7 +153,7 @@ function AboutPage() {
             </div>
           </section>
 
-          {/* Open Source */}
+          {/* Open source section */}
           <section className="space-y-4">
             <h2 className="font-title-sans text-2xl font-bold tracking-wide lg:text-3xl">
               Open Source

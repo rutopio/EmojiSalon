@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { CaretRightIcon, ListIcon } from "@phosphor-icons/react";
+
 import { GithubIcon } from "@/components/icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";

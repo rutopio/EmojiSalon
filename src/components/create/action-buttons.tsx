@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Action buttons component for emoji customization interface.
+ * Provides buttons for emoji selection, color randomization, reset, download,
+ * copy, and share functionality. Supports both desktop and mobile layouts.
+ */
+
 import { useState } from "react";
 import {
   ArrowCounterClockwiseIcon,
@@ -8,6 +14,8 @@ import {
   ShareNetworkIcon,
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
+import { useEmoji } from "@/contexts/emoji-context";
+
 import { EmojiPicker } from "@/components/create/emoji-picker";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +29,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEmoji } from "@/contexts/emoji-context";
 
+/**
+ * Props for the ActionButtons component.
+ */
 interface ActionButtonsProps {
+  /** Display variant: desktop shows all buttons with labels, mobile shows compact grid layout. */
   variant?: "desktop" | "mobile";
 }
 
+/**
+ * Action buttons component for emoji customization.
+ * Displays buttons for emoji selection, color operations, and sharing.
+ *
+ * @param props - Component props.
+ * @returns Action buttons UI for desktop or mobile layout.
+ */
 export default function ActionButtons({
   variant = "desktop",
 }: ActionButtonsProps) {
@@ -42,8 +60,13 @@ export default function ActionButtons({
     handleShare,
   } = useEmoji();
 
-  // Wrap emoji select to close popover
-  const onEmojiSelect = (emoji: string, label: string) => {
+  /**
+   * Handles emoji selection and closes the picker popover.
+   *
+   * @param emoji - The selected emoji character.
+   * @param label - The emoji label/name.
+   */
+  const handleEmojiSelectAndClose = (emoji: string, label: string) => {
     setEmojiPickerOpen(false);
     handleEmojiSelect(emoji, label);
   };
@@ -81,7 +104,7 @@ export default function ActionButtons({
             side="bottom"
             sideOffset={8}
           >
-            <EmojiPicker onEmojiSelect={onEmojiSelect} />
+            <EmojiPicker onEmojiSelect={handleEmojiSelectAndClose} />
           </PopoverContent>
         </Popover>
 

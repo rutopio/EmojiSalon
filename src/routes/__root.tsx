@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Root route component for Emoji Salon application.
+ * Defines the root layout, metadata, and provides global context providers.
+ */
+
 /// <reference types="vite/client" />
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -8,13 +13,18 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
 import { EmojiProvider } from "@/contexts/emoji-context";
 import appCss from "@/styles.css?url";
 
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+
 import type { QueryClient } from "@tanstack/react-query";
 
+/**
+ * Root route configuration with context type.
+ * Provides global layout, metadata, and context providers for all routes.
+ */
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
@@ -86,6 +96,11 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
 });
 
+/**
+ * Root component that wraps all routes with the root document.
+ *
+ * @returns Root component with outlet for child routes.
+ */
 function RootComponent() {
   return (
     <RootDocument>
@@ -94,9 +109,16 @@ function RootComponent() {
   );
 }
 
+/**
+ * Root document component that provides HTML structure and global providers.
+ * Suppresses hydration warning since ThemeProvider updates the "dark" class.
+ *
+ * @param props - Component props.
+ * @param props.children - Child components to render.
+ * @returns Root HTML document with providers and devtools.
+ */
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
   return (
-    // suppress since we're updating the "dark" class in ThemeProvider
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />

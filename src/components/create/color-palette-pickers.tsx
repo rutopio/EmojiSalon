@@ -1,8 +1,7 @@
 /**
- * @fileoverview Color picker popover component using react-aria-components.
- *
- * This component provides a color picker in a popover that allows users to
- * select colors using a color area, hue slider, and hex input.
+ * @fileoverview Color palette picker components for emoji customization.
+ * Provides color picker popovers using react-aria-components that allow users
+ * to select colors using a color area, hue slider, hex input, and preset colors.
  */
 
 import { use, useRef } from "react";
@@ -17,6 +16,9 @@ import {
   Popover,
 } from "react-aria-components";
 import { CopyIcon, EyedropperIcon } from "@phosphor-icons/react";
+import { useEmoji } from "@/contexts/emoji-context";
+import { toast } from "sonner";
+
 import {
   ColorArea,
   ColorField,
@@ -29,20 +31,21 @@ import {
   SliderTrack,
 } from "@/components/color";
 import { Button } from "@/components/ui/button";
-import { useEmoji } from "@/contexts/emoji-context";
 import { PRESET_COLORS } from "@/lib/constants";
-import { toast } from "sonner";
 
 import type { Color } from "react-aria-components";
 
 /**
  * EyeDropper button component that uses the browser's EyeDropper API
  * to pick colors from anywhere on the screen.
+ * Returns null if the EyeDropper API is not supported by the browser.
+ *
+ * @returns EyeDropper button component or null if not supported.
  */
 function EyeDropperButton() {
   const state = use(ColorPickerStateContext)!;
 
-  // Check browser support.
+  // Check if browser supports EyeDropper API
   // @ts-expect-error - EyeDropper API may not be available
   if (typeof EyeDropper === "undefined") {
     return null;
@@ -76,19 +79,27 @@ interface ColorPickerPopoverProps {
 }
 
 /**
- * A popover-based color picker that displays a color swatch button which,
- * when clicked, opens a color picker with an area selector, hue slider,
- * and hex input field.
+ * Popover-based color picker component.
+ * Displays a color swatch button that opens a color picker dialog with
+ * color area selector, hue slider, hex input field, and preset colors.
+ *
+ * @param props - Component props.
+ * @returns Color picker popover component.
  */
 export function ColorPickerPopover({
   color,
   onColorChange,
 }: ColorPickerPopoverProps) {
-  // Parse the hex color to a Color object
+  // Parse the hex color string to a Color object in HSB format
   const colorValue = parseColor(color).toFormat("hsb");
-  // Track if user is dragging to prevent popover close during drag
+  // Track if user is dragging to prevent popover from closing during drag
   const isDraggingRef = useRef(false);
 
+  /**
+   * Handles color change from the color picker.
+   *
+   * @param newColor - The new color value from the picker.
+   */
   const handleColorChange = (newColor: Color) => {
     onColorChange(newColor.toString("hex"));
   };
@@ -186,8 +197,11 @@ export function ColorPickerPopover({
 }
 
 /**
- * A component that displays multiple color pickers for editing a color palette.
- * Uses EmojiContext for colors and useEmojiActions for color change handling.
+ * Color palette pickers component.
+ * Displays multiple color picker popovers for editing the emoji's color palette.
+ * Each color in the palette can be individually customized.
+ *
+ * @returns Color palette pickers component.
  */
 export default function ColorPalettePickers() {
   const { customizedPaletteColors, handleColorChange } = useEmoji();

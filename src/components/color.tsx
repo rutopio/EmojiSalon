@@ -24,6 +24,7 @@ import {
   SliderTrackProps as AriaSliderTrackProps,
   composeRenderProps,
 } from "react-aria-components";
+
 import { cn } from "@/lib/utils";
 
 const ColorSlider = AriaColorSlider;
