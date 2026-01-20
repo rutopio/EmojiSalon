@@ -4,10 +4,12 @@ import {
   ClipboardIcon,
   FacebookLogoIcon,
   FileSvgIcon,
-  GithubLogoIcon,
   LinkIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
+import { toast } from "sonner";
+
+// import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,12 +19,15 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
-  FACEBOOK_SHARE_BASE_URL,
-  TWITTER_SHARE_BASE_URL,
-} from "@/lib/constants";
-import { emojiToUnicode, triggerDownload } from "@/lib/emoji-utils";
-import { generateCSSCode } from "@/lib/share-utils";
-import { toast } from "sonner";
+  copyCSSCode,
+  copyHTMLCode,
+  copyLinkToClipboard,
+  downloadSVG,
+  generateCSSCode,
+  generateShareURL,
+  shareToFacebook,
+  shareToTwitter,
+} from "@/lib/share-utils";
 
 interface ShowcaseShareModalProps {
   open: boolean;
@@ -52,11 +57,10 @@ export default function ShowcaseShareModal({
   originalPaletteIndex,
 }: ShowcaseShareModalProps) {
   // Generate the share URL for this specific emoji/palette combination
-  const shareURL = useMemo(() => {
-    const baseURL = window.location.origin;
-    const emojiUnicode = emojiToUnicode(emoji);
-    return `${baseURL}/?emoji=${emojiUnicode}&palette=${palette}`;
-  }, [emoji, palette]);
+  const shareURL = useMemo(
+    () => generateShareURL(emoji, palette),
+    [emoji, palette]
+  );
 
   const cssCode = generateCSSCode(
     customizedPaletteColors,
@@ -64,34 +68,13 @@ export default function ShowcaseShareModal({
     originalPaletteIndex
   );
 
-  const handleShareToTwitter = () => {
-    const message = `#EmojiSalon ${shareURL}`;
-    const twitterShareURL = `${TWITTER_SHARE_BASE_URL}?text=${encodeURIComponent(message)}`;
-    window.open(twitterShareURL, "_blank");
-    toast.success("Shared to Twitter");
-  };
+  const handleShareToTwitter = () => shareToTwitter(shareURL);
 
-  const handleShareToFacebook = () => {
-    const facebookShareURL = `${FACEBOOK_SHARE_BASE_URL}?u=${encodeURIComponent(shareURL)}`;
-    window.open(facebookShareURL, "_blank");
-    toast.success("Shared to Facebook");
-  };
+  const handleShareToFacebook = () => shareToFacebook(shareURL);
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareURL);
-    toast.success("Link copied to clipboard", {
-      description: shareURL,
-    });
-  };
+  const handleCopyLink = () => copyLinkToClipboard(shareURL);
 
-  const handleDownloadSVG = () => {
-    const svgBlob = new Blob([svgData], {
-      type: "image/svg+xml;charset=utf-8",
-    });
-    const url = URL.createObjectURL(svgBlob);
-    triggerDownload(url, `${emojiToUnicode(emoji)}-EmojiSalon.svg`);
-    toast.success("SVG downloaded");
-  };
+  const handleDownloadSVG = () => downloadSVG(svgData, emoji);
 
   const handleCopyImage = async () => {
     try {
@@ -100,25 +83,16 @@ export default function ShowcaseShareModal({
       await navigator.clipboard.write([
         new ClipboardItem({ "image/png": blob }),
       ]);
-      toast.success("Image copied to clipboard");
+      toast.success("Image copied to clipboard.");
     } catch (error) {
-      toast.error("Failed to copy image");
+      toast.error("Failed to copy image.");
       console.error("Copy image error:", error);
     }
   };
 
-  const handleCopyHTMLCode = () => {
-    const htmlCode = `<span class="mod-emoji"> ${emoji} </span>`;
-    navigator.clipboard.writeText(htmlCode);
-    toast.success("HTML code copied to clipboard", {
-      description: htmlCode,
-    });
-  };
+  const handleCopyHTMLCode = () => copyHTMLCode(emoji);
 
-  const handleCopyCSSCode = () => {
-    navigator.clipboard.writeText(cssCode);
-    toast.success("CSS code copied to clipboard");
-  };
+  const handleCopyCSSCode = () => copyCSSCode(cssCode);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -128,7 +102,7 @@ export default function ShowcaseShareModal({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
+          <div className="mx-auto grid w-fit grid-cols-5 justify-center gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
                 variant="outline"
@@ -173,18 +147,18 @@ export default function ShowcaseShareModal({
               <div className="text-xs">Copy Link</div>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-2">
+            {/* <div className="flex flex-col items-center justify-center gap-2">
               <a
                 href="https://github.com/rutopio/EmojiSalon"
                 target="_blank"
                 rel="noreferrer noopener"
               >
                 <Button variant="outline" size="icon">
-                  <GithubLogoIcon className="size-5" />
+                  <GithubIcon />
                 </Button>
               </a>
-              <div className="text-xs">Github Repo</div>
-            </div>
+              <div className="text-xs">Submit Showcase</div>
+            </div> */}
           </div>
 
           <div className="mx-auto flex items-center gap-2 text-center text-sm">

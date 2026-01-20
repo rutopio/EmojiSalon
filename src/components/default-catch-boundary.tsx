@@ -6,7 +6,7 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
@@ -32,28 +32,20 @@ export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
           Try Again
         </Button>
         {isRoot ? (
-          <Button
-            render={<Link to="/" />}
-            variant="secondary"
-            nativeButton={false}
-          >
-            Home
+          <Button asChild variant="secondary">
+            <Link to="/">Home</Link>
           </Button>
         ) : (
-          <Button
-            render={
-              <Link
-                to="/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.history.back();
-                }}
-              />
-            }
-            variant="secondary"
-            nativeButton={false}
-          >
-            Go Back
+          <Button asChild variant="secondary">
+            <Link
+              to="/"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.back();
+              }}
+            >
+              Go Back
+            </Link>
           </Button>
         )}
       </div>

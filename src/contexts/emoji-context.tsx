@@ -121,6 +121,9 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const updateURLTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
   // Update URL using TanStack Router (only on "/" route)
   const updateURL = useCallback(
@@ -256,23 +259,29 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
     location.pathname,
   ]);
 
-  // Handle color change from color picker
+  // Handle color change from color picker (debounced URL update)
   const handleColorChange = useCallback(
     (idx: number, color: string) => {
       setCustomizedPaletteColors((prev) => {
         const newColors = [...prev];
         newColors[idx] = color;
 
-        const overrideColors = getOverrideStyleString(
-          newColors,
-          originalPaletteColors,
-          originalPaletteIndex
-        );
-        if (overrideColors) {
-          updateURL(emojiToUnicode(currentEmoji), overrideColors);
-        } else {
-          updateURL(emojiToUnicode(currentEmoji));
+        // Debounce URL update to avoid excessive updates during drag
+        if (updateURLTimeoutRef.current) {
+          clearTimeout(updateURLTimeoutRef.current);
         }
+        updateURLTimeoutRef.current = setTimeout(() => {
+          const overrideColors = getOverrideStyleString(
+            newColors,
+            originalPaletteColors,
+            originalPaletteIndex
+          );
+          if (overrideColors) {
+            updateURL(emojiToUnicode(currentEmoji), overrideColors);
+          } else {
+            updateURL(emojiToUnicode(currentEmoji));
+          }
+        }, 500);
 
         return newColors;
       });
@@ -311,6 +320,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   // Reset colors
   const handleReset = useCallback(() => {
     updateEmoji(currentEmoji, false);
+    toast.success("Palette colors have been reset.");
   }, [currentEmoji, updateEmoji]);
 
   // Generate SVG data
@@ -407,7 +417,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   // Download image
   const handleDownloadImage = useCallback(() => {
     updateCanvas(1);
-    toast.success("Image downloaded", {
+    toast.success("Image downloaded.", {
       description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.png`,
     });
   }, [updateCanvas, currentEmoji]);
@@ -419,7 +429,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
     } else {
       updateCanvas(2);
     }
-    toast.success("Image copied to clipboard");
+    toast.success("Image copied to clipboard.");
   }, [updateCanvas]);
 
   // Share

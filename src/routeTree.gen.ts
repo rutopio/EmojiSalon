@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as ShowcaseIndexRouteImport } from './routes/showcase/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as indexIndexRouteImport } from './routes/(index)/index'
 
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShowcaseIndexRoute = ShowcaseIndexRouteImport.update({
   id: '/showcase/',
   path: '/showcase/',
@@ -30,30 +36,34 @@ const indexIndexRoute = indexIndexRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/$': typeof SplatRoute
   '/': typeof indexIndexRoute
   '/about': typeof AboutIndexRoute
   '/showcase': typeof ShowcaseIndexRoute
 }
 export interface FileRoutesByTo {
+  '/$': typeof SplatRoute
   '/': typeof indexIndexRoute
   '/about': typeof AboutIndexRoute
   '/showcase': typeof ShowcaseIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$': typeof SplatRoute
   '/(index)/': typeof indexIndexRoute
   '/about/': typeof AboutIndexRoute
   '/showcase/': typeof ShowcaseIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/showcase'
+  fullPaths: '/$' | '/' | '/about' | '/showcase'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/showcase'
-  id: '__root__' | '/(index)/' | '/about/' | '/showcase/'
+  to: '/$' | '/' | '/about' | '/showcase'
+  id: '__root__' | '/$' | '/(index)/' | '/about/' | '/showcase/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SplatRoute: typeof SplatRoute
   indexIndexRoute: typeof indexIndexRoute
   AboutIndexRoute: typeof AboutIndexRoute
   ShowcaseIndexRoute: typeof ShowcaseIndexRoute
@@ -61,6 +71,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/showcase/': {
       id: '/showcase/'
       path: '/showcase'
@@ -86,6 +103,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  SplatRoute: SplatRoute,
   indexIndexRoute: indexIndexRoute,
   AboutIndexRoute: AboutIndexRoute,
   ShowcaseIndexRoute: ShowcaseIndexRoute,

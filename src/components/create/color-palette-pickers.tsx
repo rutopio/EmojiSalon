@@ -13,11 +13,10 @@ import {
   ColorPickerStateContext,
   Dialog,
   DialogTrigger,
-  OverlayTriggerStateContext,
   parseColor,
   Popover,
 } from "react-aria-components";
-import { CopyIcon, EyedropperIcon, XIcon } from "@phosphor-icons/react";
+import { CopyIcon, EyedropperIcon } from "@phosphor-icons/react";
 import {
   ColorArea,
   ColorField,
@@ -113,20 +112,6 @@ export function ColorPickerPopover({
           aria-label="Color picker"
         >
           <ColorPicker value={colorValue} onChange={handleColorChange}>
-            {/* Close Button */}
-            {(() => {
-              const state = use(OverlayTriggerStateContext);
-              return (
-                <AriaButton
-                  onPress={() => state?.close()}
-                  className="absolute top-2 right-2 flex size-6 items-center justify-center rounded-md transition-colors hover:bg-gray-100"
-                  aria-label="Close"
-                >
-                  <XIcon className="h-4 w-4" />
-                </AriaButton>
-              );
-            })()}
-
             {/* Color Area for saturation and brightness */}
             <div
               onPointerDown={() => {
@@ -173,7 +158,7 @@ export function ColorPickerPopover({
                 variant="ghost"
                 onClick={() => {
                   navigator.clipboard.writeText(colorValue.toString("hex"));
-                  toast.success("Color copied to clipboard", {
+                  toast.success("Color copied to clipboard.", {
                     description: `${colorValue.toString("hex")}`,
                   });
                 }}

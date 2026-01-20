@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Footer from "@/components/footer";
-import ActionButtons from "@/components/home/action-buttons";
-import ColorPalettePickers from "@/components/home/color-palette-pickers";
-import EmojiDisplay from "@/components/home/emoji-display";
-import DesktopEmojiPicker from "@/components/home/emoji-picker";
-import ShareModal from "@/components/home/share-modal";
-import Navbar from "@/components/navbar";
+import ActionButtons from "@/components/create/action-buttons";
+import ColorPalettePickers from "@/components/create/color-palette-pickers";
+import EmojiDisplay from "@/components/create/emoji-display";
+import DesktopEmojiPicker from "@/components/create/emoji-picker";
+import ShareModal from "@/components/create/share-modal";
+import { Spinner } from "@/components/ui/spinner";
 import { useEmoji } from "@/contexts/emoji-context";
 import useIsClient from "@/hooks/use-is-client";
-import { Spinner } from "@/components/ui/spinner";
+import PageLayout from "@/layout";
 
 // Define search params type
 interface EmojiSearchParams {
@@ -42,34 +41,29 @@ function EmojiSalonPage() {
   if (!isClient) {
     return (
       <div className="flex h-dvh items-center justify-center">
-        <Spinner className="size-8"/>
+        <Spinner className="size-8" />
       </div>
     );
   }
 
   return (
-    <div className="h-dvh overflow-hidden">
-      <div className="flex min-h-dvh flex-col items-center justify-between lg:justify-center">
-        {/* Hidden Canvas for image export */}
-        <canvas ref={canvasRef} className="hidden" width={256} height={256} />
+    <PageLayout>
+      {/* Hidden Canvas for image export */}
+      <canvas ref={canvasRef} className="hidden" width={256} height={256} />
 
-        <Navbar />
-
-        <div className="container flex flex-1 flex-col items-center justify-between gap-16 lg:justify-center">
-          <div className="grid grid-cols-1 items-center lg:grid-cols-3 lg:gap-16">
-            <DesktopEmojiPicker />
-            <ActionButtons variant="mobile" />
-            <EmojiDisplay variant="customized" />
-            <EmojiDisplay variant="reference" />
-          </div>
-
-          <ActionButtons variant="desktop" />
-          <ColorPalettePickers />
+      <div className="container flex flex-1 flex-col items-center justify-between gap-16 lg:justify-center">
+        <div className="grid grid-cols-1 items-center lg:grid-cols-3 lg:gap-16">
+          <DesktopEmojiPicker />
+          <ActionButtons variant="mobile" />
+          <EmojiDisplay variant="customized" />
+          <EmojiDisplay variant="reference" />
         </div>
 
-        <Footer />
-        <ShareModal />
+        <ActionButtons variant="desktop" />
+        <ColorPalettePickers />
       </div>
-    </div>
+
+      <ShareModal />
+    </PageLayout>
   );
 }

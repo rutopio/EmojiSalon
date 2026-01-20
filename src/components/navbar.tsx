@@ -1,5 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { CaretRightIcon, ListIcon } from "@phosphor-icons/react";
+import { GithubIcon } from "@/components/icon";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,9 +18,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-
-import { GithubIcon } from "./icon";
-import { ThemeToggle } from "./theme-toggle";
 
 /**
  * Navigation bar component with links to main pages and external GitHub.

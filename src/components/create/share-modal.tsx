@@ -3,10 +3,12 @@ import {
   ClipboardIcon,
   FacebookLogoIcon,
   FileSvgIcon,
-  GithubLogoIcon,
   LinkIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
+import { useEmoji } from "@/contexts/emoji-context";
+
+import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,15 +17,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { useEmoji } from "@/contexts/emoji-context";
 import {
+  copyCSSCode,
+  copyHTMLCode,
   copyLinkToClipboard,
   downloadSVG,
   generateCSSCode,
   shareToFacebook,
   shareToTwitter,
 } from "@/lib/share-utils";
-import { toast } from "sonner";
 
 /**
  * Modal component for sharing customized emoji.
@@ -48,25 +50,11 @@ export default function ShareModal() {
     originalPaletteIndex
   );
 
-  const handleDownloadSVG = () => {
-    downloadSVG(svgHTML, currentEmoji);
-  };
+  const handleDownloadSVG = () => downloadSVG(svgHTML, currentEmoji);
 
-  const handleCopyHTMLCode = () => {
-    navigator.clipboard.writeText(
-      `<span class="mod-emoji"> ${currentEmoji} </span>`
-    );
-    toast.success("HTML code copied to clipboard", {
-      description: `<span class="mod-emoji"> ${currentEmoji} </span>`,
-    });
-  };
+  const handleCopyHTMLCode = () => copyHTMLCode(currentEmoji);
 
-  const handleCopyCSSCode = () => {
-    navigator.clipboard.writeText(cssCode);
-    toast.success("CSS code copied to clipboard", {
-      description: `${cssCode}`,
-    });
-  };
+  const handleCopyCSSCode = () => copyCSSCode(cssCode);
 
   return (
     <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
@@ -78,14 +66,22 @@ export default function ShareModal() {
         <div className="flex flex-col gap-4">
           <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={shareToTwitter}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => shareToTwitter()}
+              >
                 <XLogoIcon className="size-5" />
               </Button>
               <div className="text-xs">X (Twitter)</div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex items-center justify-center">
-                <Button variant="outline" size="icon" onClick={shareToFacebook}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => shareToFacebook()}
+                >
                   <FacebookLogoIcon className="size-5" />
                 </Button>
               </div>
@@ -110,7 +106,7 @@ export default function ShareModal() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={copyLinkToClipboard}
+                onClick={() => copyLinkToClipboard()}
               >
                 <LinkIcon className="size-5" />
               </Button>
@@ -124,10 +120,10 @@ export default function ShareModal() {
                 rel="noreferrer noopener"
               >
                 <Button variant="outline" size="icon">
-                  <GithubLogoIcon className="size-5" />
+                  <GithubIcon />
                 </Button>
               </a>
-              <div className="text-xs">Github Repo</div>
+              <div className="text-xs">Submit Showcase</div>
             </div>
           </div>
 

@@ -7,52 +7,76 @@
  * @module share-utils
  */
 
+import {
+  FACEBOOK_SHARE_BASE_URL,
+  TWITTER_SHARE_BASE_URL,
+} from "@/lib/constants";
+import { emojiToUnicode, triggerDownload } from "@/lib/emoji-utils";
 import { toast } from "sonner";
 
-import { FACEBOOK_SHARE_BASE_URL, TWITTER_SHARE_BASE_URL } from "./constants";
-import { emojiToUnicode, triggerDownload } from "./emoji-utils";
+// ============================================================================
+// URL Generation Functions
+// ============================================================================
+
+/**
+ * Generate a shareable URL for a specific emoji/palette combination.
+ *
+ * @param {string} emoji - The emoji character.
+ * @param {string} palette - The palette override string.
+ * @returns {string} The shareable URL.
+ *
+ * @example
+ * generateShareURL("😀", "0-ff0000"); // Returns "https://example.com/?emoji=1f600&palette=0-ff0000"
+ */
+export function generateShareURL(emoji: string, palette: string): string {
+  const baseURL = window.location.origin;
+  const emojiUnicode = emojiToUnicode(emoji);
+  return `${baseURL}/?emoji=${emojiUnicode}&palette=${palette}`;
+}
 
 // ============================================================================
 // Social Sharing Functions
 // ============================================================================
 
 /**
- * Share the current page to Twitter/X.
+ * Share to Twitter/X.
  *
  * Opens a new browser tab with a pre-filled tweet containing
- * the #EmojiSalon hashtag and the current page URL.
+ * the #EmojiSalon hashtag and the specified URL.
  *
+ * @param {string} [url] - The URL to share. Defaults to current page URL.
  * @returns {void}
  *
  * @example
  * shareToTwitter(); // Opens Twitter with "#EmojiSalon https://..."
+ * shareToTwitter("https://example.com"); // Opens Twitter with custom URL
  */
-export function shareToTwitter(): void {
-  const message = `#EmojiSalon ${window.location.href}`;
+export function shareToTwitter(url?: string): void {
+  const shareUrl = url ?? window.location.href;
+  const message = `#EmojiSalon ${shareUrl}`;
   const twitterShareURL = `${TWITTER_SHARE_BASE_URL}?text=${encodeURIComponent(message)}`;
   window.open(twitterShareURL, "_blank");
-  toast.success("Shared to Twitter", {
-    description: twitterShareURL,
-  });
+  toast.success("Shared to Twitter.");
 }
 
 /**
- * Share the current page to Facebook.
+ * Share to Facebook.
  *
  * Opens a new browser tab with the Facebook share dialog
- * pre-filled with the current page URL.
+ * pre-filled with the specified URL.
  *
+ * @param {string} [url] - The URL to share. Defaults to current page URL.
  * @returns {void}
  *
  * @example
  * shareToFacebook(); // Opens Facebook share dialog
+ * shareToFacebook("https://example.com"); // Opens Facebook with custom URL
  */
-export function shareToFacebook(): void {
-  const facebookShareURL = `${FACEBOOK_SHARE_BASE_URL}?u=${encodeURIComponent(window.location.href)}`;
+export function shareToFacebook(url?: string): void {
+  const shareUrl = url ?? window.location.href;
+  const facebookShareURL = `${FACEBOOK_SHARE_BASE_URL}?u=${encodeURIComponent(shareUrl)}`;
   window.open(facebookShareURL, "_blank");
-  toast.success("Shared to Facebook", {
-    description: facebookShareURL,
-  });
+  toast.success("Shared to Facebook.");
 }
 
 // ============================================================================
@@ -60,21 +84,49 @@ export function shareToFacebook(): void {
 // ============================================================================
 
 /**
- * Copy the current page URL to the clipboard.
+ * Copy a URL to the clipboard.
  *
  * Uses the modern Clipboard API. Note that this may require
  * user permission or a secure context (HTTPS).
  *
+ * @param {string} [url] - The URL to copy. Defaults to current page URL.
  * @returns {void}
  *
  * @example
  * copyLinkToClipboard(); // Copies current URL to clipboard
+ * copyLinkToClipboard("https://example.com"); // Copies custom URL
  */
-export function copyLinkToClipboard(): void {
-  navigator.clipboard.writeText(window.location.href);
-  toast.success("Link copied to clipboard", {
-    description: `${window.location.href}`,
+export function copyLinkToClipboard(url?: string): void {
+  const copyUrl = url ?? window.location.href;
+  navigator.clipboard.writeText(copyUrl);
+  toast.success("Link copied to clipboard.", {
+    description: copyUrl,
   });
+}
+
+/**
+ * Copy HTML code for displaying the emoji to the clipboard.
+ *
+ * @param {string} emoji - The emoji character.
+ * @returns {void}
+ */
+export function copyHTMLCode(emoji: string): void {
+  const htmlCode = `<span class="mod-emoji"> ${emoji} </span>`;
+  navigator.clipboard.writeText(htmlCode);
+  toast.success("HTML code copied to clipboard.", {
+    description: htmlCode,
+  });
+}
+
+/**
+ * Copy CSS code to the clipboard.
+ *
+ * @param {string} cssCode - The CSS code string.
+ * @returns {void}
+ */
+export function copyCSSCode(cssCode: string): void {
+  navigator.clipboard.writeText(cssCode);
+  toast.success("CSS code copied to clipboard.");
 }
 
 // ============================================================================
@@ -153,5 +205,9 @@ export function downloadSVG(svgData: string, emoji: string): void {
     type: "image/svg+xml;charset=utf-8",
   });
   const url = URL.createObjectURL(svgBlob);
-  triggerDownload(url, `${emojiToUnicode(emoji)}-EmojiSalon.svg`);
+  const filename = `${emojiToUnicode(emoji)}-EmojiSalon.svg`;
+  triggerDownload(url, filename);
+  toast.success("SVG downloaded.", {
+    description: filename,
+  });
 }

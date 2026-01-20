@@ -17,9 +17,9 @@ export default function EmojiPreview({
 }: EmojiPreviewProps) {
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center gap-8">
-        <div className="flex size-32 items-center justify-center">
-          <Skeleton className="size-32" />
+      <div className="flex flex-col items-center gap-4 lg:gap-8">
+        <div className="flex size-24 items-center justify-center lg:size-32">
+          <Skeleton className="size-24 lg:size-32" />
         </div>
         <span className="text-center text-sm text-neutral-500">{label}</span>
       </div>
@@ -27,10 +27,10 @@ export default function EmojiPreview({
   }
 
   return (
-    <div className="group flex flex-col items-center gap-8 focus:outline-none">
+    <div className="group flex flex-col items-center gap-4 focus:outline-none lg:gap-8">
       <div
         dangerouslySetInnerHTML={{ __html: svg }}
-        className="size-32 [&>svg]:h-full [&>svg]:w-full"
+        className="size-24 lg:size-32 [&>svg]:h-full [&>svg]:w-full"
       />
       <span className="text-center text-sm text-neutral-600 group-hover:text-neutral-900">
         {label}

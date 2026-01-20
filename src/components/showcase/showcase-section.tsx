@@ -6,18 +6,18 @@
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
+  ArrowDownIcon,
   ArrowRightIcon,
   DownloadSimpleIcon,
   PencilSimpleIcon,
   ShareNetworkIcon,
 } from "@phosphor-icons/react";
+import EmojiPreview from "@/components/showcase/emoji-preview";
+import ShowcaseShareModal from "@/components/showcase/showcase-share-modal";
 import { Button } from "@/components/ui/button";
 import { useEmojiSVG, useVariantSVG } from "@/hooks/use-emoji-svg";
 import { triggerDownload, unicodeToEmoji } from "@/lib/emoji-utils";
 import { toast } from "sonner";
-
-import EmojiPreview from "./emoji-preview";
-import ShowcaseShareModal from "./showcase-share-modal";
 
 interface Variant {
   palette: string;
@@ -136,7 +136,7 @@ export default function ShowcaseSection({
 
       <div className="flex flex-col gap-8">
         {/* Unicode label */}
-        <div className="relative flex w-full items-center justify-center">
+        <div className="relative flex w-full items-center justify-start lg:justify-center">
           <span className="text-primary font-mono text-base">
             {unicodeDisplay}
           </span>
@@ -169,7 +169,7 @@ export default function ShowcaseSection({
         </div>
 
         {/* Content */}
-        <div className="flex flex-wrap items-center justify-center gap-12">
+        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:gap-12">
           {/* Original emoji */}
           <EmojiPreview
             svg={originalSvg}
@@ -178,7 +178,16 @@ export default function ShowcaseSection({
           />
 
           {/* Arrow */}
-          <ArrowRightIcon size={20} weight="bold" className="text-primary" />
+          <ArrowRightIcon
+            size={20}
+            weight="bold"
+            className="text-primary hidden lg:block"
+          />
+          <ArrowDownIcon
+            size={20}
+            weight="bold"
+            className="text-primary block lg:hidden"
+          />
 
           {/* Variants */}
           {hasMultipleVariants ? (

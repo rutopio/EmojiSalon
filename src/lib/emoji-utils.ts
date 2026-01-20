@@ -21,8 +21,7 @@ import symbolsData from "@/data/emoji-category/symbols.json";
 import emojiNames from "@/data/emoji-names.json";
 import emojiPaletteData from "@/data/emoji-palette-data.json";
 import paletteColorDataRaw from "@/data/palette-color-data.json";
-
-import { DEFAULT_EMOJIS } from "./constants";
+import { DEFAULT_EMOJIS } from "@/lib/constants";
 
 // ============================================================================
 // Type Definitions
@@ -492,7 +491,7 @@ export function parsePaletteString(
 // ============================================================================
 
 // Re-export from constants for backward compatibility
-export { DEFAULT_EMOJIS as defaultEmojis } from "./constants";
+export { DEFAULT_EMOJIS as defaultEmojis } from "@/lib/constants";
 
 /**
  * Get the label/name for an emoji character.
