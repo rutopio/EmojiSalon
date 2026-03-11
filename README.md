@@ -4,7 +4,7 @@
 
 🔗 Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev) 🔗
 
-![Npm](https://img.shields.io/badge/npm-v10.8.2-CB3837?style=flat-square&logo=npm&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-v10.8.2-F69220?style=flat-square&logo=pnpm&logoColor=white)
 ![Node](https://img.shields.io/badge/Node.js-v20.19.6-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 ![License: CC_BY_4.0(Graphics)_/_MIT(Code)](<https://img.shields.io/badge/License-CC_BY_4.0(Graphics)_/_MIT(Code)-yellow.svg>)
 

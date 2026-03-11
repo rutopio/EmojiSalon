@@ -140,14 +140,14 @@ Extracts palette color indices from font using Glyphs App.
 
 Extracts color palette from Twemoji COLR font.
 
-**Requirements:** `fontkit` npm package
+**Requirements:** `fontkit` pnpm package
 
 **Input:** Twemoji COLR font (fetched from CDN)
 
 **Output:** `paletteColorData.json`
 
 ```bash
-npm install fontkit
+pnpm install fontkit
 node extract_palette_colors.js
 ```
 

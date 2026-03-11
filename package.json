@@ -12,8 +12,8 @@
     "deps": "pnpm dlx taze@latest -Ilw",
     "deps:major": "pnpm dlx taze@latest major -Ilw",
     "ui": "pnpm dlx shadcn@latest",
-    "deploy": "npm run build && wrangler deploy",
-    "preview": "npm run build && vite preview",
+    "deploy": "pnpm run build && wrangler deploy",
+    "preview": "pnpm run build && vite preview",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
