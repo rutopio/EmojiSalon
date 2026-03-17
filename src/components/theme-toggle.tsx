@@ -18,10 +18,12 @@ export function ThemeToggle() {
         <Button aria-label="Toggle theme" variant="ghost" size="icon">
           <SunIcon
             weight="bold"
+            aria-hidden="true"
             className="size-[1.2rem] scale-100 rotate-0 transition-transform dark:scale-0 dark:-rotate-90"
           />
           <MoonIcon
             weight="bold"
+            aria-hidden="true"
             className="absolute size-[1.2rem] scale-0 rotate-90 transition-transform dark:scale-100 dark:rotate-0"
           />
           <span className="sr-only">Toggle theme</span>

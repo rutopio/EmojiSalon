@@ -87,11 +87,12 @@ export default function ActionButtons({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
+                    aria-label="Random Emoji"
                     variant="outline"
                     className="col-span-1"
                     onClick={handleRandomEmoji}
                   >
-                    <DiceFiveIcon className="size-5" />
+                    <DiceFiveIcon className="size-5" aria-hidden="true" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Random Emoji</TooltipContent>
@@ -112,11 +113,12 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Random Colors"
                 variant="outline"
                 className="w-full"
                 onClick={handleRandomColors}
               >
-                <PaletteIcon className="size-5" />
+                <PaletteIcon className="size-5" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Random Colors</TooltipContent>
@@ -125,11 +127,15 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Reset Colors"
                 variant="outline"
                 className="w-full"
                 onClick={handleReset}
               >
-                <ArrowCounterClockwiseIcon className="size-5" />
+                <ArrowCounterClockwiseIcon
+                  className="size-5"
+                  aria-hidden="true"
+                />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Reset Colors</TooltipContent>
@@ -138,11 +144,12 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Download Image"
                 variant="outline"
                 className="w-full"
                 onClick={handleDownloadImage}
               >
-                <DownloadSimpleIcon className="size-5" />
+                <DownloadSimpleIcon className="size-5" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Download Image</TooltipContent>
@@ -151,11 +158,12 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Copy or Share Image"
                 variant="outline"
                 className="w-full"
                 onClick={handleCopyImage}
               >
-                <ImageIcon className="size-5" />
+                <ImageIcon className="size-5" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Copy/Share Image</TooltipContent>
@@ -164,11 +172,12 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Share"
                 variant="outline"
                 className="w-full"
                 onClick={handleShare}
               >
-                <ShareNetworkIcon className="size-5" />
+                <ShareNetworkIcon className="size-5" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Share</TooltipContent>

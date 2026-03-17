@@ -15,6 +15,7 @@ import DesktopEmojiPicker from "@/components/create/emoji-picker";
 import ShareModal from "@/components/create/share-modal";
 import { Spinner } from "@/components/ui/spinner";
 import useIsClient from "@/hooks/use-is-client";
+import { SITE_URL } from "@/lib/constants";
 
 /**
  * Search parameters for the emoji customization page.
@@ -42,9 +43,27 @@ export const Route = createFileRoute("/(index)/")({
     meta: [
       {
         title: "Create | EmojiSalon - Coloring Your Emoji",
-        description: "Customize your emoji colors with EmojiSalon!",
+      },
+      {
+        name: "description",
+        content:
+          "Customize your emoji colors with EmojiSalon! Select any emoji, pick custom colors, and download as SVG or PNG.",
+      },
+      {
+        property: "og:title",
+        content: "Create | EmojiSalon - Coloring Your Emoji",
+      },
+      {
+        property: "og:description",
+        content:
+          "Customize your emoji colors with EmojiSalon! Select any emoji, pick custom colors, and download as SVG or PNG.",
+      },
+      {
+        property: "og:url",
+        content: `${SITE_URL}/`,
       },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
   }),
 });
 
@@ -74,6 +93,7 @@ function EmojiSalonPage() {
       <canvas ref={canvasRef} className="hidden" width={256} height={256} />
 
       <div className="container flex flex-1 flex-col items-center justify-between gap-16 lg:justify-center">
+        <h1 className="sr-only">Create Your Custom Emoji</h1>
         <div className="grid grid-cols-1 items-center lg:grid-cols-3 lg:gap-16">
           <DesktopEmojiPicker />
           <ActionButtons variant="mobile" />

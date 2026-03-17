@@ -18,7 +18,7 @@ export default function PageLayout({
     <div className={outerClassName}>
       <div className={innerClassName}>
         <Navbar />
-        {children}
+        <main className="flex flex-1 flex-col">{children}</main>
         <Footer />
       </div>
     </div>

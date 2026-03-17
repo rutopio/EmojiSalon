@@ -7,6 +7,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PageLayout from "@/layout";
 
+import { SITE_URL } from "@/lib/constants";
+
 /**
  * About page route configuration.
  */
@@ -16,9 +18,27 @@ export const Route = createFileRoute("/about/")({
     meta: [
       {
         title: "About | EmojiSalon - Coloring Your Emoji",
-        description: "Learn more about EmojiSalon",
+      },
+      {
+        name: "description",
+        content:
+          "Learn about EmojiSalon, how it works, accessibility features for visually impaired users, and open source licensing.",
+      },
+      {
+        property: "og:title",
+        content: "About | EmojiSalon - Coloring Your Emoji",
+      },
+      {
+        property: "og:description",
+        content:
+          "Learn about EmojiSalon, how it works, accessibility features for visually impaired users, and open source licensing.",
+      },
+      {
+        property: "og:url",
+        content: `${SITE_URL}/about`,
       },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/about` }],
   }),
 });
 

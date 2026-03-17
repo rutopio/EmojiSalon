@@ -18,6 +18,7 @@ import appCss from "@/styles.css?url";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { SITE_URL } from "@/lib/constants";
 
 import type { QueryClient } from "@tanstack/react-query";
 
@@ -50,24 +51,46 @@ export const Route = createRootRouteWithContext<{
         content: "#e1e1e1",
       },
       {
+        property: "og:site_name",
+        content: "EmojiSalon",
+      },
+      {
         property: "og:title",
         content: "EmojiSalon - Coloring Your Emoji",
       },
       {
         property: "og:description",
-        content: "Customize your emoji colors with EmojiSalon!",
+        content:
+          "Customize your emoji colors with EmojiSalon! Create unique emoji variations and download as SVG or PNG.",
       },
       {
         property: "og:image",
-        content: "/social.png",
+        content: `${SITE_URL}/social.png`,
       },
       {
         property: "og:type",
         content: "website",
       },
       {
+        property: "og:url",
+        content: SITE_URL,
+      },
+      {
         name: "twitter:card",
         content: "summary_large_image",
+      },
+      {
+        name: "twitter:title",
+        content: "EmojiSalon - Coloring Your Emoji",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Customize your emoji colors with EmojiSalon! Create unique emoji variations and download as SVG or PNG.",
+      },
+      {
+        name: "twitter:image",
+        content: `${SITE_URL}/social.png`,
       },
     ],
     links: [

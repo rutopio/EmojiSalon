@@ -146,25 +146,26 @@ export default function ShareModal() {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <a
-                href={GITHUB_ISSUE_BASE_URL}
-                target="_blank"
-                rel="noreferrer noopener"
+              <Button
+                aria-label="Submit to showcase"
+                variant="outline"
+                size="icon"
+                asChild
               >
-                <Button
-                  aria-label="Submit to showcase"
-                  variant="outline"
-                  size="icon"
+                <a
+                  href={GITHUB_ISSUE_BASE_URL}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
-                  <GithubIcon />
-                </Button>
-              </a>
+                  <GithubIcon aria-hidden="true" />
+                </a>
+              </Button>
               <div className="text-xs">Submit Showcase</div>
             </div>
           </div>
 
           <div className="mx-auto flex items-center gap-2 text-center text-sm">
-            <CheckCircleIcon className="size-4" />
+            <CheckCircleIcon className="size-4" aria-hidden="true" />
             <p>
               <a
                 href={GITHUB_REPO_URL + "#copyright"}

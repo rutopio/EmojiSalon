@@ -185,7 +185,9 @@ export default function ShowcaseSection({
       <div className="flex flex-col gap-4 lg:gap-8">
         {/* Unicode label and action buttons */}
         <div className="relative flex w-full items-center justify-start lg:justify-center">
-          <span className="font-mono text-base">{unicodeDisplay}</span>
+          <span className="font-mono text-base tabular-nums">
+            {unicodeDisplay}
+          </span>
           <div className="absolute -top-1 right-0 flex items-center gap-2">
             <Button
               aria-label="Edit emoji"
@@ -230,11 +232,13 @@ export default function ShowcaseSection({
           <ArrowRightIcon
             size={20}
             weight="bold"
+            aria-hidden="true"
             className="text-muted-foreground hidden text-sm lg:block"
           />
           <ArrowDownIcon
             size={20}
             weight="bold"
+            aria-hidden="true"
             className="text-muted-foreground block text-sm lg:hidden"
           />
 

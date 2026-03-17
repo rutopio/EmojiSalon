@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="container py-8 text-center font-mono text-xs tracking-wider">
+    <footer className="container py-8 text-center font-mono text-xs tracking-wider">
       <p>
         Created by{" "}
         <a
@@ -21,6 +21,6 @@ export default function Footer() {
           justfont
         </a>
       </p>
-    </div>
+    </footer>
   );
 }

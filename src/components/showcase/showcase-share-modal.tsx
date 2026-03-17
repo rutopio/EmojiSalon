@@ -147,51 +147,68 @@ export default function ShowcaseShareModal({
           <div className="mx-auto grid w-fit grid-cols-5 items-start justify-start gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
+                aria-label="Share to X (Twitter)"
                 variant="outline"
                 size="icon"
                 onClick={handleShareToTwitter}
               >
-                <XLogoIcon className="size-5" />
+                <XLogoIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-center text-xs">X (Twitter)</div>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex items-center justify-center">
                 <Button
+                  aria-label="Share to Facebook"
                   variant="outline"
                   size="icon"
                   onClick={handleShareToFacebook}
                 >
-                  <FacebookLogoIcon className="size-5" />
+                  <FacebookLogoIcon className="size-5" aria-hidden="true" />
                 </Button>
               </div>
               <div className="text-center text-xs">Facebook</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleDownloadSVG}>
-                <FileSvgIcon className="size-5" />
+              <Button
+                aria-label="Save SVG"
+                variant="outline"
+                size="icon"
+                onClick={handleDownloadSVG}
+              >
+                <FileSvgIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-center text-xs">Save SVG</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleCopyImage}>
-                <ClipboardIcon className="size-5" />
+              <Button
+                aria-label="Copy image to clipboard"
+                variant="outline"
+                size="icon"
+                onClick={handleCopyImage}
+              >
+                <ClipboardIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-center text-xs">Copy Image</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <Button variant="outline" size="icon" onClick={handleCopyLink}>
-                <LinkIcon className="size-5" />
+              <Button
+                aria-label="Copy link to clipboard"
+                variant="outline"
+                size="icon"
+                onClick={handleCopyLink}
+              >
+                <LinkIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-center text-xs">Copy Link</div>
             </div>
           </div>
 
           <div className="mx-auto flex items-center gap-2 text-center text-sm">
-            <CheckCircleIcon className="size-4" />
+            <CheckCircleIcon className="size-4" aria-hidden="true" />
             <p>
               <a
                 href="https://github.com/rutopio/EmojiSalon#copyright"

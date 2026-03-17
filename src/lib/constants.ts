@@ -109,6 +109,12 @@ export const DEFAULT_EMOJIS = [
 ];
 
 /**
+ * Canonical site URL for metadata (OG tags, canonical links, etc.).
+ * Used at build/SSR time where window.location is unavailable.
+ */
+export const SITE_URL = "https://emojisalon.pages.dev";
+
+/**
  * Base URL for Twitter/X share intent.
  */
 export const TWITTER_SHARE_BASE_URL = "https://twitter.com/intent/tweet";

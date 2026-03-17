@@ -33,7 +33,10 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="bg-background font-title-sans sticky top-0 z-10 container hidden w-full items-center justify-between py-4 lg:flex">
+      <nav
+        aria-label="Main navigation"
+        className="bg-background font-title-sans sticky top-0 z-10 container hidden w-full items-center justify-between py-4 lg:flex"
+      >
         <Link to="/">
           <div className="text-xl font-bold tracking-wider">EmojiSalon</div>
         </Link>
@@ -75,7 +78,7 @@ export default function Navbar() {
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <GithubIcon />
+                  <GithubIcon aria-hidden="true" />
                   rutopio/EmojiSalon
                 </a>
               </NavigationMenuLink>
@@ -88,7 +91,10 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="bg-background sticky top-0 z-10 container flex w-full items-center justify-between py-4 lg:hidden">
+      <nav
+        aria-label="Main navigation"
+        className="bg-background sticky top-0 z-10 container flex w-full items-center justify-between py-4 lg:hidden"
+      >
         <Link to="/">
           <div className="font-title-sans text-xl font-bold tracking-wider">
             EmojiSalon
@@ -99,7 +105,7 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button aria-label="Open menu" size="icon" variant="ghost">
-                <ListIcon className="size-6" weight="bold" />
+                <ListIcon className="size-6" weight="bold" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-fit min-w-48">
@@ -138,7 +144,7 @@ export default function Navbar() {
                   rel="noreferrer noopener"
                   className="flex items-center gap-2"
                 >
-                  <GithubIcon />
+                  <GithubIcon aria-hidden="true" />
                   rutopio/EmojiSalon
                 </a>
               </DropdownMenuItem>

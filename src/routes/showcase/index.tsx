@@ -9,7 +9,7 @@ import PageLayout from "@/layout";
 
 import ShowcaseSection from "@/components/showcase/showcase-section";
 import { Button } from "@/components/ui/button";
-import { GITHUB_ISSUE_BASE_URL } from "@/lib/constants";
+import { GITHUB_ISSUE_BASE_URL, SITE_URL } from "@/lib/constants";
 
 import showcaseData from "@/data/showcase/showcase-data.json";
 
@@ -22,9 +22,27 @@ export const Route = createFileRoute("/showcase/")({
     meta: [
       {
         title: "Showcase | EmojiSalon - Coloring Your Emoji",
-        description: "Explore creative emoji color variations",
+      },
+      {
+        name: "description",
+        content:
+          "Explore creative emoji color variations created by the community. Download or remix customized emoji designs.",
+      },
+      {
+        property: "og:title",
+        content: "Showcase | EmojiSalon - Coloring Your Emoji",
+      },
+      {
+        property: "og:description",
+        content:
+          "Explore creative emoji color variations created by the community. Download or remix customized emoji designs.",
+      },
+      {
+        property: "og:url",
+        content: `${SITE_URL}/showcase`,
       },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/showcase` }],
   }),
 });
 
@@ -46,13 +64,17 @@ function ShowcasePage() {
           <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
             Explore creative emoji color variations
           </p>
-          <div className="">
-            <a href={GITHUB_ISSUE_BASE_URL}>
-              <Button className="">
-                <MagicWandIcon className="mr-2 size-4" />
+          <div>
+            <Button asChild>
+              <a
+                href={GITHUB_ISSUE_BASE_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <MagicWandIcon className="mr-2 size-4" aria-hidden="true" />
                 Submit Your Own
-              </Button>
-            </a>
+              </a>
+            </Button>
           </div>
         </div>
 

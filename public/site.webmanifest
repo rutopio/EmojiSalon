@@ -1,6 +1,8 @@
 {
-  "name": "EmojiSalon",
+  "name": "EmojiSalon - Coloring Your Emoji",
   "short_name": "EmojiSalon",
+  "description": "Customize your emoji colors with EmojiSalon! Create unique emoji variations and download as SVG or PNG.",
+  "start_url": "/",
   "icons": [
     {
       "src": "./android-chrome-192x192.png",

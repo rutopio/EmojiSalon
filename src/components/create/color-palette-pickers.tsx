@@ -64,7 +64,7 @@ function EyeDropperButton() {
           );
       }}
     >
-      <EyedropperIcon className="size-4" />
+      <EyedropperIcon className="size-4" aria-hidden="true" />
     </AriaButton>
   );
 }
@@ -107,6 +107,7 @@ export function ColorPickerPopover({
   return (
     <DialogTrigger>
       <AriaButton
+        aria-label={`Pick color ${color}`}
         className="size-12 cursor-pointer rounded-lg border-2 p-0 outline-none focus:ring-2 focus:ring-offset-2"
         style={{ backgroundColor: color }}
       >
@@ -119,7 +120,7 @@ export function ColorPickerPopover({
         shouldCloseOnInteractOutside={() => !isDraggingRef.current}
       >
         <Dialog
-          className="relative flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-lg outline-none"
+          className="bg-popover relative flex flex-col gap-4 rounded-lg border p-4 shadow-lg outline-none"
           aria-label="Color picker"
         >
           <ColorPicker value={colorValue} onChange={handleColorChange}>
@@ -165,6 +166,7 @@ export function ColorPickerPopover({
                 }}
               />
               <Button
+                aria-label="Copy color code"
                 className="size-9"
                 variant="ghost"
                 onClick={() => {
@@ -174,7 +176,7 @@ export function ColorPickerPopover({
                   });
                 }}
               >
-                <CopyIcon size={30} />
+                <CopyIcon size={30} aria-hidden="true" />
               </Button>
             </ColorField>
 
