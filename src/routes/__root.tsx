@@ -93,6 +93,15 @@ export const Route = createRootRouteWithContext<{
         content: `${SITE_URL}/social.png`,
       },
     ],
+    scripts: [
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-SYC5J76P2M",
+        async: true,
+      },
+      {
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SYC5J76P2M');`,
+      },
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
