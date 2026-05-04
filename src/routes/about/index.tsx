@@ -37,6 +37,10 @@ export const Route = createFileRoute("/about/")({
         property: "og:url",
         content: `${SITE_URL}/about`,
       },
+      {
+        property: "og:image",
+        content: `${SITE_URL}/social.png`,
+      },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/about` }],
   }),
@@ -56,7 +60,7 @@ function AboutPage() {
         <div className="mx-auto max-w-3xl space-y-12">
           {/* Hero section */}
           <section className="space-y-4 lg:text-center">
-            <h1 className="font-title-sans text-4xl font-bold tracking-wide text-balance lg:text-5xl">
+            <h1 className="font-title-sans text-4xl font-bold text-balance lg:text-5xl">
               About EmojiSalon
             </h1>
             <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
@@ -68,7 +72,7 @@ function AboutPage() {
 
           {/* How it works section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
               How It Works
             </h2>
             <p className="text-muted-foreground leading-relaxed text-pretty">
@@ -83,7 +87,7 @@ function AboutPage() {
 
           {/* Accessibility section */}
           <section className="space-y-6">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
               Accessibility
             </h2>
             <p className="text-muted-foreground leading-relaxed text-pretty">
@@ -205,7 +209,7 @@ function AboutPage() {
 
           {/* Copyright section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
               Copyright & License
             </h2>
             <div className="text-muted-foreground space-y-3 leading-relaxed">
@@ -274,7 +278,7 @@ function AboutPage() {
 
           {/* Open source section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold tracking-wide text-balance lg:text-3xl">
+            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
               Open Source
             </h2>
             <p className="text-muted-foreground leading-relaxed text-pretty">

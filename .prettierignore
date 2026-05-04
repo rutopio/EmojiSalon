@@ -16,3 +16,5 @@ drizzle/
 .wrangler
 .netlify
 dist
+
+deprecated/

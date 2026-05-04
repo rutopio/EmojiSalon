@@ -14,7 +14,6 @@ import {
   ShareNetworkIcon,
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
-import { useEmoji } from "@/contexts/emoji-context";
 
 import { EmojiPicker } from "@/components/create/emoji-picker";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useEmoji } from "@/contexts/emoji-context";
 
 /**
  * Props for the ActionButtons component.
@@ -79,7 +79,7 @@ export default function ActionButtons({
             <div className="grid w-full grid-cols-5 gap-2">
               <PopoverTrigger asChild>
                 <Button variant="outline" className="col-span-4">
-                  <SmileyWinkIcon className="size-5" />
+                  <SmileyWinkIcon className="size-5" aria-hidden="true" />
                   <span className="ml-1">Select Emoji</span>
                 </Button>
               </PopoverTrigger>
@@ -190,23 +190,23 @@ export default function ActionButtons({
   return (
     <div className="hidden gap-4 lg:grid lg:grid-cols-5">
       <Button variant="outline" onClick={handleRandomEmoji}>
-        <DiceFiveIcon className="size-5" />
+        <DiceFiveIcon className="size-5" aria-hidden="true" />
         Random Emoji
       </Button>
       <Button variant="outline" onClick={handleRandomColors}>
-        <PaletteIcon className="size-5" />
+        <PaletteIcon className="size-5" aria-hidden="true" />
         Random Colors
       </Button>
       <Button variant="outline" onClick={handleReset}>
-        <ArrowCounterClockwiseIcon className="size-5" />
+        <ArrowCounterClockwiseIcon className="size-5" aria-hidden="true" />
         Reset Palette
       </Button>
       <Button variant="outline" onClick={handleDownloadImage}>
-        <DownloadSimpleIcon className="size-5" />
+        <DownloadSimpleIcon className="size-5" aria-hidden="true" />
         Save Image
       </Button>
       <Button variant="outline" onClick={handleShare}>
-        <ShareNetworkIcon className="size-5" />
+        <ShareNetworkIcon className="size-5" aria-hidden="true" />
         Share Link
       </Button>
     </div>

@@ -6,11 +6,11 @@
  * @see https://github.com/missive/emoji-mart
  */
 
-import { useEmoji } from "@/contexts/emoji-context";
 import data from "@emoji-mart/data/sets/15/twitter.json";
 import EmojiMartPicker from "@emoji-mart/react";
 
 import { useTheme } from "@/components/theme-provider";
+import { useEmoji } from "@/contexts/emoji-context";
 
 /**
  * Props for the EmojiPicker component.

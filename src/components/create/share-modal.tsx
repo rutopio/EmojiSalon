@@ -12,7 +12,6 @@ import {
   LinkIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
-import { useEmoji } from "@/contexts/emoji-context";
 
 import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
@@ -23,6 +22,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { useEmoji } from "@/contexts/emoji-context";
 import { GITHUB_ISSUE_BASE_URL, GITHUB_REPO_URL } from "@/lib/constants";
 import {
   copyCSSCode,
@@ -91,7 +91,7 @@ export default function ShareModal() {
                 size="icon"
                 onClick={() => shareToTwitter()}
               >
-                <XLogoIcon className="size-5" />
+                <XLogoIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-xs">X (Twitter)</div>
             </div>
@@ -103,7 +103,7 @@ export default function ShareModal() {
                   size="icon"
                   onClick={() => shareToFacebook()}
                 >
-                  <FacebookLogoIcon className="size-5" />
+                  <FacebookLogoIcon className="size-5" aria-hidden="true" />
                 </Button>
               </div>
               <div className="text-xs"> Facebook</div>
@@ -116,7 +116,7 @@ export default function ShareModal() {
                 size="icon"
                 onClick={handleDownloadSVG}
               >
-                <FileSvgIcon className="size-5" />
+                <FileSvgIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-xs">Save SVG</div>
             </div>
@@ -128,7 +128,7 @@ export default function ShareModal() {
                 size="icon"
                 onClick={handleCopyImage}
               >
-                <ClipboardIcon className="size-5" />
+                <ClipboardIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-xs">Copy Image</div>
             </div>
@@ -140,7 +140,7 @@ export default function ShareModal() {
                 size="icon"
                 onClick={() => copyLinkToClipboard()}
               >
-                <LinkIcon className="size-5" />
+                <LinkIcon className="size-5" aria-hidden="true" />
               </Button>
               <div className="text-xs">Copy Link</div>
             </div>
@@ -200,7 +200,7 @@ export default function ShareModal() {
                   onClick={handleCopyHTMLCode}
                   className="ml-auto w-32"
                 >
-                  <ClipboardIcon />
+                  <ClipboardIcon aria-hidden="true" />
                   <div className="text-xs">Copy HTML</div>
                 </Button>
               </div>
@@ -216,7 +216,7 @@ export default function ShareModal() {
                   onClick={handleCopyCSSCode}
                   className="ml-auto w-32"
                 >
-                  <ClipboardIcon />
+                  <ClipboardIcon aria-hidden="true" />
                   <div className="text-xs">Copy CSS</div>
                 </Button>
               </div>

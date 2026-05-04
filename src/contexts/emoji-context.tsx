@@ -161,13 +161,13 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   // Modal and UI state
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [resultImageSrc, setResultImageSrc] = useState<string>("");
-  const [isInitialized, setIsInitialized] = useState(false);
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const urlUpdateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const isInitializedRef = useRef(false);
 
   /**
    * Updates the URL and localStorage with current emoji and palette.
@@ -288,7 +288,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
       }
 
       // If URL failed and not yet initialized, try localStorage
-      if (!emojiLoaded && !isInitialized) {
+      if (!emojiLoaded && !isInitializedRef.current) {
         const storedEmoji = localStorage.getItem("emojisalon:emoji");
         const storedPalette = localStorage.getItem("emojisalon:palette");
 
@@ -307,25 +307,17 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
       }
 
       // If both URL and localStorage failed and not yet initialized, use random emoji
-      if (!emojiLoaded && !isInitialized) {
+      if (!emojiLoaded && !isInitializedRef.current) {
         const { emoji: randomEmoji, label } = getRandomEmojiWithLabel();
         setCurrentEmojiLabel(label);
         updateEmoji(randomEmoji, false);
       }
 
-      if (!isInitialized) {
-        setIsInitialized(true);
-      }
+      isInitializedRef.current = true;
     }, 0);
 
     return () => clearTimeout(timer);
-  }, [
-    search.emoji,
-    search.palette,
-    updateEmoji,
-    isInitialized,
-    location.pathname,
-  ]);
+  }, [search.emoji, search.palette, updateEmoji, location.pathname]);
 
   /**
    * Handles color change at a specific palette index.

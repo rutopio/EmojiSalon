@@ -16,7 +16,6 @@ import {
   Popover,
 } from "react-aria-components";
 import { CopyIcon, EyedropperIcon } from "@phosphor-icons/react";
-import { useEmoji } from "@/contexts/emoji-context";
 import { toast } from "sonner";
 
 import {
@@ -31,6 +30,7 @@ import {
   SliderTrack,
 } from "@/components/color";
 import { Button } from "@/components/ui/button";
+import { useEmoji } from "@/contexts/emoji-context";
 import { PRESET_COLORS } from "@/lib/constants";
 
 import type { Color } from "react-aria-components";
@@ -142,7 +142,7 @@ export function ColorPickerPopover({
                 yChannel="brightness"
                 className="h-48 w-full rounded-b-none border-b-0"
               >
-                <ColorThumb className="z-50" />
+                <ColorThumb className="z-(--z-modal)" />
               </ColorArea>
               {/* Hue Slider */}
               <ColorSlider colorSpace="hsb" channel="hue">
@@ -213,7 +213,7 @@ export default function ColorPalettePickers() {
       <div className="flex flex-wrap items-center justify-center gap-2">
         {customizedPaletteColors.map((color, idx) => (
           <ColorPickerPopover
-            key={`palette-color-${idx}`}
+            key={color}
             color={color}
             onColorChange={(newColor) => handleColorChange(idx, newColor)}
             index={idx}

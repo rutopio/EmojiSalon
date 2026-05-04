@@ -5,7 +5,6 @@
  */
 
 import { createFileRoute } from "@tanstack/react-router";
-import { useEmoji } from "@/contexts/emoji-context";
 import PageLayout from "@/layout";
 
 import ActionButtons from "@/components/create/action-buttons";
@@ -13,8 +12,7 @@ import ColorPalettePickers from "@/components/create/color-palette-pickers";
 import EmojiDisplay from "@/components/create/emoji-display";
 import DesktopEmojiPicker from "@/components/create/emoji-picker";
 import ShareModal from "@/components/create/share-modal";
-import { Spinner } from "@/components/ui/spinner";
-import useIsClient from "@/hooks/use-is-client";
+import { useEmoji } from "@/contexts/emoji-context";
 import { SITE_URL } from "@/lib/constants";
 
 /**
@@ -62,6 +60,10 @@ export const Route = createFileRoute("/(index)/")({
         property: "og:url",
         content: `${SITE_URL}/`,
       },
+      {
+        property: "og:image",
+        content: `${SITE_URL}/social.png`,
+      },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/` }],
   }),
@@ -76,16 +78,6 @@ export const Route = createFileRoute("/(index)/")({
  */
 function EmojiSalonPage() {
   const { canvasRef } = useEmoji();
-  const isClient = useIsClient();
-
-  // Show loading state during SSR to prevent hydration mismatches
-  if (!isClient) {
-    return (
-      <div className="flex h-dvh items-center justify-center">
-        <Spinner className="size-8" />
-      </div>
-    );
-  }
 
   return (
     <PageLayout>

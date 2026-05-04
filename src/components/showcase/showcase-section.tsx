@@ -196,7 +196,7 @@ export default function ShowcaseSection({
               onClick={() => handleNavigate(firstVariant.palette)}
               className="size-8"
             >
-              <PencilSimpleIcon />
+              <PencilSimpleIcon aria-hidden="true" />
             </Button>
             <Button
               aria-label="Download image"
@@ -205,7 +205,7 @@ export default function ShowcaseSection({
               onClick={handleDownload}
               className="size-8"
             >
-              <DownloadSimpleIcon />
+              <DownloadSimpleIcon aria-hidden="true" />
             </Button>
             <Button
               aria-label="Share emoji"
@@ -214,7 +214,7 @@ export default function ShowcaseSection({
               onClick={handleShare}
               className="size-8"
             >
-              <ShareNetworkIcon />
+              <ShareNetworkIcon aria-hidden="true" />
             </Button>
           </div>
         </div>
@@ -244,8 +244,12 @@ export default function ShowcaseSection({
 
           {/* Variant previews */}
           {hasMultipleVariants ? (
-            variants.map((variant, index) => (
-              <VariantPreview key={index} emoji={emoji} variant={variant} />
+            variants.map((variant) => (
+              <VariantPreview
+                key={variant.palette}
+                emoji={emoji}
+                variant={variant}
+              />
             ))
           ) : (
             <EmojiPreview

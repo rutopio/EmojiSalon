@@ -243,7 +243,7 @@ export default function ShowcaseShareModal({
                   onClick={handleCopyHTMLCode}
                   className="ml-auto w-32"
                 >
-                  <ClipboardIcon />
+                  <ClipboardIcon aria-hidden="true" />
                   <div className="text-xs">Copy HTML</div>
                 </Button>
               </div>
@@ -259,7 +259,7 @@ export default function ShowcaseShareModal({
                   onClick={handleCopyCSSCode}
                   className="ml-auto w-32"
                 >
-                  <ClipboardIcon />
+                  <ClipboardIcon aria-hidden="true" />
                   <div className="text-xs">Copy CSS</div>
                 </Button>
               </div>

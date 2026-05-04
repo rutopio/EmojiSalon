@@ -4,7 +4,6 @@
  * URL encoding/decoding, and data fetching.
  */
 import { DEFAULT_EMOJIS } from "@/lib/constants";
-
 import defaultEmojisSVGData from "@/data/default-emojis-data.json";
 import emojiCategories from "@/data/emoji-categories.json";
 import activityData from "@/data/emoji-category/activity.json";

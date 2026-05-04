@@ -35,13 +35,13 @@ export default function Navbar() {
       {/* Desktop Navigation */}
       <nav
         aria-label="Main navigation"
-        className="bg-background font-title-sans sticky top-0 z-10 container hidden w-full items-center justify-between py-4 lg:flex"
+        className="bg-background font-title-sans sticky top-0 z-(--z-sticky) container hidden w-full items-center justify-between py-4 lg:flex"
       >
         <Link to="/">
-          <div className="text-xl font-bold tracking-wider">EmojiSalon</div>
+          <div className="text-xl font-bold">EmojiSalon</div>
         </Link>
         <NavigationMenu>
-          <NavigationMenuList className="gap-2 tracking-wider">
+          <NavigationMenuList className="gap-2">
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
@@ -93,12 +93,10 @@ export default function Navbar() {
       {/* Mobile Navigation */}
       <nav
         aria-label="Main navigation"
-        className="bg-background sticky top-0 z-10 container flex w-full items-center justify-between py-4 lg:hidden"
+        className="bg-background sticky top-0 z-(--z-sticky) container flex w-full items-center justify-between py-4 lg:hidden"
       >
         <Link to="/">
-          <div className="font-title-sans text-xl font-bold tracking-wider">
-            EmojiSalon
-          </div>
+          <div className="font-title-sans text-xl font-bold">EmojiSalon</div>
         </Link>
         <div className="flex items-center gap-2">
           <ThemeToggle />
@@ -113,6 +111,7 @@ export default function Navbar() {
                 <Link to="/" className="flex items-center gap-2">
                   <CaretRightIcon
                     className={cn("size-4 opacity-0", isHome && "opacity-100")}
+                    aria-hidden="true"
                   />
                   Create
                 </Link>
@@ -124,6 +123,7 @@ export default function Navbar() {
                       "size-4 opacity-0",
                       isShowcase && "opacity-100"
                     )}
+                    aria-hidden="true"
                   />
                   Showcase
                 </Link>
@@ -132,6 +132,7 @@ export default function Navbar() {
                 <Link to="/about" className="flex items-center gap-2">
                   <CaretRightIcon
                     className={cn("size-4 opacity-0", isAbout && "opacity-100")}
+                    aria-hidden="true"
                   />
                   About
                 </Link>

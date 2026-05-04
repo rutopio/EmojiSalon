@@ -38,8 +38,8 @@ const indexIndexRoute = indexIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/': typeof indexIndexRoute
-  '/about': typeof AboutIndexRoute
-  '/showcase': typeof ShowcaseIndexRoute
+  '/about/': typeof AboutIndexRoute
+  '/showcase/': typeof ShowcaseIndexRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
@@ -56,7 +56,7 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/$' | '/' | '/about' | '/showcase'
+  fullPaths: '/$' | '/' | '/about/' | '/showcase/'
   fileRoutesByTo: FileRoutesByTo
   to: '/$' | '/' | '/about' | '/showcase'
   id: '__root__' | '/$' | '/(index)/' | '/about/' | '/showcase/'
@@ -81,14 +81,14 @@ declare module '@tanstack/react-router' {
     '/showcase/': {
       id: '/showcase/'
       path: '/showcase'
-      fullPath: '/showcase'
+      fullPath: '/showcase/'
       preLoaderRoute: typeof ShowcaseIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about/': {
       id: '/about/'
       path: '/about'
-      fullPath: '/about'
+      fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -111,12 +111,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

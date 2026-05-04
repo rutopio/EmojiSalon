@@ -10,7 +10,6 @@ import PageLayout from "@/layout";
 import ShowcaseSection from "@/components/showcase/showcase-section";
 import { Button } from "@/components/ui/button";
 import { GITHUB_ISSUE_BASE_URL, SITE_URL } from "@/lib/constants";
-
 import showcaseData from "@/data/showcase/showcase-data.json";
 
 /**
@@ -41,6 +40,10 @@ export const Route = createFileRoute("/showcase/")({
         property: "og:url",
         content: `${SITE_URL}/showcase`,
       },
+      {
+        property: "og:image",
+        content: `${SITE_URL}/social.png`,
+      },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/showcase` }],
   }),
@@ -58,7 +61,7 @@ function ShowcasePage() {
     <PageLayout>
       <div className="container flex-1 lg:py-16">
         <div className="flex flex-col items-start gap-4 lg:items-center">
-          <h1 className="font-title-sans text-4xl font-bold tracking-wide text-balance lg:text-5xl">
+          <h1 className="font-title-sans text-4xl font-bold text-balance lg:text-5xl">
             Showcase
           </h1>
           <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
