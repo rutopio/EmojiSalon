@@ -491,7 +491,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
           const filesArray = [
             new File([blob], `${currentEmoji}.png`, {
               type: "image/png",
-              lastModified: new Date().getTime(),
+              lastModified: Date.now(),
             }),
           ];
           const shareData = { files: filesArray };
@@ -500,7 +500,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
           setResultImageSrc(canvas.toDataURL("image/png"));
         }
       };
-      img.src = "data:image/svg+xml," + encodeURIComponent(svgData);
+      img.src = `data:image/svg+xml,${encodeURIComponent(svgData)}`;
     },
     [generateSVGData, currentEmoji]
   );

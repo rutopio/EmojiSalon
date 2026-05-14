@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+
+import type { ReactNode } from "react";
 
 interface PageLayoutProps {
   children: ReactNode;

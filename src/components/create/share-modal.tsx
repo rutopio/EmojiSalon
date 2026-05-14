@@ -168,7 +168,7 @@ export default function ShareModal() {
             <CheckCircleIcon className="size-4" aria-hidden="true" />
             <p>
               <a
-                href={GITHUB_REPO_URL + "#copyright"}
+                href={`${GITHUB_REPO_URL}#copyright`}
                 target="_blank"
                 rel="noreferrer noopener"
                 className="underline"

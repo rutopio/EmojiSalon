@@ -69,7 +69,7 @@ const categoryDataMap: Record<string, EmojiPathsAndColors> = {
  * Derived from the raw palette color data.
  */
 export const paletteData: string[] = (paletteColorDataRaw as string[]).map(
-  (c) => "#" + c
+  (c) => `#${c}`
 );
 
 /**
@@ -106,7 +106,7 @@ export function rgbaToHexColor(rgbaColorArray: number[]): string {
     rgbaColorArray
       .slice(0, 3)
       .map((ele) => ele.toString(16))
-      .map((ele) => (ele.length === 1 ? "0" + ele : ele))
+      .map((ele) => (ele.length === 1 ? `0${ele}` : ele))
       .join("")
   );
 }
@@ -248,9 +248,7 @@ export function unicodeToEmoji(urlCode: string): string | null {
  * encodeURL("3 #ff0000, 5 #00ff00"); // Returns "3(ff0000)5(00ff00)"
  */
 export function encodeURL(str: string): string {
-  return (
-    str.replaceAll(" ", "").replaceAll("#", "(").replaceAll(",", ")") + ")"
-  );
+  return `${str.replaceAll(" ", "").replaceAll("#", "(").replaceAll(",", ")")})`;
 }
 
 /**
@@ -421,8 +419,8 @@ export function parsePaletteString(
   pairs.forEach((pair) => {
     const match = pair.match(/^(\d+)_([A-Fa-f0-9]{6})$/);
     if (match) {
-      const colorIdx = parseInt(match[1]);
-      const hexColor = "#" + match[2];
+      const colorIdx = parseInt(match[1], 10);
+      const hexColor = `#${match[2]}`;
       const idx = originalPaletteIndex.indexOf(colorIdx);
       if (idx !== -1) {
         modifiedColors[idx] = hexColor;

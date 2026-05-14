@@ -1,0 +1,102 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "maxSize": 4194304,
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/.wrangler",
+      "!**/.output",
+      "!**/build/",
+      "!**/routeTree.gen.ts",
+      "!**/*.css",
+      "!**/*.html"
+    ]
+  },
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "useHookAtTopLevel": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.{ts,tsx}"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noArguments": "error",
+            "noUselessTypeConstraint": "error"
+          },
+          "correctness": {
+            "noChildrenProp": "warn",
+            "noNestedComponentDefinitions": "error",
+            "noVoidElementsWithChildren": "error",
+            "useJsxKeyInIterable": "error",
+            "noConstAssign": "off",
+            "noGlobalObjectCalls": "off",
+            "noInvalidBuiltinInstantiation": "off",
+            "noInvalidConstructorSuper": "off",
+            "noSetterReturn": "off",
+            "noUndeclaredVariables": "off",
+            "noUnreachable": "off",
+            "noUnreachableSuper": "off",
+            "noUnusedVariables": "error"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "warn",
+            "noDangerouslySetInnerHtmlWithChildren": "error"
+          },
+          "style": {
+            "noCommonJs": "error",
+            "noNamespace": "error",
+            "useArrayLiterals": "error",
+            "useAsConstAssertion": "error",
+            "useBlockStatements": "off",
+            "useConst": "error"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "error",
+            "noClassAssign": "off",
+            "noDuplicateClassMembers": "off",
+            "noDuplicateObjectKeys": "off",
+            "noDuplicateParameters": "off",
+            "noExplicitAny": "error",
+            "noExtraNonNullAssertion": "error",
+            "noFunctionAssign": "off",
+            "noImportAssign": "off",
+            "noMisleadingInstantiator": "error",
+            "noNonNullAssertedOptionalChain": "error",
+            "noReactForwardRef": "warn",
+            "noRedeclare": "off",
+            "noUnsafeDeclarationMerging": "error",
+            "noUnsafeNegation": "off",
+            "noUnusedExpressions": "off",
+            "noVar": "error",
+            "noWith": "off",
+            "useGetterReturn": "off",
+            "useNamespaceKeyword": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/emoji-display.tsx", "**/emoji-preview.tsx"],
+      "linter": {
+        "rules": {
+          "security": { "noDangerouslySetInnerHtml": "off" }
+        }
+      }
+    }
+  ]
+}

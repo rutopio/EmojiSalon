@@ -4,28 +4,31 @@
 
 import {
   ColorArea as AriaColorArea,
-  ColorAreaProps as AriaColorAreaProps,
   ColorField as AriaColorField,
   ColorPicker as AriaColorPicker,
   ColorSlider as AriaColorSlider,
   ColorSwatch as AriaColorSwatch,
   ColorSwatchPicker as AriaColorSwatchPicker,
   ColorSwatchPickerItem as AriaColorSwatchPickerItem,
-  ColorSwatchPickerItemProps as AriaColorSwatchPickerItemProps,
-  ColorSwatchPickerProps as AriaColorSwatchPickerProps,
-  ColorSwatchProps as AriaColorSwatchProps,
   ColorThumb as AriaColorThumb,
-  ColorThumbProps as AriaColorThumbProps,
   ColorWheel as AriaColorWheel,
-  ColorWheelProps as AriaColorWheelProps,
   ColorWheelTrack as AriaColorWheelTrack,
   SliderOutput as AriaSliderOutput,
   SliderTrack as AriaSliderTrack,
-  SliderTrackProps as AriaSliderTrackProps,
   composeRenderProps,
 } from "react-aria-components";
 
 import { cn } from "@/lib/utils";
+
+import type {
+  ColorAreaProps as AriaColorAreaProps,
+  ColorSwatchPickerItemProps as AriaColorSwatchPickerItemProps,
+  ColorSwatchPickerProps as AriaColorSwatchPickerProps,
+  ColorSwatchProps as AriaColorSwatchProps,
+  ColorThumbProps as AriaColorThumbProps,
+  ColorWheelProps as AriaColorWheelProps,
+  SliderTrackProps as AriaSliderTrackProps,
+} from "react-aria-components";
 
 const ColorSlider = AriaColorSlider;
 

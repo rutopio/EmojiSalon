@@ -1,9 +1,10 @@
-import * as React from "react";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+
+import type * as React from "react";
 
 function NavigationMenu({
   className,

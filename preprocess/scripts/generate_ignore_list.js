@@ -14,7 +14,7 @@
  * @output data/ignoreEmojiUnicodeList.json
  */
 
-const fs = require("fs");
+const fs = require("node:fs");
 
 /**
  * Convert an emoji character to its unicode representation.

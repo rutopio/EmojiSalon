@@ -43,7 +43,9 @@ import type { Color } from "react-aria-components";
  * @returns EyeDropper button component or null if not supported.
  */
 function EyeDropperButton() {
-  const state = use(ColorPickerStateContext)!;
+  const state = use(ColorPickerStateContext);
+  if (!state)
+    throw new Error("EyeDropperButton must be used inside ColorPicker");
 
   // Check if browser supports EyeDropper API
   // @ts-expect-error - EyeDropper API may not be available

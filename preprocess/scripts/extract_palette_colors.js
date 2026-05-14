@@ -19,7 +19,7 @@
  */
 
 const fontkit = require("fontkit");
-const fs = require("fs");
+const fs = require("node:fs");
 
 /**
  * URL to the Twemoji COLR font on CDN.
@@ -39,7 +39,7 @@ function rgbaToHexColor(rgba) {
     .slice(0, 3)
     .map((value) => {
       const hex = value.toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
+      return hex.length === 1 ? `0${hex}` : hex;
     })
     .join("");
 }
