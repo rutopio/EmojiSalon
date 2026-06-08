@@ -81,13 +81,13 @@ function ShowcasePage() {
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
           {showcaseData.sections.map((section) => (
             <ShowcaseSection
               key={section.emoji}
               emoji={section.emoji}
               variants={section.variants}
-              className={section.variants.length > 1 ? "md:col-span-2" : ""}
+              className={section.variants.length > 1 ? "lg:col-span-2" : ""}
             />
           ))}
         </div>

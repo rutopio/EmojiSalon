@@ -7,9 +7,10 @@
 import { useState } from "react";
 import {
   ArrowCounterClockwiseIcon,
+  ClipboardIcon,
   DiceFiveIcon,
   DownloadSimpleIcon,
-  ImageIcon,
+  FileSvgIcon,
   PaletteIcon,
   ShareNetworkIcon,
   SmileyWinkIcon,
@@ -17,6 +18,12 @@ import {
 
 import { EmojiPicker } from "@/components/create/emoji-picker";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverAnchor,
@@ -49,8 +56,11 @@ export default function ActionButtons({
   variant = "desktop",
 }: ActionButtonsProps) {
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
 
   const {
+    svgHTML,
+    currentEmoji,
     handleEmojiSelect,
     handleRandomEmoji,
     handleRandomColors,
@@ -59,6 +69,16 @@ export default function ActionButtons({
     handleCopyImage,
     handleShare,
   } = useEmoji();
+
+  /**
+   * Downloads the emoji in the given format, then closes the dialog.
+   *
+   * @param format - Output format: "svg", "png", or "jpg".
+   */
+  const handleDownloadAndClose = (format: "svg" | "png" | "jpg") => {
+    handleDownloadImage(format);
+    setDownloadOpen(false);
+  };
 
   /**
    * Handles emoji selection and closes the picker popover.
@@ -76,9 +96,9 @@ export default function ActionButtons({
       <div className="flex w-full flex-col gap-4 lg:hidden">
         <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
           <PopoverAnchor asChild>
-            <div className="grid w-full grid-cols-5 gap-2">
+            <div className="grid w-full grid-cols-4 gap-2">
               <PopoverTrigger asChild>
-                <Button variant="outline" className="col-span-4">
+                <Button variant="outline" className="col-span-3">
                   <SmileyWinkIcon className="size-5" aria-hidden="true" />
                   <span className="ml-1">Select Emoji</span>
                 </Button>
@@ -109,7 +129,7 @@ export default function ActionButtons({
           </PopoverContent>
         </Popover>
 
-        <div className="grid w-full grid-cols-5 gap-2">
+        <div className="grid w-full grid-cols-4 gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -144,29 +164,15 @@ export default function ActionButtons({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                aria-label="Download Image"
-                variant="outline"
-                className="w-full"
-                onClick={handleDownloadImage}
-              >
-                <DownloadSimpleIcon className="size-5" aria-hidden="true" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Download Image</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Copy or Share Image"
+                aria-label="Save Image"
                 variant="outline"
                 className="w-full"
                 onClick={handleCopyImage}
               >
-                <ImageIcon className="size-5" aria-hidden="true" />
+                <DownloadSimpleIcon className="size-5" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Copy/Share Image</TooltipContent>
+            <TooltipContent>Save Image</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -201,7 +207,7 @@ export default function ActionButtons({
         <ArrowCounterClockwiseIcon className="size-5" aria-hidden="true" />
         Reset Palette
       </Button>
-      <Button variant="outline" onClick={handleDownloadImage}>
+      <Button variant="outline" onClick={() => setDownloadOpen(true)}>
         <DownloadSimpleIcon className="size-5" aria-hidden="true" />
         Save Image
       </Button>
@@ -209,6 +215,61 @@ export default function ActionButtons({
         <ShareNetworkIcon className="size-5" aria-hidden="true" />
         Share Link
       </Button>
+
+      <Dialog open={downloadOpen} onOpenChange={setDownloadOpen}>
+        <DialogContent className="lg:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Save Image</DialogTitle>
+          </DialogHeader>
+
+          <div className="flex items-center justify-center py-2">
+            <div
+              role="img"
+              aria-label={`Customized ${currentEmoji} emoji`}
+              dangerouslySetInnerHTML={{ __html: svgHTML }}
+              className="size-32 [&>svg]:size-full"
+            />
+          </div>
+
+          <div className="grid grid-cols-4 gap-2">
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-1.5 py-3"
+              onClick={() => handleDownloadAndClose("svg")}
+            >
+              <FileSvgIcon className="size-5" aria-hidden="true" />
+              <span className="text-xs">SVG</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-1.5 py-3"
+              onClick={() => handleDownloadAndClose("png")}
+            >
+              <DownloadSimpleIcon className="size-5" aria-hidden="true" />
+              <span className="text-xs">PNG</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-1.5 py-3"
+              onClick={() => handleDownloadAndClose("jpg")}
+            >
+              <DownloadSimpleIcon className="size-5" aria-hidden="true" />
+              <span className="text-xs">JPG</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-1.5 py-3"
+              onClick={() => {
+                handleCopyImage();
+                setDownloadOpen(false);
+              }}
+            >
+              <ClipboardIcon className="size-5" aria-hidden="true" />
+              <span className="text-xs">Copy</span>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

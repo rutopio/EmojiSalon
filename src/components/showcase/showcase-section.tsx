@@ -153,13 +153,36 @@ export default function ShowcaseSection({
   );
 
   /**
-   * Handles downloading the emoji image.
+   * Handles saving the emoji image.
+   * On devices that support the Web Share API (mobile), opens the native share
+   * sheet so the user can pick "Save Image", Files, etc. Otherwise falls back
+   * to a direct PNG download.
    */
   const handleDownload = useCallback(() => {
-    generateImage((dataUrl) => {
-      triggerDownload(dataUrl, `${emoji}-EmojiSalon.png`);
+    generateImage(async (dataUrl) => {
+      const filename = `${emoji}-EmojiSalon.png`;
+
+      if (typeof navigator.canShare === "function") {
+        const blob = await (await fetch(dataUrl)).blob();
+        const files = [
+          new File([blob], filename, {
+            type: "image/png",
+            lastModified: Date.now(),
+          }),
+        ];
+        if (navigator.canShare({ files })) {
+          try {
+            await navigator.share({ files });
+          } catch {
+            // User cancelled or share failed; do nothing.
+          }
+          return;
+        }
+      }
+
+      triggerDownload(dataUrl, filename);
       toast.success("Image downloading...", {
-        description: `${emoji}-EmojiSalon.png`,
+        description: filename,
       });
     });
   }, [emoji, generateImage]);

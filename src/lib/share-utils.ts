@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import {
   FACEBOOK_SHARE_BASE_URL,
+  THREADS_SHARE_BASE_URL,
   TWITTER_SHARE_BASE_URL,
 } from "@/lib/constants";
 import { emojiToUnicode, triggerDownload } from "@/lib/emoji-utils";
@@ -63,6 +64,25 @@ export function shareToFacebook(url?: string): void {
   const facebookShareURL = `${FACEBOOK_SHARE_BASE_URL}?u=${encodeURIComponent(shareUrl)}`;
   window.open(facebookShareURL, "_blank");
   toast.success("Shared to Facebook.");
+}
+
+/**
+ * Shares to Threads.
+ * Opens a new browser tab with a pre-filled post containing
+ * the #EmojiSalon hashtag and the specified URL.
+ *
+ * @param url - Optional URL to share. Defaults to current page URL.
+ *
+ * @example
+ * shareToThreads(); // Opens Threads with "#EmojiSalon https://..."
+ * shareToThreads("https://example.com"); // Opens Threads with custom URL
+ */
+export function shareToThreads(url?: string): void {
+  const shareUrl = url ?? window.location.href;
+  const message = `#EmojiSalon ${shareUrl}`;
+  const threadsShareURL = `${THREADS_SHARE_BASE_URL}?text=${encodeURIComponent(message)}`;
+  window.open(threadsShareURL, "_blank");
+  toast.success("Shared to Threads.");
 }
 
 /**

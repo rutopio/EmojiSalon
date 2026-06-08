@@ -236,7 +236,13 @@
     @apply bg-background text-foreground font-sans;
   }
   html {
-    @apply font-sans;
+    @apply bg-background font-sans;
+  }
+  html,
+  body {
+    /* Prevent iOS Chrome's collapsing toolbar from exposing a strip of
+       body background below the footer when rubber-band scrolling. */
+    overscroll-behavior-y: contain;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -274,6 +280,12 @@
   }
 }
 
-html {
-  overscroll-behavior-y: none;
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  clip-path: var(--theme-vt-clip-from, circle(0px at 50% 50%));
 }

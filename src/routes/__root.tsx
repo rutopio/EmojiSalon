@@ -6,6 +6,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 
+import { ScreenSize } from "@/components/screen-size";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { EmojiProvider } from "@/contexts/emoji-context";
@@ -50,6 +51,7 @@ function RootComponent() {
         <EmojiProvider>
           <Outlet />
           <Toaster position="top-center" />
+          <ScreenSize />
         </EmojiProvider>
         <Suspense>
           <TanStackDevtools

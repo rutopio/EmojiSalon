@@ -1,16 +1,8 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { CaretRightIcon, ListIcon } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
 
 import { GithubIcon } from "@/components/icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -19,17 +11,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { GITHUB_REPO_URL } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 
 /**
  * Navigation bar component with links to main pages and external GitHub.
- * Shows dropdown menu on mobile, full links on desktop.
+ * Mobile shows logo plus inline page links; desktop shows the full menu.
  */
 export default function Navbar() {
-  const location = useLocation();
-  const isHome = location.pathname === "/";
-  const isShowcase = location.pathname === "/showcase";
-  const isAbout = location.pathname === "/about";
   return (
     <>
       {/* Desktop Navigation */}
@@ -45,7 +32,7 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
               >
                 <Link to="/">
                   <span>Create</span>
@@ -55,7 +42,7 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
               >
                 <Link to="/showcase">Showcase</Link>
               </NavigationMenuLink>
@@ -63,7 +50,7 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={`${navigationMenuTriggerStyle()} [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`}
+                className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
               >
                 <Link to="/about">About</Link>
               </NavigationMenuLink>
@@ -98,59 +85,30 @@ export default function Navbar() {
         <Link to="/">
           <div className="font-title-sans text-xl font-bold">EmojiSalon</div>
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
+          <Link
+            to="/showcase"
+            className="[&.active]:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+          >
+            Showcase
+          </Link>
+          <Link
+            to="/about"
+            className="[&.active]:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+          >
+            About
+          </Link>
+          <Button
+            aria-label="rutopio/EmojiSalon"
+            size="icon"
+            variant="ghost"
+            asChild
+          >
+            <a href={GITHUB_REPO_URL} target="_blank" rel="noreferrer noopener">
+              <GithubIcon aria-hidden="true" />
+            </a>
+          </Button>
           <ThemeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-label="Open menu" size="icon" variant="ghost">
-                <ListIcon className="size-6" weight="bold" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-fit min-w-48">
-              <DropdownMenuItem asChild>
-                <Link to="/" className="flex items-center gap-2">
-                  <CaretRightIcon
-                    className={cn("size-4 opacity-0", isHome && "opacity-100")}
-                    aria-hidden="true"
-                  />
-                  Create
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/showcase" className="flex items-center gap-2">
-                  <CaretRightIcon
-                    className={cn(
-                      "size-4 opacity-0",
-                      isShowcase && "opacity-100"
-                    )}
-                    aria-hidden="true"
-                  />
-                  Showcase
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/about" className="flex items-center gap-2">
-                  <CaretRightIcon
-                    className={cn("size-4 opacity-0", isAbout && "opacity-100")}
-                    aria-hidden="true"
-                  />
-                  About
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <a
-                  href={GITHUB_REPO_URL}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="flex items-center gap-2"
-                >
-                  <GithubIcon aria-hidden="true" />
-                  rutopio/EmojiSalon
-                </a>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </nav>
     </>

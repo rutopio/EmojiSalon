@@ -1,0 +1,46 @@
+# EmojiSalon
+
+> A web app for recoloring emoji. Pick any emoji, customize the color of each
+> layer, and download your creation as SVG or PNG for personal or commercial
+> use. Rendering is based on Twemoji SVG data.
+
+Site: https://emojisalon.pages.dev
+Source: https://github.com/rutopio/EmojiSalon
+License: CC-BY 4.0 (graphics, via Twemoji) / MIT (code)
+
+## What it does
+
+EmojiSalon lets you treat an emoji like a coloring page. Select an emoji, and
+each colored layer becomes individually editable. Change the colors to create
+custom variations, then export the result.
+
+Common uses:
+
+- Custom or brand-matched emoji variations.
+- Cross-cultural or region-specific redesigns.
+- Accessibility: high-contrast or more distinguishable variants for users with
+  color vision deficiencies or low vision (e.g. telling apart similar flag or
+  heart emoji).
+
+## How to use
+
+1. Open the playground and pick an emoji from the picker.
+2. Edit the color of each layer in the emoji.
+3. Download the result as SVG or PNG. There is no account or login.
+
+This is an interactive client-side tool, not an HTTP image API. Output is
+generated in the browser; there is no URL endpoint that renders an emoji image
+from query parameters.
+
+## Pages
+
+- [Home / playground](https://emojisalon.pages.dev/): Select and recolor emoji.
+- [Showcase](https://emojisalon.pages.dev/showcase): Example custom emoji and use cases.
+- [About](https://emojisalon.pages.dev/about): Background, accessibility notes, and credits.
+
+## Credits and licensing
+
+- Emoji graphics are based on [Twemoji](https://github.com/twitter/twemoji),
+  licensed under CC-BY 4.0. Attribution to the Twemoji creators is required when
+  redistributing derived graphics; commercial use is allowed.
+- Application code is licensed under the MIT License.

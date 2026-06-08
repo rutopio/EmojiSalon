@@ -1,15 +1,15 @@
 /**
  * @fileoverview Share modal component for sharing customized emoji.
- * Provides options to share via social media, download SVG, copy image/link,
- * and view HTML/CSS code for the customized emoji.
+ * Provides options to share via social media, copy link, submit to showcase,
+ * and view/copy HTML/CSS code for the customized emoji.
  */
 
 import {
   CheckCircleIcon,
   ClipboardIcon,
   FacebookLogoIcon,
-  FileSvgIcon,
   LinkIcon,
+  ThreadsLogoIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
 
@@ -28,9 +28,9 @@ import {
   copyCSSCode,
   copyHTMLCode,
   copyLinkToClipboard,
-  downloadSVG,
   generateCSSCode,
   shareToFacebook,
+  shareToThreads,
   shareToTwitter,
 } from "@/lib/share-utils";
 
@@ -47,8 +47,6 @@ export default function ShareModal() {
     shareModalOpen,
     setShareModalOpen,
     resultImageSrc,
-    svgHTML,
-    handleCopyImage,
     customizedPaletteColors,
     originalPaletteColors,
     originalPaletteIndex,
@@ -59,11 +57,6 @@ export default function ShareModal() {
     originalPaletteColors,
     originalPaletteIndex
   );
-
-  /**
-   * Handles SVG file download.
-   */
-  const handleDownloadSVG = () => downloadSVG(svgHTML, currentEmoji);
 
   /**
    * Handles copying HTML code to clipboard.
@@ -77,13 +70,13 @@ export default function ShareModal() {
 
   return (
     <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="lg:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Share Your Customized Emoji</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <div className="mx-auto grid w-fit grid-cols-6 justify-center gap-4">
+          <div className="mx-auto grid w-fit grid-cols-5 justify-center gap-4">
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
                 aria-label="Share to X (Twitter)"
@@ -111,26 +104,14 @@ export default function ShareModal() {
 
             <div className="flex flex-col items-center justify-center gap-2">
               <Button
-                aria-label="Save SVG"
+                aria-label="Share to Threads"
                 variant="outline"
                 size="icon"
-                onClick={handleDownloadSVG}
+                onClick={() => shareToThreads()}
               >
-                <FileSvgIcon className="size-5" aria-hidden="true" />
+                <ThreadsLogoIcon className="size-5" aria-hidden="true" />
               </Button>
-              <div className="text-xs">Save SVG</div>
-            </div>
-
-            <div className="flex flex-col items-center justify-center gap-2">
-              <Button
-                aria-label="Copy image to clipboard"
-                variant="outline"
-                size="icon"
-                onClick={handleCopyImage}
-              >
-                <ClipboardIcon className="size-5" aria-hidden="true" />
-              </Button>
-              <div className="text-xs">Copy Image</div>
+              <div className="text-xs">Threads</div>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-2">

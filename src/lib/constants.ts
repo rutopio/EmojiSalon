@@ -125,6 +125,11 @@ export const TWITTER_SHARE_BASE_URL = "https://twitter.com/intent/tweet";
 export const FACEBOOK_SHARE_BASE_URL = "https://www.facebook.com/sharer.php";
 
 /**
+ * Base URL for Threads share intent.
+ */
+export const THREADS_SHARE_BASE_URL = "https://www.threads.net/intent/post";
+
+/**
  * Base URL for GitHub issue submission template.
  */
 export const GITHUB_ISSUE_BASE_URL =

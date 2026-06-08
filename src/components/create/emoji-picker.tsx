@@ -8,8 +8,8 @@
 
 import data from "@emoji-mart/data/sets/15/twitter.json";
 import EmojiMartPicker from "@emoji-mart/react";
+import { useTheme } from "next-themes";
 
-import { useTheme } from "@/components/theme-provider";
 import { useEmoji } from "@/contexts/emoji-context";
 
 /**
@@ -46,7 +46,7 @@ interface EmojiMartEmoji {
  * @returns Emoji picker UI component.
  */
 export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   /**
    * Handles emoji selection from emoji-mart picker.
@@ -65,7 +65,7 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
         set="twitter"
         emojiSize={28}
         perLine={8}
-        theme={theme === "dark" ? "dark" : "light"}
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
         maxFrequentRows={1}
         skinTonePosition="none"
         exceptEmojis={[

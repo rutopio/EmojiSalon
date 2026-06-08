@@ -91,7 +91,11 @@
       }
     },
     {
-      "includes": ["**/emoji-display.tsx", "**/emoji-preview.tsx"],
+      "includes": [
+        "**/emoji-display.tsx",
+        "**/emoji-preview.tsx",
+        "**/action-buttons.tsx"
+      ],
       "linter": {
         "rules": {
           "security": { "noDangerouslySetInnerHtml": "off" }

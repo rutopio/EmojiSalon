@@ -138,7 +138,7 @@ export default function ShowcaseShareModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="lg:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Share Your Customized Emoji</DialogTitle>
         </DialogHeader>

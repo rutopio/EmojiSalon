@@ -28,6 +28,7 @@ import {
   triggerDownload,
   unicodeToEmoji,
 } from "@/lib/emoji-utils";
+import { downloadSVG } from "@/lib/share-utils";
 
 /**
  * Search parameters for emoji and palette from URL.
@@ -90,13 +91,16 @@ interface EmojiContextValue {
   handleRandomColors: () => void;
   /** Handles resetting palette to original colors. */
   handleReset: () => void;
-  /** Handles downloading the emoji image. */
-  handleDownloadImage: () => void;
+  /** Handles downloading the emoji image in the given format (defaults to png). */
+  handleDownloadImage: (format?: ImageFormat) => void;
   /** Handles copying the emoji image to clipboard. */
   handleCopyImage: () => void;
   /** Handles sharing the emoji. */
   handleShare: () => Promise<void>;
 }
+
+/** Supported image download formats. */
+export type ImageFormat = "png" | "jpg" | "svg";
 
 const EmojiContext = createContext<EmojiContextValue | null>(null);
 
@@ -443,7 +447,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
    * @param action - Action type: 1=download, 2=copy, 3=share, 4=generate preview.
    */
   const updateCanvas = useCallback(
-    async (action: number) => {
+    async (action: number, format: "png" | "jpg" = "png") => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -462,6 +466,14 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
       ctx.scale(scaleFactor, scaleFactor);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // JPG has no alpha channel; fill a white background so transparent
+      // areas don't render as black.
+      const isJpg = action === CANVAS_ACTION.DOWNLOAD && format === "jpg";
+      if (isJpg) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
       const img = new Image();
       img.onload = async () => {
         ctx.drawImage(
@@ -473,9 +485,11 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
         );
 
         if (action === CANVAS_ACTION.DOWNLOAD) {
+          const mime = isJpg ? "image/jpeg" : "image/png";
+          const ext = isJpg ? "jpg" : "png";
           triggerDownload(
-            canvas.toDataURL("image/png"),
-            `${emojiToUnicode(currentEmoji)}-EmojiSalon.png`
+            canvas.toDataURL(mime),
+            `${emojiToUnicode(currentEmoji)}-EmojiSalon.${ext}`
           );
         } else if (action === CANVAS_ACTION.COPY) {
           canvas.toBlob((blob) => {
@@ -506,15 +520,24 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   );
 
   /**
-   * Handles downloading the emoji image.
-   * Generates PNG from canvas and triggers download.
+   * Handles downloading the emoji image in the given format.
+   * SVG is written directly from the markup; png/jpg are rendered via canvas.
+   *
+   * @param format - Output format: "png" (default), "jpg", or "svg".
    */
-  const handleDownloadImage = useCallback(() => {
-    updateCanvas(CANVAS_ACTION.DOWNLOAD);
-    toast.success("Image downloading....", {
-      description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.png`,
-    });
-  }, [updateCanvas, currentEmoji]);
+  const handleDownloadImage = useCallback(
+    (format: ImageFormat = "png") => {
+      if (format === "svg") {
+        downloadSVG(generateSVGData(), currentEmoji);
+        return;
+      }
+      updateCanvas(CANVAS_ACTION.DOWNLOAD, format);
+      toast.success("Image downloading....", {
+        description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.${format}`,
+      });
+    },
+    [updateCanvas, generateSVGData, currentEmoji]
+  );
 
   /**
    * Handles copying the emoji image to clipboard.
