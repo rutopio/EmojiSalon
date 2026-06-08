@@ -9,13 +9,38 @@
       "!**/.wrangler",
       "!**/.output",
       "!**/build/",
+      "!**/deprecated/",
       "!**/routeTree.gen.ts",
       "!**/*.css",
       "!**/*.html"
     ]
   },
-  "formatter": { "enabled": false },
-  "assist": { "enabled": false },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "always",
+      "quoteStyle": "double",
+      "trailingCommas": "es5",
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        "useSortedKeys": "off"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -26,6 +51,14 @@
       },
       "suspicious": {
         "noArrayIndexKey": "error"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "options": {
+            "functions": ["cn", "cva", "clsx"]
+          }
+        }
       }
     }
   },

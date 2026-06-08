@@ -4,8 +4,6 @@
  * both single and multiple variant displays.
  */
 
-import { useCallback, useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -13,6 +11,8 @@ import {
   PencilSimpleIcon,
   ShareNetworkIcon,
 } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import EmojiPreview from "@/components/showcase/emoji-preview";
@@ -201,7 +201,7 @@ export default function ShowcaseSection({
   const hasMultipleVariants = variants.length > 1;
 
   return (
-    <div className={`bg-card rounded-lg border p-4 lg:p-6 ${className}`}>
+    <div className={`rounded-lg border bg-card p-4 lg:p-6 ${className}`}>
       {/* Hidden canvas for image generation */}
       <canvas ref={canvasRef} className="hidden" />
 
@@ -256,13 +256,13 @@ export default function ShowcaseSection({
             size={20}
             weight="bold"
             aria-hidden="true"
-            className="text-muted-foreground hidden text-sm lg:block"
+            className="hidden text-muted-foreground text-sm lg:block"
           />
           <ArrowDownIcon
             size={20}
             weight="bold"
             aria-hidden="true"
-            className="text-muted-foreground block text-sm lg:hidden"
+            className="block text-muted-foreground text-sm lg:hidden"
           />
 
           {/* Variant previews */}

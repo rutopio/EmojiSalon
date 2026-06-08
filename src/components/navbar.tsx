@@ -22,10 +22,10 @@ export default function Navbar() {
       {/* Desktop Navigation */}
       <nav
         aria-label="Main navigation"
-        className="bg-background font-title-sans sticky top-0 z-(--z-sticky) container hidden w-full items-center justify-between py-4 lg:flex"
+        className="container sticky top-0 z-(--z-sticky) hidden w-full items-center justify-between bg-background py-4 font-title-sans lg:flex"
       >
         <Link to="/">
-          <div className="text-xl font-bold">EmojiSalon</div>
+          <div className="font-bold text-xl">EmojiSalon</div>
         </Link>
         <NavigationMenu>
           <NavigationMenuList className="gap-2">
@@ -80,21 +80,21 @@ export default function Navbar() {
       {/* Mobile Navigation */}
       <nav
         aria-label="Main navigation"
-        className="bg-background sticky top-0 z-(--z-sticky) container flex w-full items-center justify-between py-4 lg:hidden"
+        className="container sticky top-0 z-(--z-sticky) flex w-full items-center justify-between bg-background py-4 lg:hidden"
       >
         <Link to="/">
-          <div className="font-title-sans text-xl font-bold">EmojiSalon</div>
+          <div className="font-bold font-title-sans text-xl">EmojiSalon</div>
         </Link>
         <div className="flex items-center">
           <Link
             to="/showcase"
-            className="[&.active]:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+            className="rounded-md px-3 py-2 font-medium text-sm [&.active]:bg-accent"
           >
             Showcase
           </Link>
           <Link
             to="/about"
-            className="[&.active]:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+            className="rounded-md px-3 py-2 font-medium text-sm [&.active]:bg-accent"
           >
             About
           </Link>

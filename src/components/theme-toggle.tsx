@@ -1,8 +1,8 @@
-import { useCallback, useRef } from "react";
-import { flushSync } from "react-dom";
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
+import { useCallback, useRef } from "react";
+import { flushSync } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

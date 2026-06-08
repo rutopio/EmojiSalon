@@ -60,10 +60,10 @@ function AboutPage() {
         <div className="mx-auto max-w-3xl space-y-12">
           {/* Hero section */}
           <section className="space-y-4 lg:text-center">
-            <h1 className="font-title-sans text-4xl font-bold text-balance lg:text-5xl">
+            <h1 className="text-balance font-bold font-title-sans text-4xl lg:text-5xl">
               About EmojiSalon
             </h1>
-            <p className="text-muted-foreground text-lg text-pretty lg:text-xl">
+            <p className="text-pretty text-lg text-muted-foreground lg:text-xl">
               EmojiSalon allows you to customize the colors of emojis, just like
               dressing them up with various cosmetics or coloring them with
               different paints.
@@ -72,10 +72,10 @@ function AboutPage() {
 
           {/* How it works section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
+            <h2 className="text-balance font-bold font-title-sans text-2xl lg:text-3xl">
               How It Works
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-pretty">
+            <p className="text-pretty text-muted-foreground leading-relaxed">
               EmojiSalon uses Twemoji SVG data for emoji rendering. You can
               select any emoji, customize its colors using an intuitive color
               palette system, and download your creation as SVG or PNG for
@@ -87,10 +87,10 @@ function AboutPage() {
 
           {/* Accessibility section */}
           <section className="space-y-6">
-            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
+            <h2 className="text-balance font-bold font-title-sans text-2xl lg:text-3xl">
               Accessibility
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-pretty">
+            <p className="text-pretty text-muted-foreground leading-relaxed">
               Emoji accessibility is not just a binary between being able to see
               emoji perfectly and not being able to see them at all — it is a
               spectrum that accounts for multiple experiences.
@@ -98,14 +98,14 @@ function AboutPage() {
 
             {/* Challenges */}
             <div className="space-y-3">
-              <h3 className="font-title-sans text-xl font-semibold">
+              <h3 className="font-semibold font-title-sans text-xl">
                 Challenges for Visually Impaired Users
               </h3>
               <p className="text-muted-foreground leading-relaxed">
                 For people with color vision deficiencies, color blindness, or
                 low vision, identifying certain emojis can be challenging:
               </p>
-              <ul className="text-muted-foreground list-inside list-disc space-y-1 pl-2">
+              <ul className="list-inside list-disc space-y-1 pl-2 text-muted-foreground">
                 <li>
                   <strong>Similar colors:</strong> Emoji may appear blurry or
                   distorted, making it difficult to distinguish between
@@ -131,10 +131,10 @@ function AboutPage() {
 
             {/* Commonly Confused Emoji */}
             <div className="space-y-3">
-              <h3 className="font-title-sans text-xl font-semibold">
+              <h3 className="font-semibold font-title-sans text-xl">
                 Commonly Confused Emoji
               </h3>
-              <div className="text-muted-foreground space-y-2">
+              <div className="space-y-2 text-muted-foreground">
                 <p>
                   <strong>Flag emoji</strong> with similar color schemes are
                   particularly problematic:
@@ -159,14 +159,14 @@ function AboutPage() {
 
             {/* How EmojiSalon Helps */}
             <div className="space-y-3">
-              <h3 className="font-title-sans text-xl font-semibold">
+              <h3 className="font-semibold font-title-sans text-xl">
                 How EmojiSalon Helps
               </h3>
               <p className="text-muted-foreground leading-relaxed">
                 Most current emoji designs do not consider these accessibility
                 needs. EmojiSalon provides a solution by allowing users to:
               </p>
-              <ul className="text-muted-foreground list-inside list-disc space-y-1 pl-2">
+              <ul className="list-inside list-disc space-y-1 pl-2 text-muted-foreground">
                 <li>Customize emoji colors for better personal distinction</li>
                 <li>
                   Create high-contrast variants tailored to individual visual
@@ -180,7 +180,7 @@ function AboutPage() {
             </div>
 
             {/* See more */}
-            <div className="text-muted-foreground space-y-2">
+            <div className="space-y-2 text-muted-foreground">
               <p>See more:</p>
               <ul className="list-inside list-disc space-y-1 pl-2">
                 <li>
@@ -188,7 +188,7 @@ function AboutPage() {
                     href="https://veroniiiica.com/emoji-and-low-vision/"
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="hover:text-foreground underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-foreground"
                   >
                     Emoji And Low Vision - Veronica With Four Eyes
                   </a>
@@ -198,7 +198,7 @@ function AboutPage() {
                     href="https://www.facebook.com/ColourBlindVision/posts/are-you-emoji-colour-blinda-strange-concept-to-say-nevertheless-how-many-times-h/678523570194699/"
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="hover:text-foreground underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-foreground"
                   >
                     Are you emoji colour blind? - Colour Blind Vision
                   </a>
@@ -209,13 +209,13 @@ function AboutPage() {
 
           {/* Copyright section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
+            <h2 className="text-balance font-bold font-title-sans text-2xl lg:text-3xl">
               Copyright & License
             </h2>
-            <div className="text-muted-foreground space-y-3 leading-relaxed">
+            <div className="space-y-3 text-muted-foreground leading-relaxed">
               {/* Graphics License */}
               <div className="space-y-3">
-                <h3 className="font-title-sans text-xl font-semibold">
+                <h3 className="font-semibold font-title-sans text-xl">
                   Graphics
                 </h3>
                 <div className="flex justify-center py-2">
@@ -231,7 +231,7 @@ function AboutPage() {
                     href="https://github.com/twitter/twemoji"
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="hover:text-foreground underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-foreground"
                   >
                     Twemoji
                   </a>
@@ -240,7 +240,7 @@ function AboutPage() {
                     href="https://creativecommons.org/licenses/by/4.0/"
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="hover:text-foreground underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-foreground"
                   >
                     CC-BY 4.0
                   </a>{" "}
@@ -259,14 +259,14 @@ function AboutPage() {
 
               {/* Code License */}
               <div className="space-y-3 border-t pt-4">
-                <h3 className="font-title-sans text-xl font-semibold">Code</h3>
+                <h3 className="font-semibold font-title-sans text-xl">Code</h3>
                 <p>
                   Code licensed under the{" "}
                   <a
                     href="http://opensource.org/licenses/MIT"
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="hover:text-foreground underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-foreground"
                   >
                     MIT License
                   </a>
@@ -278,16 +278,16 @@ function AboutPage() {
 
           {/* Open source section */}
           <section className="space-y-4">
-            <h2 className="font-title-sans text-2xl font-bold text-balance lg:text-3xl">
+            <h2 className="text-balance font-bold font-title-sans text-2xl lg:text-3xl">
               Open Source
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-pretty">
+            <p className="text-pretty text-muted-foreground leading-relaxed">
               EmojiSalon is open source and available on{" "}
               <a
                 href="https://github.com/rutopio/EmojiSalon"
                 target="_blank"
                 rel="noreferrer noopener"
-                className="hover:text-foreground underline underline-offset-4"
+                className="underline underline-offset-4 hover:text-foreground"
               >
                 GitHub
               </a>

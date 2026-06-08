@@ -4,7 +4,9 @@
  * to select colors using a color area, hue slider, hex input, and preset colors.
  */
 
+import { CopyIcon, EyedropperIcon } from "@phosphor-icons/react";
 import { use, useRef } from "react";
+import type { Color } from "react-aria-components";
 import {
   Button as AriaButton,
   Input as AriaInput,
@@ -12,12 +14,10 @@ import {
   ColorPickerStateContext,
   Dialog,
   DialogTrigger,
-  parseColor,
   Popover,
+  parseColor,
 } from "react-aria-components";
-import { CopyIcon, EyedropperIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
-
 import {
   ColorArea,
   ColorField,
@@ -32,8 +32,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEmoji } from "@/contexts/emoji-context";
 import { PRESET_COLORS } from "@/lib/constants";
-
-import type { Color } from "react-aria-components";
 
 /**
  * EyeDropper button component that uses the browser's EyeDropper API
@@ -56,7 +54,7 @@ function EyeDropperButton() {
   return (
     <AriaButton
       aria-label="Eye dropper"
-      className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex size-8 items-center justify-center rounded-md border text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      className="inline-flex size-8 items-center justify-center rounded-md border border-input bg-background font-medium text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-offset-2"
       onPress={() => {
         // @ts-expect-error - EyeDropper API may not be available
         new EyeDropper()
@@ -122,7 +120,7 @@ export function ColorPickerPopover({
         shouldCloseOnInteractOutside={() => !isDraggingRef.current}
       >
         <Dialog
-          className="bg-popover relative flex flex-col gap-4 rounded-lg border p-4 shadow-lg outline-none"
+          className="relative flex flex-col gap-4 rounded-lg border bg-popover p-4 shadow-lg outline-none"
           aria-label="Color picker"
         >
           <ColorPicker value={colorValue} onChange={handleColorChange}>
@@ -158,7 +156,7 @@ export function ColorPickerPopover({
             <ColorField className="flex w-full gap-2">
               <AriaLabel className="sr-only">Hex Color</AriaLabel>
               <AriaInput
-                className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                className="h-9 w-full rounded-md border border-input bg-transparent px-2.5 py-1 font-mono text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 placeholder="Hex"
                 onKeyDown={(e) => {
                   // Blur on Enter to commit the color value

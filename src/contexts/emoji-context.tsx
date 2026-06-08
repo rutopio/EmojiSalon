@@ -4,6 +4,7 @@
  * SVG generation, and sharing functionality in the EmojiSalon application.
  */
 
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import {
   createContext,
   use,
@@ -12,7 +13,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { useLocation, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import {

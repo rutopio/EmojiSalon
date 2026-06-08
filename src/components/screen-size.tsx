@@ -9,7 +9,7 @@ export function ScreenSize() {
   }
 
   return (
-    <div className="fixed right-5 bottom-5 z-50 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 p-3 font-mono text-xs text-white">
+    <div className="fixed right-5 bottom-5 z-50 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 p-3 font-mono text-white text-xs">
       <div className="block sm:hidden">xs</div>
       <div className="hidden sm:block md:hidden lg:hidden xl:hidden 2xl:hidden">
         sm

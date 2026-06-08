@@ -4,7 +4,6 @@
  * copy, and share functionality. Supports both desktop and mobile layouts.
  */
 
-import { useState } from "react";
 import {
   ArrowCounterClockwiseIcon,
   ClipboardIcon,
@@ -15,6 +14,7 @@ import {
   ShareNetworkIcon,
   SmileyWinkIcon,
 } from "@phosphor-icons/react";
+import { useState } from "react";
 
 import { EmojiPicker } from "@/components/create/emoji-picker";
 import { Button } from "@/components/ui/button";

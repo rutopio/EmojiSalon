@@ -5,14 +5,13 @@
  */
 
 import { createFileRoute } from "@tanstack/react-router";
-import PageLayout from "@/layout";
-
 import ActionButtons from "@/components/create/action-buttons";
 import ColorPalettePickers from "@/components/create/color-palette-pickers";
 import EmojiDisplay from "@/components/create/emoji-display";
 import DesktopEmojiPicker from "@/components/create/emoji-picker";
 import ShareModal from "@/components/create/share-modal";
 import { useEmoji } from "@/contexts/emoji-context";
+import PageLayout from "@/layout";
 import { SITE_URL } from "@/lib/constants";
 
 /**

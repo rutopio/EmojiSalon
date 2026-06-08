@@ -1,17 +1,16 @@
 /// <reference types="vite/client" />
-import { lazy, Suspense } from "react";
+
+import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
 } from "@tanstack/react-router";
-
+import { lazy, Suspense } from "react";
 import { ScreenSize } from "@/components/screen-size";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { EmojiProvider } from "@/contexts/emoji-context";
-
-import type { QueryClient } from "@tanstack/react-query";
 
 const TanStackDevtools = import.meta.env.DEV
   ? lazy(() =>

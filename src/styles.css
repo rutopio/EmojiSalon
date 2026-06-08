@@ -1,3 +1,8 @@
+@import "tailwindcss" source("./");
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
 @font-face {
   font-family: "Geist";
   src: url("/font/Geist[wght].woff2") format("woff2");
@@ -29,11 +34,6 @@
   font-style: italic;
   font-display: swap;
 }
-
-@import "tailwindcss" source("./");
-
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 

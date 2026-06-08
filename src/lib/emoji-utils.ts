@@ -3,7 +3,7 @@
  * Provides functions for emoji manipulation, color conversion,
  * URL encoding/decoding, and data fetching.
  */
-import { DEFAULT_EMOJIS } from "@/lib/constants";
+
 import defaultEmojisSVGData from "@/data/default-emojis-data.json";
 import emojiCategories from "@/data/emoji-categories.json";
 import activityData from "@/data/emoji-category/activity.json";
@@ -17,6 +17,7 @@ import symbolsData from "@/data/emoji-category/symbols.json";
 import emojiNames from "@/data/emoji-names.json";
 import emojiPaletteData from "@/data/emoji-palette-data.json";
 import paletteColorDataRaw from "@/data/palette-color-data.json";
+import { DEFAULT_EMOJIS } from "@/lib/constants";
 
 /**
  * SVG data for a single emoji.

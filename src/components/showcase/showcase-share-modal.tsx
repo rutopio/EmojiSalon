@@ -4,7 +4,6 @@
  * Each showcase section can share its own emoji variant independently.
  */
 
-import { useMemo } from "react";
 import {
   CheckCircleIcon,
   ClipboardIcon,
@@ -13,6 +12,7 @@ import {
   LinkIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
+import { useMemo } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -247,7 +247,7 @@ export default function ShowcaseShareModal({
                   <div className="text-xs">Copy HTML</div>
                 </Button>
               </div>
-              <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs">
+              <pre className="overflow-x-auto rounded bg-accent px-4 py-4 text-xs">
                 <code className="font-mono">{`<span class="mod-emoji"> ${emoji} </span>`}</code>
               </pre>
 
@@ -263,7 +263,7 @@ export default function ShowcaseShareModal({
                   <div className="text-xs">Copy CSS</div>
                 </Button>
               </div>
-              <pre className="bg-accent overflow-x-auto rounded px-4 py-4 text-xs whitespace-pre-wrap">
+              <pre className="overflow-x-auto whitespace-pre-wrap rounded bg-accent px-4 py-4 text-xs">
                 <code className="font-mono">{cssCode}</code>
               </pre>
             </div>
