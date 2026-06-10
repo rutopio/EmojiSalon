@@ -10,7 +10,6 @@ import {
   fetchEmojiData,
   getEmojiLabel,
   getOriginalPaletteData,
-  normalizeColor,
   parsePaletteString,
   unicodeToEmoji,
 } from "@/lib/emoji-utils";
@@ -81,14 +80,12 @@ export function useEmojiSVG(
         return;
       }
 
-      const normalizedPalette = data.f.map(normalizeColor);
-      const glyphId = unicode.toLowerCase();
       const { originalPaletteIndex: opIndex, originalPaletteColors: opColors } =
-        getOriginalPaletteData(glyphId);
+        getOriginalPaletteData(data);
 
       // Generate original SVG with original palette colors
       const originalPaths = data.d.map((d, index) => {
-        return `<path fill="${normalizedPalette[index]}" d="${d}" />`;
+        return `<path fill="${data.f[index]}" d="${d}" />`;
       });
       const originalSvgHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">${originalPaths.join("")}</svg>`;
 
@@ -99,11 +96,11 @@ export function useEmojiSVG(
       }
 
       const modifiedPaths = data.d.map((d, index) => {
-        const colorIndex = opColors.indexOf(normalizedPalette[index]);
+        const colorIndex = opColors.indexOf(data.f[index]);
         const fillColor =
           colorIndex !== -1
-            ? customizedColors[colorIndex] || normalizedPalette[index]
-            : normalizedPalette[index];
+            ? customizedColors[colorIndex] || data.f[index]
+            : data.f[index];
         return `<path fill="${fillColor}" d="${d}" />`;
       });
       const modifiedSvgHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">${modifiedPaths.join("")}</svg>`;
@@ -179,10 +176,8 @@ export function useVariantSVG(
         return;
       }
 
-      const normalizedPalette = data.f.map(normalizeColor);
-      const glyphId = unicode.toLowerCase();
       const { originalPaletteIndex, originalPaletteColors } =
-        getOriginalPaletteData(glyphId);
+        getOriginalPaletteData(data);
 
       const customizedColors = parsePaletteString(
         palette,
@@ -191,13 +186,11 @@ export function useVariantSVG(
       );
 
       const paths = data.d.map((d, index) => {
-        const colorIndex = originalPaletteColors.indexOf(
-          normalizedPalette[index]
-        );
+        const colorIndex = originalPaletteColors.indexOf(data.f[index]);
         const fillColor =
           colorIndex !== -1
-            ? customizedColors[colorIndex] || normalizedPalette[index]
-            : normalizedPalette[index];
+            ? customizedColors[colorIndex] || data.f[index]
+            : data.f[index];
         return `<path fill="${fillColor}" d="${d}" />`;
       });
 

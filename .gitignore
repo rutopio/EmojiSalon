@@ -23,3 +23,7 @@ dist
 
 .tanstack
 .vscode
+
+# Cloned upstream emoji source for preprocessing (re-fetched by `pnpm preprocess`)
+preprocess/twemoji
+/tasks

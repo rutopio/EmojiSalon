@@ -13,17 +13,17 @@
     "deps:major": "pnpm dlx taze@latest major -Ilw",
     "ui": "pnpm dlx shadcn@latest",
     "preview": "pnpm run build && vite preview",
-    "preview:cf": "pnpm build && wrangler pages dev dist"
+    "preview:cf": "pnpm build && wrangler pages dev dist",
+    "preprocess": "node preprocess/scripts/build-emoji-data.mjs"
   },
   "dependencies": {
-    "@emoji-mart/data": "1.2.1",
-    "@resvg/resvg-wasm": "2.6.2",
-    "@emoji-mart/react": "1.1.1",
     "@phosphor-icons/react": "2.1.10",
+    "@resvg/resvg-wasm": "2.6.2",
     "@tanstack/react-query": "5.100.9",
     "@tanstack/react-router": "1.169.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "frimousse": "0.3.0",
     "motion": "12.40.0",
     "next-themes": "0.4.6",
     "radix-ui": "1.4.3",
@@ -39,7 +39,10 @@
       "seroval": ">=1.4.1",
       "ip-address": ">=10.1.1"
     },
-    "onlyBuiltDependencies": ["esbuild", "workerd"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",

@@ -23,7 +23,6 @@ import {
   getOverrideStyleString,
   getRandomColor,
   getRandomEmojiWithLabel,
-  normalizeColor,
   parsePaletteString,
   triggerDownload,
   unicodeToEmoji,
@@ -216,18 +215,16 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
   const updateEmoji = useCallback(
     async (emoji: string, keepPalette: boolean, paletteFromURL?: string) => {
       setCurrentEmoji(emoji);
-      const glyphId = emojiToUnicode(emoji).toLowerCase();
 
       const data = await fetchEmojiData(emoji);
       if (data) {
-        const normalizedPalette = data.f.map(normalizeColor);
         setPathArray(data.d);
-        setPaletteArray(normalizedPalette);
+        setPaletteArray(data.f);
 
         const {
           originalPaletteIndex: opIndex,
           originalPaletteColors: opColors,
-        } = getOriginalPaletteData(glyphId);
+        } = getOriginalPaletteData(data);
         setOriginalPaletteIndex(opIndex);
         setOriginalPaletteColors(opColors);
 

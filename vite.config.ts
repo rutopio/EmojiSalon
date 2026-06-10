@@ -1,17 +1,21 @@
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import type { EmojiData } from "./src/lib/render-emoji-svg";
 import { renderOgSvg } from "./src/lib/render-og-image";
 
 /**
  * Dev-only: mirror the /og Pages Function so the OG image works under
- * `vite dev` too (Cloudflare Functions only run under wrangler). Serves the SVG
- * directly (prod rasterizes it to PNG via resvg-wasm), sharing the same
- * renderer so dev and prod stay in sync.
+ * `vite dev` too (Cloudflare Functions only run under wrangler). Reads the
+ * per-emoji data from public/data and serves the SVG directly (prod fetches the
+ * same asset and rasterizes to PNG via resvg-wasm), sharing the same renderer
+ * so dev and prod stay in sync.
  */
 function ogImagePlugin(): Plugin {
+  const emojiDir = path.resolve(__dirname, "public/data/emoji");
   return {
     name: "og-image-dev",
     configureServer(server) {
@@ -20,15 +24,16 @@ function ogImagePlugin(): Plugin {
         if (url.pathname !== "/og") return next();
 
         const emoji = url.searchParams.get("emoji");
-        const palette = url.searchParams.get("palette") ?? undefined;
-        const svg = emoji ? renderOgSvg({ emoji, palette }) : null;
-        if (!svg) {
+        const override = url.searchParams.get("palette") ?? undefined;
+        const file = emoji ? path.join(emojiDir, `${emoji}.json`) : "";
+        if (!emoji || !/^u[0-9a-f_]+$/.test(emoji) || !existsSync(file)) {
           res.statusCode = 400;
           res.end("Unknown emoji");
           return;
         }
+        const data = JSON.parse(readFileSync(file, "utf8")) as EmojiData;
         res.setHeader("content-type", "image/svg+xml;charset=utf-8");
-        res.end(svg);
+        res.end(renderOgSvg({ data, override }));
       });
     },
   };

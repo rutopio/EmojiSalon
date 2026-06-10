@@ -4,92 +4,24 @@
  * URL encoding/decoding, and data fetching.
  */
 
-import defaultEmojisSVGData from "@/data/default-emojis-data.json";
-import emojiCategories from "@/data/emoji-categories.json";
-import activityData from "@/data/emoji-category/activity.json";
-import flagsData from "@/data/emoji-category/flags.json";
-import foodsData from "@/data/emoji-category/foods.json";
-import natureData from "@/data/emoji-category/nature.json";
-import objectsData from "@/data/emoji-category/objects.json";
-import peopleData from "@/data/emoji-category/people.json";
-import placesData from "@/data/emoji-category/places.json";
-import symbolsData from "@/data/emoji-category/symbols.json";
 import emojiNames from "@/data/emoji-names.json";
-import emojiPaletteData from "@/data/emoji-palette-data.json";
-import paletteColorDataRaw from "@/data/palette-color-data.json";
 import { DEFAULT_EMOJIS } from "@/lib/constants";
 
 /**
- * SVG data for a single emoji.
+ * Preprocessed data for a single emoji, served as a static asset at
+ * `/data/emoji/u<code>.json` and fetched on demand.
  */
 export interface EmojiSVGData {
   /** Array of SVG path data strings. */
   d: string[];
-  /** Array of fill colors (hex strings or null). */
-  f: (string | null)[];
+  /** Normalized fill color for each path (same length as d). */
+  f: string[];
+  /** Distinct editable colors, first-seen order; index i is the palette index. */
+  c: string[];
 }
 
-/**
- * Mapping of category names to arrays of emoji unicode identifiers.
- */
-export interface EmojiCategories {
-  [category: string]: string[];
-}
-
-/**
- * Mapping of emoji unicode identifiers to arrays of palette color indices.
- */
-export interface EmojiPaletteData {
-  [unicode: string]: number[];
-}
-
-/**
- * Mapping of emoji unicode identifiers to their SVG data.
- */
-export interface EmojiPathsAndColors {
-  [unicode: string]: EmojiSVGData;
-}
-
-/**
- * Map of category names to their emoji data.
- * Used for lazy loading emoji data by category.
- */
-const categoryDataMap: Record<string, EmojiPathsAndColors> = {
-  activity: activityData as unknown as EmojiPathsAndColors,
-  flags: flagsData as unknown as EmojiPathsAndColors,
-  foods: foodsData as unknown as EmojiPathsAndColors,
-  nature: natureData as unknown as EmojiPathsAndColors,
-  objects: objectsData as unknown as EmojiPathsAndColors,
-  people: peopleData as unknown as EmojiPathsAndColors,
-  places: placesData as unknown as EmojiPathsAndColors,
-  symbols: symbolsData as unknown as EmojiPathsAndColors,
-};
-
-/**
- * Array of palette colors with '#' prefix.
- * Derived from the raw palette color data.
- */
-export const paletteData: string[] = (paletteColorDataRaw as string[]).map(
-  (c) => `#${c}`
-);
-
-/**
- * Typed emoji categories data.
- */
-export const emojiCategoriesData = emojiCategories as EmojiCategories;
-
-/**
- * Typed emoji palette data.
- */
-export const emojiPaletteDataTyped = emojiPaletteData as EmojiPaletteData;
-
-/**
- * Mutable object containing loaded emoji path and color data.
- * Initially contains only the default emojis, but can be extended
- * with category data when needed.
- */
-export const emojiPathsAndColors =
-  defaultEmojisSVGData as unknown as EmojiPathsAndColors;
+/** In-memory cache of fetched per-emoji data, keyed by unicode id. */
+const emojiDataCache = new Map<string, EmojiSVGData>();
 
 /**
  * Converts an RGBA color array to a hex color string.
@@ -270,86 +202,72 @@ export function decodeURL(str: string): string {
 }
 
 /**
- * Finds the category that contains a given emoji.
- *
- * @param unicode - The emoji unicode identifier.
- * @returns Category name if found, null otherwise.
- *
- * @example
- * findEmojiCategory("u1f600"); // Returns "people"
- * findEmojiCategory("u1f355"); // Returns "foods"
- */
-export function findEmojiCategory(unicode: string): string | null {
-  for (const category in emojiCategoriesData) {
-    if (emojiCategoriesData[category].includes(unicode)) {
-      return category;
-    }
-  }
-  return null;
-}
-
-/**
- * Fetches SVG data for an emoji.
- * First checks the default emojis cache, then looks up
- * the emoji's category and loads the category data if needed.
- * All data is loaded from local files bundled with the application.
+ * Fetches preprocessed data for an emoji from its static asset at
+ * `/data/emoji/u<code>.json`. Results are cached in memory per session.
  *
  * @param emoji - The emoji character to fetch data for.
- * @returns Promise resolving to the emoji's SVG data, or null if not found.
+ * @returns Promise resolving to the emoji's data, or null if not found.
  *
  * @example
  * const data = await fetchEmojiData("😀");
- * // data.d contains path data array
- * // data.f contains fill colors array
+ * // data.d = path data, data.f = fills, data.c = distinct editable colors
  */
 export async function fetchEmojiData(
   emoji: string
 ): Promise<EmojiSVGData | null> {
   const unicode = emojiToUnicode(emoji);
 
-  // Check if already in the loaded data cache
-  if (unicode in emojiPathsAndColors) {
-    return emojiPathsAndColors[unicode];
+  const cached = emojiDataCache.get(unicode);
+  if (cached) return cached;
+
+  // Try the id as-is first, then an FE0F-stripped variant. emojiToUnicode keeps
+  // embedded FE0F for some sequences (e.g. u1f441_fe0f_200d_1f5e8_fe0f) while
+  // the data file drops it (u1f441_200d_1f5e8) — but other ids legitimately
+  // contain fe0f, so the original must win when it exists.
+  const candidates =
+    unicode.includes("_fe0f") && unicode !== unicode.replace(/_fe0f/g, "")
+      ? [unicode, unicode.replace(/_fe0f/g, "")]
+      : [unicode];
+
+  for (const id of candidates) {
+    try {
+      const res = await fetch(`/data/emoji/${id}.json`);
+      // A missing asset falls back to the SPA shell (text/html, 200), so check
+      // for JSON rather than trusting the status code.
+      const contentType = res.headers.get("content-type") || "";
+      if (!res.ok || !contentType.includes("application/json")) continue;
+      const data = (await res.json()) as EmojiSVGData;
+      emojiDataCache.set(unicode, data);
+      return data;
+    } catch (error) {
+      console.warn(`Failed to fetch emoji data for ${emoji} (${id})`, error);
+    }
   }
 
-  // Find the category and load its data
-  const category = findEmojiCategory(unicode);
-  if (category === null) {
-    console.warn(`No category found for emoji: ${emoji} (${unicode})`);
-    return null;
-  }
-
-  // Load category data into the cache
-  const categoryData = categoryDataMap[category];
-  if (categoryData) {
-    Object.assign(emojiPathsAndColors, categoryData);
-    return emojiPathsAndColors[unicode] || null;
-  }
-
+  console.warn(`No data for emoji: ${emoji} (${unicode})`);
   return null;
 }
 
 /**
- * Gets the original palette indices and colors for an emoji.
+ * Derives the palette indices and colors for an emoji from its data. With the
+ * per-emoji local-index scheme, the index of a color is simply its position in
+ * the distinct-color list `c`.
  *
- * @param glyphId - The emoji unicode identifier.
- * @returns Object containing unique palette indices and their corresponding colors.
+ * @param data - The emoji's preprocessed data.
+ * @returns Object with local palette indices and their colors.
  *
  * @example
- * const { originalPaletteIndex, originalPaletteColors } = getOriginalPaletteData("u1f600");
- * // originalPaletteIndex: [3, 5, 12, ...]
- * // originalPaletteColors: ["#ffcc4d", "#664500", ...]
+ * getOriginalPaletteData({ d, f, c: ["#ffcc4d", "#664500"] });
+ * // { originalPaletteIndex: [0, 1], originalPaletteColors: ["#ffcc4d", "#664500"] }
  */
-export function getOriginalPaletteData(glyphId: string): {
+export function getOriginalPaletteData(data: EmojiSVGData): {
   originalPaletteIndex: number[];
   originalPaletteColors: string[];
 } {
-  const paletteIndices = emojiPaletteDataTyped[glyphId] || [];
-  const originalPaletteIndex = [...new Set(paletteIndices)];
-  const originalPaletteColors = originalPaletteIndex.map(
-    (index) => paletteData[index]
-  );
-  return { originalPaletteIndex, originalPaletteColors };
+  return {
+    originalPaletteIndex: data.c.map((_, i) => i),
+    originalPaletteColors: data.c,
+  };
 }
 
 /**

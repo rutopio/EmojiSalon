@@ -1,16 +1,114 @@
 /**
- * @fileoverview Emoji picker component using emoji-mart library.
- * Provides an emoji selection interface with custom styling to match
- * the EmojiSalon design system.
+ * @fileoverview Emoji picker built on frimousse (headless) with self-hosted
+ * Twemoji thumbnails. Each cell renders the jdecked Twemoji SVG copied to
+ * /twemoji during preprocessing, so the picker preview matches the editor and
+ * OG image (one source of truth).
  *
- * @see https://github.com/missive/emoji-mart
+ * @see https://frimousse.liveblocks.io
  */
 
-import data from "@emoji-mart/data/sets/15/twitter.json";
-import EmojiMartPicker from "@emoji-mart/react";
+import {
+  type EmojiPickerListCategoryHeaderProps,
+  type EmojiPickerListEmojiProps,
+  type EmojiPickerListRowProps,
+  EmojiPicker as Frimousse,
+} from "frimousse";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import { useEmoji } from "@/contexts/emoji-context";
+
+/** Maps an emoji character to its Twemoji filename stem (from index.json). */
+type CharMap = Record<string, string>;
+
+/**
+ * Session-global char -> filename map. Loaded once; read by the hoisted Emoji
+ * button (frimousse fixes the component signature, so we can't pass it as a
+ * prop). It is immutable after load, so a module-level value is safe.
+ */
+let charMap: CharMap = {};
+let charMapPromise: Promise<CharMap> | null = null;
+function loadCharMap(): Promise<CharMap> {
+  if (!charMapPromise) {
+    charMapPromise = fetch("/data/index.json")
+      .then((res) => res.json())
+      .then((json: { chars?: CharMap }) => {
+        charMap = json.chars ?? {};
+        return charMap;
+      })
+      .catch(() => charMap);
+  }
+  return charMapPromise;
+}
+
+/** Sticky category header. */
+function CategoryHeader({
+  category,
+  ...props
+}: EmojiPickerListCategoryHeaderProps) {
+  return (
+    <div
+      className="bg-popover px-3 pt-3 pb-1.5 font-medium text-muted-foreground text-xs"
+      {...props}
+    >
+      {category.label}
+    </div>
+  );
+}
+
+/** A row of emoji buttons. */
+function Row({ children, ...props }: EmojiPickerListRowProps) {
+  return (
+    <div className="scroll-my-1 px-1" {...props}>
+      {children}
+    </div>
+  );
+}
+
+/** Variation selector emojibase appends but Twemoji filenames usually omit. */
+const FE0F = "️";
+
+/**
+ * Resolve an emoji character to its Twemoji filename stem. emojibase reports
+ * many emoji with a trailing/embedded FE0F that the Twemoji filename drops, so
+ * fall back to FE0F-stripped variants. Lifts coverage from ~81% to ~99.7%.
+ */
+function stemFor(char: string): string | undefined {
+  return (
+    charMap[char] ??
+    charMap[char.replace(new RegExp(`${FE0F}$`), "")] ??
+    charMap[char.replaceAll(FE0F, "")]
+  );
+}
+
+/** One emoji button, rendered as a self-hosted Twemoji thumbnail. */
+function EmojiButton({ emoji, ...props }: EmojiPickerListEmojiProps) {
+  const stem = stemFor(emoji.emoji);
+  return (
+    <button
+      type="button"
+      className="flex size-9 items-center justify-center rounded-md data-[active]:bg-secondary"
+      {...props}
+    >
+      {stem ? (
+        <img
+          src={`/twemoji/${stem}.svg`}
+          alt={emoji.label}
+          loading="lazy"
+          className="size-7"
+        />
+      ) : (
+        <span className="text-2xl">{emoji.emoji}</span>
+      )}
+    </button>
+  );
+}
+
+const LIST_COMPONENTS = {
+  CategoryHeader,
+  Row,
+  Emoji: EmojiButton,
+};
 
 /**
  * Props for the EmojiPicker component.
@@ -26,66 +124,52 @@ interface EmojiPickerProps {
 }
 
 /**
- * Emoji data structure from emoji-mart library.
- */
-interface EmojiMartEmoji {
-  id: string;
-  name: string;
-  native: string;
-  unified: string;
-  keywords: string[];
-  shortcodes: string;
-  emoticons?: string[];
-}
-
-/**
- * Emoji picker component that wraps emoji-mart library.
- * Displays an emoji selection interface with categories and search.
+ * Emoji picker with self-hosted Twemoji thumbnails.
+ * Displays a searchable, scrollable emoji grid.
  *
  * @param props - Component props.
  * @returns Emoji picker UI component.
  */
 export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
   const { resolvedTheme } = useTheme();
+  // Trigger the one-time char-map load; re-render once it's ready so the first
+  // paint of thumbnails has the map.
+  const [, setReady] = useState(false);
 
-  /**
-   * Handles emoji selection from emoji-mart picker.
-   *
-   * @param emoji - The selected emoji data from emoji-mart.
-   */
-  const handleEmojiSelect = (emoji: EmojiMartEmoji) => {
-    onEmojiSelect(emoji.native, emoji.name);
-  };
+  useEffect(() => {
+    let cancelled = false;
+    loadCharMap().then(() => {
+      if (!cancelled) setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
-    <div className="emoji-mart-container w-full">
-      <EmojiMartPicker
-        data={data}
-        onEmojiSelect={handleEmojiSelect}
-        set="twitter"
-        emojiSize={28}
-        perLine={8}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
-        maxFrequentRows={1}
-        skinTonePosition="none"
-        exceptEmojis={[
-          "one",
-          "two",
-          "three",
-          "four",
-          "five",
-          "six",
-          "seven",
-          "eight",
-          "nine",
-          "zero",
-          "keycap_star",
-          "hash",
-          "copyright",
-          "registered",
-        ]}
+    <Frimousse.Root
+      onEmojiSelect={({ emoji, label }) => onEmojiSelect(emoji, label)}
+      columns={8}
+      className="isolate flex h-[352px] w-[312px] flex-col rounded-[var(--radius)] border bg-popover text-popover-foreground shadow-md"
+      data-theme={resolvedTheme === "dark" ? "dark" : "light"}
+    >
+      <Frimousse.Search
+        placeholder="Search emoji"
+        className="z-10 mx-2 mt-2 appearance-none rounded-md bg-secondary px-2.5 py-2 text-secondary-foreground text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
-    </div>
+      <Frimousse.Viewport className="relative flex-1 outline-none">
+        <Frimousse.Loading className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          Loading…
+        </Frimousse.Loading>
+        <Frimousse.Empty className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          No emoji found.
+        </Frimousse.Empty>
+        <Frimousse.List
+          className="select-none pb-2"
+          components={LIST_COMPONENTS}
+        />
+      </Frimousse.Viewport>
+    </Frimousse.Root>
   );
 }
 

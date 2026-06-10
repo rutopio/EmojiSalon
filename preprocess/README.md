@@ -1,261 +1,82 @@
 # Preprocessing Pipeline
 
-This directory contains scripts and data for preprocessing Twemoji assets into the JSON format used by EmojiSalon.
+Turns upstream Twemoji SVG assets into the per-emoji JSON files EmojiSalon
+serves and recolors. The whole pipeline is one reproducible Node script — no
+fonts, no Glyphs App, no manual steps.
 
-## Overview
+## Source of truth
 
-The preprocessing pipeline extracts path data and color information from Twemoji SVG files and COLR font files, then organizes them into category-based JSON files for efficient loading in the application.
+[`jdecked/twemoji`](https://github.com/jdecked/twemoji) — the community-
+maintained continuation of Twemoji (the original `twitter/twemoji` is archived).
+Pinned to a specific tag for deterministic output.
 
-## Directory Structure
+- Pinned tag: `v17.0.3` (Unicode 17). Bump `TWEMOJI_TAG` in
+  `scripts/build-emoji-data.mjs` to update, then re-run.
+- SVGs come from `assets/svg/*.svg` in that repo.
 
-```
-preprocess/
-├── data/                    # Intermediate data files
-│   ├── emojimart.json       # emoji-mart library data (source)
-│   └── ...                  # Generated intermediate files
-├── font/                    # Font files
-│   ├── Twemoji.Mozilla.ttf  # Mozilla-modified Twemoji font (for Glyphs App)
-│   └── twemoji.woff2        # Web font (for palette extraction)
-├── scripts/                 # Processing scripts
-│   ├── extract_svg_data.py
-│   ├── group_by_categories.py
-│   ├── generate_ignore_list.js
-│   ├── extract_palette_colors.js
-│   ├── parse_emoji_mart.py
-│   ├── generate_categories.py
-│   ├── glyphs_extract_palette_indices.py
-│   └── glyphs_extract_paths_deprecated.py
-└── README.md
-```
-
-## Data Flow
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Twemoji SVGs   │────>│ extract_svg_    │────>│ Individual      │
-│  (from GitHub)  │     │ data.py         │     │ emoji JSONs     │
-└─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                         │
-┌─────────────────┐     ┌─────────────────┐              │
-│  emoji-mart     │────>│ generate_       │              │
-│  data           │     │ categories.py   │              │
-└─────────────────┘     └────────┬────────┘              │
-                                 │                       │
-                                 v                       v
-                        ┌─────────────────┐     ┌─────────────────┐
-                        │ emojiCategories │────>│ group_by_       │
-                        │ .json           │     │ categories.py   │
-                        └─────────────────┘     └────────┬────────┘
-                                                         │
-┌─────────────────┐     ┌─────────────────┐              │
-│  Twemoji COLR   │────>│ extract_palette │              │
-│  font           │     │ _colors.js      │              │
-└─────────────────┘     └────────┬────────┘              │
-                                 │                       │
-                                 v                       v
-                        ┌─────────────────┐     ┌─────────────────┐
-                        │ paletteColor    │     │ Category JSONs  │
-                        │ Data.json       │     │ (foods, nature) │
-                        └─────────────────┘     └─────────────────┘
-                                                         │
-┌─────────────────┐     ┌─────────────────┐              │
-│  Glyphs App     │────>│ glyphs_extract_ │              │
-│  + TTF font     │     │ palette_indices │              │
-└─────────────────┘     └────────┬────────┘              │
-                                 │                       │
-                                 v                       v
-                        ┌─────────────────┐     ┌─────────────────┐
-                        │ emojiPalette    │     │   src/data/     │
-                        │ Data.json       │────>│   (final)       │
-                        └─────────────────┘     └─────────────────┘
-```
-
-## Scripts
-
-### Python Scripts
-
-#### `extract_svg_data.py`
-
-Extracts path and fill color data from Twemoji SVG files.
-
-**Input:** Twemoji SVG files (download from [twitter/twemoji](https://github.com/twitter/twemoji))
-
-**Output:**
-
-- Individual JSON files for each emoji
-- `fullPathAndColorData.json` containing all emoji data
-
-**Features:**
-
-- Converts `<circle>` and `<ellipse>` elements to path data
-- Preserves `opacity` and `transform` attributes
-- Skips emoji with skin tone modifiers (handled separately)
-
-#### `group_by_categories.py`
-
-Groups individual emoji JSON files by category.
-
-**Prerequisites:**
-
-- Run `extract_svg_data.py` first
-- `emojiCategories.json` in data directory
-- `ignoreEmojiUnicodeList.json` in data directory
-
-**Output:** Category JSON files (e.g., `people.json`, `nature.json`)
-
-#### `generate_categories.py`
-
-Creates category mapping from emoji-mart data.
-
-**Input:** `emojimart.json`
-
-**Output:** `emojiCategories.json`
-
-#### `parse_emoji_mart.py`
-
-Extracts emoji native characters and unicode values from emoji-mart data.
-
-**Input:** `emojimart.json`
-
-**Output:**
-
-- `emojisWithSkinTone.json`
-- `emojisWithoutSkinTone.json`
-- `unicodeWithSkinTone.json`
-- `unicodeWithoutSkinTone.json`
-
-#### `glyphs_extract_palette_indices.py`
-
-Extracts palette color indices from font using Glyphs App.
-
-**Requirements:** Must be run inside [Glyphs App](https://glyphsapp.com/)
-
-**Input:** `Twemoji.Mozilla.ttf` opened in Glyphs App
-
-**Output:** `emojiPaletteData.json`
-
-### JavaScript Scripts
-
-#### `extract_palette_colors.js`
-
-Extracts color palette from Twemoji COLR font.
-
-**Requirements:** `fontkit` pnpm package
-
-**Input:** Twemoji COLR font (fetched from CDN)
-
-**Output:** `paletteColorData.json`
+## Run
 
 ```bash
-pnpm install fontkit
-node extract_palette_colors.js
+pnpm preprocess
 ```
 
-#### `generate_ignore_list.js`
+This will:
 
-Generates list of emoji to exclude from category files.
+1. Shallow-clone `jdecked/twemoji` at the pinned tag into `preprocess/twemoji/`
+   (git-ignored). If the clone already exists it is reused — delete the folder
+   to force a fresh fetch.
+2. Parse every `assets/svg/*.svg`, skipping skin-tone-modifier files (they reuse
+   the base emoji's paths).
+3. Write the output below.
 
-**Output:** `ignoreEmojiUnicodeList.json`
+## Output
 
-```bash
-node generate_ignore_list.js
+Served as static assets from `public/data/`, fetched on demand by both the app
+(emoji picker / editor) and the Cloudflare Pages OG image function. Nothing is
+bundled into the JS or the worker.
+
+| File                            | Description                                  |
+| ------------------------------- | -------------------------------------------- |
+| `public/data/emoji/u<code>.json`| One emoji's paths, fills, editable colors    |
+| `public/data/index.json`        | `{ version, emojis: [...] }` — list + source |
+
+### Per-emoji JSON shape
+
+```jsonc
+// public/data/emoji/u1f600.json
+{
+  "d": ["M 0,18 A ...", "M18 21c...", ...], // path data, one per drawn element
+  "f": ["#ffcc4d", "#664500", ...],         // normalized fill for each d[i]
+  "c": ["#ffcc4d", "#664500", "#ffffff"]    // distinct editable colors
+}
 ```
 
-## Complete Processing Steps
+- `d` and `f` have the same length; `f[i]` is the fill for path `d[i]`.
+- `f` is normalized: `none`/missing → `#000000`, 3-digit hex expanded, lowercase.
+- `<circle>` and `<ellipse>` elements are converted to equivalent path data.
 
-1. **Download Twemoji SVG files**
+### Palette scheme (color indices)
 
-   ```bash
-   git clone https://github.com/twitter/twemoji
-   ```
+`c` is the list of **distinct** fill colors in **first-seen order** within `f`.
+A color's index is simply its position in `c`. The editor's color pickers and
+the share URL both reference colors by this index.
 
-2. **Download emoji-mart data**
-   - Get `data.json` from [emoji-mart](https://github.com/missive/emoji-mart)
-   - Rename to `emojimart.json` and place in `data/`
+Share URLs encode overrides as `palette=<index>_<hex>` pairs joined by `-`,
+e.g. `?emoji=u1f600&palette=0_55acee` recolors the first distinct color (the
+face) to blue. This is self-contained per emoji — no global color table is
+needed to recolor, which is why the OG worker only fetches one small JSON file.
 
-3. **Generate category mapping**
+Recoloring at runtime: for each path, find its fill's index via
+`c.indexOf(f[i])`, then substitute the customized color at that index.
 
-   ```bash
-   python scripts/generate_categories.py
-   ```
+## Categories
 
-4. **Extract SVG data**
-
-   ```bash
-   cd <twemoji-svg-directory>
-   python ../scripts/extract_svg_data.py
-   ```
-
-5. **Generate ignore list**
-
-   ```bash
-   node scripts/generate_ignore_list.js
-   ```
-
-6. **Group by categories**
-
-   ```bash
-   python scripts/group_by_categories.py
-   ```
-
-7. **Extract palette colors**
-
-   ```bash
-   node scripts/extract_palette_colors.js
-   ```
-
-8. **Extract palette indices (in Glyphs App)**
-   - Open `Twemoji.Mozilla.ttf` in Glyphs App
-   - Run `glyphs_extract_palette_indices.py` in Macro Panel
-
-9. **Copy final files to application**
-   ```bash
-   cp data/emojiCategories.json ../src/data/
-   cp data/paletteColorData.json ../src/data/
-   cp data/emojiPaletteData.json ../src/data/
-   cp data/*.json ../src/data/  # Category files
-   ```
-
-## Output Files
-
-| File                        | Description                                 |
-| --------------------------- | ------------------------------------------- |
-| `emojiCategories.json`      | Maps category names to emoji unicode lists  |
-| `paletteColorData.json`     | Array of hex color values from CPAL table   |
-| `emojiPaletteData.json`     | Maps emoji unicode to palette color indices |
-| `defaultEmojisSVGData.json` | Default emojis bundled with the app         |
-| `{category}.json`           | Per-category emoji path and color data      |
-
-## Font Files
-
-### `Twemoji.Mozilla.ttf`
-
-Modified Twemoji font from [mozilla/twemoji-colr](https://github.com/mozilla/twemoji-colr).
-Used with Glyphs App to extract palette index data.
-
-### `twemoji.woff2`
-
-Web font version of Twemoji COLR font from [CDN](https://cdn.jsdelivr.net/npm/twemoji-colr-font).
-Used to extract palette color values.
+Not produced here yet. Emoji categories previously came from emoji-mart, which
+lags Unicode. A replacement category source will be wired in as a separate,
+additive step (it will only annotate `index.json`; it does not touch the
+per-emoji data above).
 
 ## Dependencies
 
-### Python
-
-- Python 3.10+
-- Standard library only (json, os, xml.etree)
-
-### JavaScript
-
-- Node.js 18+
-- `fontkit` package for font parsing
-
-### External Tools
-
-- [Glyphs App](https://glyphsapp.com/) for palette index extraction (macOS only)
-
-## Notes
-
-- Emoji with skin tone modifiers are skipped during SVG extraction (they use the same base paths)
-- The `glyphs_extract_paths_deprecated.py` script is kept for reference but should not be used
-- Some emoji may require manual verification after processing
+- Node.js 18+ (uses only the standard library).
+- `git` on PATH (for the shallow clone).

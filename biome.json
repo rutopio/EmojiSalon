@@ -12,7 +12,8 @@
       "!**/deprecated/",
       "!**/routeTree.gen.ts",
       "!**/*.css",
-      "!**/*.html"
+      "!**/*.html",
+      "!public/data"
     ]
   },
   "formatter": {

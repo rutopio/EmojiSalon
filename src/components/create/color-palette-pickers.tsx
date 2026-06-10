@@ -79,6 +79,34 @@ interface ColorPickerPopoverProps {
 }
 
 /**
+ * Native color swatch for touch devices. Wraps the browser's built-in
+ * `<input type="color">` so phones/tablets get the OS color picker instead of
+ * the desktop popover (better ergonomics, no popover-close-on-tap issues).
+ *
+ * @param props - Component props (color + onColorChange).
+ * @returns A swatch button backed by a native color input.
+ */
+export function NativeColorPicker({
+  color,
+  onColorChange,
+}: ColorPickerPopoverProps) {
+  return (
+    <label
+      aria-label={`Pick color ${color}`}
+      className="relative block size-12 cursor-pointer overflow-hidden rounded-lg border-2"
+      style={{ backgroundColor: color }}
+    >
+      <input
+        type="color"
+        value={color}
+        onChange={(e) => onColorChange(e.target.value)}
+        className="absolute inset-0 size-full cursor-pointer opacity-0"
+      />
+    </label>
+  );
+}
+
+/**
  * Popover-based color picker component.
  * Displays a color swatch button that opens a color picker dialog with
  * color area selector, hue slider, hex input field, and preset colors.
@@ -211,14 +239,30 @@ export default function ColorPalettePickers() {
   return (
     <div className="flex justify-center">
       <div className="flex flex-wrap items-center justify-center gap-2">
-        {customizedPaletteColors.map((color, idx) => (
-          <ColorPickerPopover
-            key={color}
-            color={color}
-            onColorChange={(newColor) => handleColorChange(idx, newColor)}
-            index={idx}
-          />
-        ))}
+        {customizedPaletteColors.map((color, idx) => {
+          // Key by index, not color: colors can repeat or change on every drag,
+          // so a color key would remount the popover mid-interaction (closing
+          // it). Index is stable and unique per palette slot.
+          const key = `palette-${idx}`;
+          const onChange = (newColor: string) =>
+            handleColorChange(idx, newColor);
+          return (
+            <div key={key}>
+              {/* Touch devices: native OS color picker. */}
+              <div className="lg:hidden">
+                <NativeColorPicker color={color} onColorChange={onChange} />
+              </div>
+              {/* Desktop: rich popover picker. */}
+              <div className="hidden lg:block">
+                <ColorPickerPopover
+                  color={color}
+                  onColorChange={onChange}
+                  index={idx}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
