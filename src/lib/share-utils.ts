@@ -127,31 +127,62 @@ export function copyCSSCode(cssCode: string): void {
 }
 
 /**
+ * Hex-color (or CSS named color) to CPAL global palette index.
+ * Loaded once from `/data/cpal-map.json` and cached.
+ */
+export type CpalMap = Record<string, number>;
+
+/** Cached CPAL map promise so the fetch happens at most once per session. */
+let cpalMapPromise: Promise<CpalMap | null> | null = null;
+
+/**
+ * Fetches the CPAL palette-index map (color -> global COLR font index).
+ * The result is cached; subsequent calls return the same promise.
+ */
+export function fetchCpalMap(): Promise<CpalMap | null> {
+  if (!cpalMapPromise) {
+    cpalMapPromise = fetch("/data/cpal-map.json")
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json() as Promise<CpalMap>;
+      })
+      .catch(() => null);
+  }
+  return cpalMapPromise;
+}
+
+const TWEMOJI_COLR_FONT_URL =
+  "https://cdn.jsdelivr.net/npm/@sableclient/twemoji-font@1.0.2/dist/files/twemoji.woff2";
+
+/**
  * Generates CSS code for using the customized emoji with Twemoji COLR font.
  * The generated CSS includes:
  * - @font-face declaration for the Twemoji font
  * - A .mod-emoji class that applies the font
  * - @font-palette-values with color overrides (if any)
  *
+ * When a CPAL map is provided, original colors are resolved to global COLR
+ * font palette indices so the generated `override-colors` work correctly
+ * with the font's CPAL table.
+ *
  * @param customizedColors - Current customized palette colors.
  * @param originalColors - Original palette colors.
- * @param originalIndex - Original palette indices.
+ * @param cpalMap - Optional CPAL color-to-index map for global index resolution.
  * @returns Complete CSS code for displaying the customized emoji.
  */
 export function generateCSSCode(
   customizedColors: string[],
   originalColors: string[],
-  originalIndex: number[]
+  cpalMap?: CpalMap | null
 ): string {
-  // Build override colors by comparing customized vs original
   const overrides: string[] = [];
 
   customizedColors.forEach((color, idx) => {
     const originalColor = originalColors[idx];
     if (originalColor && color.toLowerCase() !== originalColor.toLowerCase()) {
-      const paletteIdx = originalIndex[idx];
-      if (paletteIdx !== undefined) {
-        overrides.push(`${paletteIdx} ${color}`);
+      const globalIdx = cpalMap?.[originalColor.toLowerCase()];
+      if (globalIdx !== undefined) {
+        overrides.push(`${globalIdx} ${color}`);
       }
     }
   });
@@ -160,7 +191,7 @@ export function generateCSSCode(
 
   return `@font-face { 
     font-family: Twemoji;
-    src: url("https://cdn.jsdelivr.net/npm/twemoji-colr-font@14.1.3/twemoji.woff2") format("woff2");
+    src: url("${TWEMOJI_COLR_FONT_URL}") format("woff2");
 }
 
 .mod-emoji {

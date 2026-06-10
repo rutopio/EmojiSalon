@@ -69,6 +69,37 @@ needed to recolor, which is why the OG worker only fetches one small JSON file.
 Recoloring at runtime: for each path, find its fill's index via
 `c.indexOf(f[i])`, then substitute the customized color at that index.
 
+## CPAL palette map (for CSS code sharing)
+
+The app's "Share → CSS" feature generates `@font-palette-values` CSS that
+works with a Twemoji COLR font. The COLR font uses a global palette table
+(CPAL) where each color has a font-wide index (e.g. `#ffcc4d` = 1093),
+which differs from the per-emoji local indices used by the app internally.
+
+`public/data/cpal-map.json` bridges this gap: it maps `hex_color → global
+CPAL index`. The CSS generator looks up each original color in this map to
+emit the correct `override-colors` indices.
+
+### Regenerating the CPAL map
+
+Only needed when the COLR font version changes.
+
+```bash
+# 1. Download the font into preprocess/fonts/
+mkdir -p preprocess/fonts
+curl -sL "https://cdn.jsdelivr.net/npm/@sableclient/twemoji-font@1.0.2/dist/files/twemoji.woff2" \
+  -o preprocess/fonts/twemoji-sable-1.0.2.woff2
+
+# 2. Extract the map (requires Python 3 + fonttools)
+python3 preprocess/scripts/extract-cpal-map.py \
+  preprocess/fonts/twemoji-sable-1.0.2.woff2 \
+  --out public/data/cpal-map.json \
+  --verify-dir public/data/emoji
+```
+
+Current font: [`@sableclient/twemoji-font@1.0.2`](https://github.com/SableClient/twemoji-font)
+(99.9% color coverage against jdecked/twemoji v17.0.3 SVGs).
+
 ## Categories
 
 Not produced here yet. Emoji categories previously came from emoji-mart, which
@@ -80,3 +111,4 @@ per-emoji data above).
 
 - Node.js 18+ (uses only the standard library).
 - `git` on PATH (for the shallow clone).
+- Python 3 + `fonttools` (only for regenerating `cpal-map.json`).

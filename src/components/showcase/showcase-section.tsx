@@ -367,7 +367,6 @@ export default function ShowcaseSection({
           emojiLabel={`Customized ${emojiChar} emoji`}
           customizedPaletteColors={customizedPaletteColors}
           originalPaletteColors={originalPaletteColors}
-          originalPaletteIndex={originalPaletteIndex}
         />
       </div>
     </div>

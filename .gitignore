@@ -26,4 +26,7 @@ dist
 
 # Cloned upstream emoji source for preprocessing (re-fetched by `pnpm preprocess`)
 preprocess/twemoji
+
+# Downloaded COLR font files used for CPAL map extraction
+preprocess/fonts
 /tasks

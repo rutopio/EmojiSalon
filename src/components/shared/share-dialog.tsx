@@ -13,7 +13,7 @@ import {
   ThreadsLogoIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/dialog";
 import { GITHUB_ISSUE_BASE_URL } from "@/lib/constants";
 import {
+  type CpalMap,
   copyCSSCode,
   copyHTMLCode,
   copyLinkToClipboard,
+  fetchCpalMap,
   generateCSSCode,
   shareToFacebook,
   shareToThreads,
@@ -57,8 +59,6 @@ interface ShareDialogProps {
   customizedPaletteColors?: string[];
   /** Original palette colors — required for CSS code generation. */
   originalPaletteColors?: string[];
-  /** Original palette indices — required for CSS code generation. */
-  originalPaletteIndex?: number[];
   /** Whether to show the "Submit to Showcase" button. Defaults to true. */
   showSubmitShowcase?: boolean;
 }
@@ -79,23 +79,19 @@ export default function ShareDialog({
   emoji,
   customizedPaletteColors,
   originalPaletteColors,
-  originalPaletteIndex,
   showSubmitShowcase = true,
 }: ShareDialogProps) {
   const [cssDialogOpen, setCssDialogOpen] = useState(false);
+  const [cpalMap, setCpalMap] = useState<CpalMap | null>(null);
 
-  const hasCodeData =
-    emoji &&
-    customizedPaletteColors &&
-    originalPaletteColors &&
-    originalPaletteIndex;
+  useEffect(() => {
+    fetchCpalMap().then(setCpalMap);
+  }, []);
+
+  const hasCodeData = emoji && customizedPaletteColors && originalPaletteColors;
 
   const cssCode = hasCodeData
-    ? generateCSSCode(
-        customizedPaletteColors,
-        originalPaletteColors,
-        originalPaletteIndex
-      )
+    ? generateCSSCode(customizedPaletteColors, originalPaletteColors, cpalMap)
     : "";
 
   const handleCopyHTMLCode = () => emoji && copyHTMLCode(emoji);

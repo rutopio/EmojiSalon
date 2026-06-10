@@ -28,8 +28,6 @@ interface ShowcaseShareModalProps {
   customizedPaletteColors: string[];
   /** Original palette colors for the CSS code section. */
   originalPaletteColors: string[];
-  /** Original palette indices for the CSS code section. */
-  originalPaletteIndex: number[];
 }
 
 /**
@@ -48,7 +46,6 @@ export default function ShowcaseShareModal({
   emojiLabel,
   customizedPaletteColors,
   originalPaletteColors,
-  originalPaletteIndex,
 }: ShowcaseShareModalProps) {
   const shareUrl = generateShareURL(emoji, palette);
 
@@ -62,7 +59,6 @@ export default function ShowcaseShareModal({
       emoji={emoji}
       customizedPaletteColors={customizedPaletteColors}
       originalPaletteColors={originalPaletteColors}
-      originalPaletteIndex={originalPaletteIndex}
       showSubmitShowcase={false}
     />
   );

@@ -21,7 +21,6 @@ export default function ShareModal() {
     setShareModalOpen,
     customizedPaletteColors,
     originalPaletteColors,
-    originalPaletteIndex,
   } = useEmoji();
 
   return (
@@ -34,7 +33,6 @@ export default function ShareModal() {
       emoji={currentEmoji}
       customizedPaletteColors={customizedPaletteColors}
       originalPaletteColors={originalPaletteColors}
-      originalPaletteIndex={originalPaletteIndex}
       showSubmitShowcase
     />
   );
