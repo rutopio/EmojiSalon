@@ -6,10 +6,8 @@
 
 import {
   ArrowCounterClockwiseIcon,
-  ClipboardIcon,
   DiceFiveIcon,
   DownloadSimpleIcon,
-  FileSvgIcon,
   PaletteIcon,
   ShareNetworkIcon,
   SmileyWinkIcon,
@@ -17,13 +15,8 @@ import {
 import { useState } from "react";
 
 import { EmojiPicker } from "@/components/create/emoji-picker";
+import DownloadDialog from "@/components/shared/download-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverAnchor,
@@ -69,16 +62,6 @@ export default function ActionButtons({
     handleCopyImage,
     handleShare,
   } = useEmoji();
-
-  /**
-   * Downloads the emoji in the given format, then closes the dialog.
-   *
-   * @param format - Output format: "svg", "png", or "jpg".
-   */
-  const handleDownloadAndClose = (format: "svg" | "png" | "jpg") => {
-    handleDownloadImage(format);
-    setDownloadOpen(false);
-  };
 
   /**
    * Handles emoji selection and closes the picker popover.
@@ -216,60 +199,16 @@ export default function ActionButtons({
         Share Link
       </Button>
 
-      <Dialog open={downloadOpen} onOpenChange={setDownloadOpen}>
-        <DialogContent className="lg:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Save Image</DialogTitle>
-          </DialogHeader>
-
-          <div className="flex items-center justify-center py-2">
-            <div
-              role="img"
-              aria-label={`Customized ${currentEmoji} emoji`}
-              dangerouslySetInnerHTML={{ __html: svgHTML }}
-              className="size-32 [&>svg]:size-full"
-            />
-          </div>
-
-          <div className="grid grid-cols-4 gap-2">
-            <Button
-              variant="outline"
-              className="h-auto flex-col gap-1.5 py-3"
-              onClick={() => handleDownloadAndClose("svg")}
-            >
-              <FileSvgIcon className="size-5" aria-hidden="true" />
-              <span className="text-xs">SVG</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto flex-col gap-1.5 py-3"
-              onClick={() => handleDownloadAndClose("png")}
-            >
-              <DownloadSimpleIcon className="size-5" aria-hidden="true" />
-              <span className="text-xs">PNG</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto flex-col gap-1.5 py-3"
-              onClick={() => handleDownloadAndClose("jpg")}
-            >
-              <DownloadSimpleIcon className="size-5" aria-hidden="true" />
-              <span className="text-xs">JPG</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto flex-col gap-1.5 py-3"
-              onClick={() => {
-                handleCopyImage();
-                setDownloadOpen(false);
-              }}
-            >
-              <ClipboardIcon className="size-5" aria-hidden="true" />
-              <span className="text-xs">Copy</span>
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DownloadDialog
+        open={downloadOpen}
+        onOpenChange={setDownloadOpen}
+        svgHTML={svgHTML}
+        emojiLabel={`Customized ${currentEmoji} emoji`}
+        onDownloadSVG={() => handleDownloadImage("svg")}
+        onDownloadPNG={() => handleDownloadImage("png")}
+        onDownloadJPG={() => handleDownloadImage("jpg")}
+        onCopy={handleCopyImage}
+      />
     </div>
   );
 }

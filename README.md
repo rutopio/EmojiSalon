@@ -26,7 +26,7 @@ Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F380
 
 ## Introduction
 
-EmojiSalon uses [Twemoji](https://github.com/twitter/twemoji) SVG data for emoji rendering. You can select any emoji, customize its colors, and download your creation as SVG or PNG for personal or commercial use.
+EmojiSalon uses [Twemoji](https://github.com/jdecked/twemoji) SVG data for emoji rendering. You can select any emoji, customize its colors, and download your creation as SVG or PNG for personal or commercial use.
 
 ## Usage
 
@@ -122,7 +122,7 @@ Refer to the [TanStack Start hosting docs](https://tanstack.com/start/latest/doc
 
 ## Data Preprocessing
 
-The emoji SVG data used in this application is preprocessed from [Twemoji](https://github.com/twitter/twemoji) source files. If you need to regenerate or update the emoji data, refer to the [`preprocess/`](./preprocess/) directory.
+The emoji SVG data used in this application is preprocessed from [Twemoji](https://github.com/jdecked/twemoji) source files. If you need to regenerate or update the emoji data, refer to the [`preprocess/`](./preprocess/) directory.
 
 The preprocessing pipeline includes:
 
@@ -141,7 +141,7 @@ See [`preprocess/README.md`](./preprocess/README.md) for detailed instructions o
 <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" style="width: 100pt;">
 </div>
 
-Your creation is based on [Twemoji](https://github.com/twitter/twemoji), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (graphic).
+Your creation is based on [Twemoji](https://github.com/jdecked/twemoji), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) (graphic).
 
 This license enables reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.
 

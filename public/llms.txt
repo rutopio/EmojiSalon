@@ -40,7 +40,7 @@ from query parameters.
 
 ## Credits and licensing
 
-- Emoji graphics are based on [Twemoji](https://github.com/twitter/twemoji),
+- Emoji graphics are based on [Twemoji](https://github.com/jdecked/twemoji),
   licensed under CC-BY 4.0. Attribution to the Twemoji creators is required when
   redistributing derived graphics; commercial use is allowed.
 - Application code is licensed under the MIT License.

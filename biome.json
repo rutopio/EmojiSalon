@@ -128,7 +128,8 @@
       "includes": [
         "**/emoji-display.tsx",
         "**/emoji-preview.tsx",
-        "**/action-buttons.tsx"
+        "**/action-buttons.tsx",
+        "**/download-dialog.tsx"
       ],
       "linter": {
         "rules": {

@@ -228,7 +228,7 @@ function AboutPage() {
                 <p>
                   Your creation is based on{" "}
                   <a
-                    href="https://github.com/twitter/twemoji"
+                    href="https://github.com/jdecked/twemoji"
                     target="_blank"
                     rel="noreferrer noopener"
                     className="underline underline-offset-4 hover:text-foreground"

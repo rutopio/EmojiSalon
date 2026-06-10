@@ -2,6 +2,13 @@
  * @fileoverview Showcase section component for displaying emoji variants.
  * Displays an emoji card with original and customized variants, supporting
  * both single and multiple variant displays.
+ *
+ * Download behaviour:
+ *   - Mobile (canShare support): opens the native share sheet via Web Share API
+ *     so the user can save the image directly from the OS share menu.
+ *   - Desktop: opens a DownloadDialog with SVG / PNG / JPG / Copy options.
+ *
+ * Share behaviour: opens a ShareDialog (same as the Create page).
  */
 
 import {
@@ -14,12 +21,14 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-
+import DownloadDialog from "@/components/shared/download-dialog";
 import EmojiPreview from "@/components/showcase/emoji-preview";
 import ShowcaseShareModal from "@/components/showcase/showcase-share-modal";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { useEmojiSVG, useVariantSVG } from "@/hooks/use-emoji-svg";
 import { triggerDownload, unicodeToEmoji } from "@/lib/emoji-utils";
+import { downloadSVG } from "@/lib/share-utils";
 
 /**
  * Variant data structure for emoji customization.
@@ -91,7 +100,7 @@ export default function ShowcaseSection({
   } = useEmojiSVG(emoji, firstVariant.palette);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState("");
+  const [downloadOpen, setDownloadOpen] = useState(false);
 
   /**
    * Navigates to the main page with the specified emoji and palette.
@@ -109,13 +118,14 @@ export default function ShowcaseSection({
   };
 
   /**
-   * Generates a PNG image from the modified SVG.
+   * Generates a PNG (or JPG) image from the modified SVG.
    * Uses a hidden canvas to render the SVG and convert it to a data URL.
    *
    * @param callback - Function called with the generated image data URL.
+   * @param format - Output image format ("png" or "jpg"). Defaults to "png".
    */
   const generateImage = useCallback(
-    (callback: (dataUrl: string) => void) => {
+    (callback: (dataUrl: string) => void, format: "png" | "jpg" = "png") => {
       const canvas = canvasRef.current;
       if (!canvas || !modifiedSvg) return;
 
@@ -131,6 +141,11 @@ export default function ShowcaseSection({
       ctx.scale(scaleFactor, scaleFactor);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      if (format === "jpg") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
       const img = new Image();
       img.onload = () => {
         ctx.drawImage(
@@ -140,7 +155,8 @@ export default function ShowcaseSection({
           baseSize,
           baseSize
         );
-        callback(canvas.toDataURL("image/png"));
+        const mime = format === "jpg" ? "image/jpeg" : "image/png";
+        callback(canvas.toDataURL(mime));
       };
 
       const svgBlob = new Blob([modifiedSvg], {
@@ -153,16 +169,20 @@ export default function ShowcaseSection({
   );
 
   /**
-   * Handles saving the emoji image.
-   * On devices that support the Web Share API (mobile), opens the native share
-   * sheet so the user can pick "Save Image", Files, etc. Otherwise falls back
-   * to a direct PNG download.
+   * Handles the download button press.
+   *
+   * On mobile (viewport < 768 px) with Web Share API support, triggers the OS
+   * native share sheet with the PNG attached so the user can save the image.
+   * Falls back to the DownloadDialog if the share is cancelled or fails.
+   *
+   * On desktop, opens the DownloadDialog directly (SVG / PNG / JPG / Copy).
    */
   const handleDownload = useCallback(() => {
-    generateImage(async (dataUrl) => {
-      const filename = `${emoji}-EmojiSalon.png`;
+    const isMobile = window.innerWidth < 768;
 
-      if (typeof navigator.canShare === "function") {
+    if (isMobile && typeof navigator.canShare === "function") {
+      generateImage(async (dataUrl) => {
+        const filename = `${emoji}-EmojiSalon.png`;
         const blob = await (await fetch(dataUrl)).blob();
         const files = [
           new File([blob], filename, {
@@ -173,32 +193,74 @@ export default function ShowcaseSection({
         if (navigator.canShare({ files })) {
           try {
             await navigator.share({ files });
+            return; // share succeeded — do not open dialog
           } catch {
-            // User cancelled or share failed; do nothing.
+            // User cancelled or share failed; fall through to dialog.
           }
-          return;
         }
-      }
-
-      triggerDownload(dataUrl, filename);
-      toast.success("Image downloading...", {
-        description: filename,
+        setDownloadOpen(true);
       });
-    });
+    } else {
+      setDownloadOpen(true);
+    }
   }, [emoji, generateImage]);
+
+  /**
+   * Downloads the modified SVG directly.
+   */
+  const handleDownloadSVG = useCallback(() => {
+    const emojiChar = unicodeToEmoji(emoji) || emoji;
+    downloadSVG(modifiedSvg, emojiChar);
+  }, [emoji, modifiedSvg]);
+
+  /**
+   * Renders the emoji to canvas and triggers a PNG download.
+   */
+  const handleDownloadPNG = useCallback(() => {
+    generateImage((dataUrl) => {
+      const filename = `${emoji}-EmojiSalon.png`;
+      triggerDownload(dataUrl, filename);
+      toast.success("Image downloading...", { description: filename });
+    }, "png");
+  }, [emoji, generateImage]);
+
+  /**
+   * Renders the emoji to canvas (white background) and triggers a JPG download.
+   */
+  const handleDownloadJPG = useCallback(() => {
+    generateImage((dataUrl) => {
+      const filename = `${emoji}-EmojiSalon.jpg`;
+      triggerDownload(dataUrl, filename);
+      toast.success("Image downloading...", { description: filename });
+    }, "jpg");
+  }, [emoji, generateImage]);
+
+  /**
+   * Copies the emoji image to the clipboard.
+   */
+  const handleCopy = useCallback(() => {
+    generateImage((dataUrl) => {
+      fetch(dataUrl)
+        .then((r) => r.blob())
+        .then((blob) => {
+          navigator.clipboard
+            .write([new ClipboardItem({ "image/png": blob })])
+            .then(() => toast.success("Image copied to clipboard."))
+            .catch(() => toast.error("Failed to copy image."));
+        });
+    }, "png");
+  }, [generateImage]);
 
   /**
    * Handles sharing the emoji by opening the share modal.
    */
   const handleShare = useCallback(() => {
-    generateImage((dataUrl) => {
-      setImageSrc(dataUrl);
-      setShareModalOpen(true);
-    });
-  }, [generateImage]);
+    setShareModalOpen(true);
+  }, []);
 
   const unicodeDisplay = `U+${emoji.replace("u", "").toUpperCase()}`;
   const hasMultipleVariants = variants.length > 1;
+  const emojiChar = unicodeToEmoji(emoji) || "";
 
   return (
     <div className={`rounded-lg border bg-card p-4 lg:p-6 ${className}`}>
@@ -211,35 +273,35 @@ export default function ShowcaseSection({
           <span className="font-mono text-base tabular-nums">
             {unicodeDisplay}
           </span>
-          <div className="absolute -top-1 right-0 flex items-center gap-2">
+          <ButtonGroup
+            aria-label="Emoji actions"
+            className="absolute -top-1 right-0"
+          >
             <Button
               aria-label="Edit emoji"
               variant="outline"
-              size="xs"
+              size="icon"
               onClick={() => handleNavigate(firstVariant.palette)}
-              className="size-8"
             >
               <PencilSimpleIcon aria-hidden="true" />
             </Button>
             <Button
               aria-label="Download image"
               variant="outline"
-              size="xs"
+              size="icon"
               onClick={handleDownload}
-              className="size-8"
             >
               <DownloadSimpleIcon aria-hidden="true" />
             </Button>
             <Button
               aria-label="Share emoji"
               variant="outline"
-              size="xs"
+              size="icon"
               onClick={handleShare}
-              className="size-8"
             >
               <ShareNetworkIcon aria-hidden="true" />
             </Button>
-          </div>
+          </ButtonGroup>
         </div>
 
         {/* Emoji previews */}
@@ -283,14 +345,26 @@ export default function ShowcaseSection({
           )}
         </div>
 
+        {/* Download dialog */}
+        <DownloadDialog
+          open={downloadOpen}
+          onOpenChange={setDownloadOpen}
+          svgHTML={modifiedSvg}
+          emojiLabel={`Customized ${emojiChar} emoji`}
+          onDownloadSVG={handleDownloadSVG}
+          onDownloadPNG={handleDownloadPNG}
+          onDownloadJPG={handleDownloadJPG}
+          onCopy={handleCopy}
+        />
+
         {/* Share modal */}
         <ShowcaseShareModal
           open={shareModalOpen}
           onOpenChange={setShareModalOpen}
-          emoji={unicodeToEmoji(emoji) || ""}
+          emoji={emojiChar}
           palette={firstVariant.palette}
-          svgData={modifiedSvg}
-          imageSrc={imageSrc}
+          svgHTML={modifiedSvg}
+          emojiLabel={`Customized ${emojiChar} emoji`}
           customizedPaletteColors={customizedPaletteColors}
           originalPaletteColors={originalPaletteColors}
           originalPaletteIndex={originalPaletteIndex}
