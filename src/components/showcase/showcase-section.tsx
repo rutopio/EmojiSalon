@@ -96,7 +96,6 @@ export default function ShowcaseSection({
     isLoading,
     customizedPaletteColors,
     originalPaletteColors,
-    originalPaletteIndex,
   } = useEmojiSVG(emoji, firstVariant.palette);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [shareModalOpen, setShareModalOpen] = useState(false);
