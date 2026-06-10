@@ -28,9 +28,11 @@ Common uses:
 2. Edit the color of each layer in the emoji.
 3. Download the result as SVG or PNG. There is no account or login.
 
-This is an interactive client-side tool, not an HTTP image API. Output is
-generated in the browser; there is no URL endpoint that renders an emoji image
-from query parameters.
+This is an interactive client-side tool, not a general image API. Your edited
+emoji is generated in the browser and downloaded there. The only image endpoint
+is `/og?emoji=<id>&palette=<index>_<hex>`, which renders a fixed 1200x630 social
+share preview (PNG) for a shared link — it is not a general-purpose emoji image
+service.
 
 ## Pages
 

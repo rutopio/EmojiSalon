@@ -18,6 +18,14 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// Track SPA navigations as GA page_view events (initial load is sent by gtag config).
+router.subscribe("onResolved", ({ toLocation }) => {
+  window.gtag?.("event", "page_view", {
+    page_path: toLocation.pathname,
+    page_location: window.location.href,
+  });
+});
+
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element #root not found");
 createRoot(rootElement).render(

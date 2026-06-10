@@ -10,11 +10,11 @@
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat-square&logo=typescript)
 ![React](https://img.shields.io/badge/React-19.2.3-blue?style=flat-square&logo=react)
-![TanStack Start](https://img.shields.io/badge/TanStack_Start-1.141.7-black?style=flat-square&logo=tanstack)
+![TanStack Router](https://img.shields.io/badge/TanStack_Router-1.169.1-black?style=flat-square&logo=tanstack)
 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38bdf8?style=flat-square&logo=tailwind-css)
-![ShadCN](https://img.shields.io/badge/shadcn%2Fui-3.6.3-000000?style=flat-square&logo=shadcnui&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-7.2.1-9135FF?style=flat-square&logo=vite&logoColor=white)
+![ShadCN](https://img.shields.io/badge/shadcn%2Fui-4.7.0-000000?style=flat-square&logo=shadcnui&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.3.2-9135FF?style=flat-square&logo=vite&logoColor=white)
 
 Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?logo=cloudflarepages&logoColor=fff&style=flat-square)
 
@@ -118,7 +118,7 @@ Most current emoji designs do not consider these accessibility needs. EmojiSalon
 pnpm run build
 ```
 
-Refer to the [TanStack Start hosting docs](https://tanstack.com/start/latest/docs/framework/react/guide/hosting) for deploying to various platforms.
+The app is deployed to [Cloudflare Pages](https://developers.cloudflare.com/pages/). The build output in `dist/` can be served as a static site on any platform.
 
 ## Data Preprocessing
 

@@ -56,7 +56,8 @@
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-      gtag("config", "G-SYC5J76P2M");
+      // page_view is sent manually on each route resolve (see src/main.tsx).
+      gtag("config", "G-SYC5J76P2M", { send_page_view: false });
     </script>
   </head>
   <body>

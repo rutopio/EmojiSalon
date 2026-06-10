@@ -38,7 +38,7 @@ bundled into the JS or the worker.
 | File                            | Description                                  |
 | ------------------------------- | -------------------------------------------- |
 | `public/data/emoji/u<code>.json`| One emoji's paths, fills, editable colors    |
-| `public/data/index.json`        | `{ version, emojis: [...] }` — list + source |
+| `public/data/index.json`        | `{ version, emojis, chars }` — list + source |
 
 ### Per-emoji JSON shape
 

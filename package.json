@@ -8,7 +8,7 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check-types": "tsc --noEmit && tsc -p functions/tsconfig.json",
-    "check": "biome check --write . && pnpm check-types",
+    "check": "biome check --write . && pnpm lint && pnpm check-types",
     "deps": "pnpm dlx taze@latest -Ilw",
     "deps:major": "pnpm dlx taze@latest major -Ilw",
     "ui": "pnpm dlx shadcn@latest",
@@ -30,14 +30,18 @@
     "react": "19.2.3",
     "react-aria-components": "1.14.0",
     "react-dom": "19.2.3",
-    "shadcn": "4.7.0",
+    "shadcn": "4.11.0",
     "sonner": "2.0.7",
     "tailwind-merge": "3.4.0"
   },
   "pnpm": {
     "overrides": {
       "seroval": ">=1.4.1",
-      "ip-address": ">=10.1.1"
+      "ip-address": ">=10.1.1",
+      "hono": ">=4.12.21",
+      "qs": ">=6.15.2",
+      "brace-expansion": ">=5.0.6",
+      "ws": ">=8.20.1"
     },
     "onlyBuiltDependencies": [
       "esbuild",
