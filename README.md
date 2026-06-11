@@ -13,7 +13,7 @@
 ![TanStack Router](https://img.shields.io/badge/TanStack_Router-1.169.1-black?style=flat-square&logo=tanstack)
 
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38bdf8?style=flat-square&logo=tailwind-css)
-![ShadCN](https://img.shields.io/badge/shadcn%2Fui-4.7.0-000000?style=flat-square&logo=shadcnui&logoColor=white)
+![ShadCN](https://img.shields.io/badge/shadcn%2Fui-4.11.0-000000?style=flat-square&logo=shadcnui&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-7.3.2-9135FF?style=flat-square&logo=vite&logoColor=white)
 
 Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?logo=cloudflarepages&logoColor=fff&style=flat-square)
@@ -110,7 +110,7 @@ Most current emoji designs do not consider these accessibility needs. EmojiSalon
    pnpm dev
    ```
 
-   The development server should now be running at [http://localhost:3000](http://localhost:3000).
+   The development server should now be running at [http://localhost:5173](http://localhost:5173).
 
 ## Building for Production
 
@@ -122,16 +122,15 @@ The app is deployed to [Cloudflare Pages](https://developers.cloudflare.com/page
 
 ## Data Preprocessing
 
-The emoji SVG data used in this application is preprocessed from [Twemoji](https://github.com/jdecked/twemoji) source files. If you need to regenerate or update the emoji data, refer to the [`preprocess/`](./preprocess/) directory.
+The emoji SVG data used in this application is preprocessed from [Twemoji](https://github.com/jdecked/twemoji) source files into one per-emoji JSON file each. The whole pipeline is a single reproducible Node script — no fonts, no Glyphs App, no manual steps.
 
-The preprocessing pipeline includes:
+```bash
+pnpm preprocess
+```
 
-1. **SVG Data Extraction** - Extract path and fill color data from Twemoji SVG files
-2. **Category Organization** - Group emojis by category for efficient loading
-3. **Palette Extraction** - Extract color palette from Twemoji COLR font
-4. **Palette Index Mapping** - Map each emoji layer to palette color indices
+This shallow-clones `jdecked/twemoji` at a pinned tag, parses every `assets/svg/*.svg` (skipping skin-tone-modifier files), and writes per-emoji data to `public/data/emoji/u<code>.json` plus an `index.json`. Each file holds the emoji's SVG paths, fills, and editable colors, served as static assets and fetched on demand by both the app and the OG image function.
 
-See [`preprocess/README.md`](./preprocess/README.md) for detailed instructions on running the preprocessing scripts.
+See [`preprocess/README.md`](./preprocess/README.md) for the pinned tag, output format, and details.
 
 ## Copyright
 

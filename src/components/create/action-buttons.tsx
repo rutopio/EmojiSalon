@@ -18,11 +18,12 @@ import { EmojiPicker } from "@/components/create/emoji-picker";
 import DownloadDialog from "@/components/shared/download-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import {
   Tooltip,
   TooltipContent,
@@ -77,98 +78,112 @@ export default function ActionButtons({
   if (variant === "mobile") {
     return (
       <div className="flex w-full flex-col gap-4 lg:hidden">
-        <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
-          <PopoverAnchor asChild>
-            <div className="grid w-full grid-cols-4 gap-2">
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="col-span-3">
-                  <SmileyWinkIcon className="size-5" aria-hidden="true" />
-                  <span className="ml-1">Select Emoji</span>
-                </Button>
-              </PopoverTrigger>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    aria-label="Random Emoji"
-                    variant="outline"
-                    className="col-span-1"
-                    onClick={handleRandomEmoji}
-                  >
-                    <DiceFiveIcon className="size-5" aria-hidden="true" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Random Emoji</TooltipContent>
-              </Tooltip>
-            </div>
-          </PopoverAnchor>
-          <PopoverContent
-            className="w-auto border-none bg-transparent p-0 shadow-none"
-            align="center"
-            side="bottom"
-            sideOffset={8}
+        <div className="grid w-full grid-cols-4 gap-2">
+          <Button
+            variant="outline"
+            className="col-span-3"
+            onClick={() => setEmojiPickerOpen(true)}
           >
-            <EmojiPicker onEmojiSelect={handleEmojiSelectAndClose} />
-          </PopoverContent>
-        </Popover>
+            <SmileyWinkIcon className="size-5" aria-hidden="true" />
+            <span className="ml-1">Select Emoji</span>
+          </Button>
+
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Random Emoji"
+                  variant="outline"
+                  className="col-span-1"
+                  onClick={handleRandomEmoji}
+                >
+                  <DiceFiveIcon className="size-5" aria-hidden="true" />
+                </Button>
+              }
+            />
+            <TooltipContent>Random Emoji</TooltipContent>
+          </Tooltip>
+        </div>
+
+        <Drawer open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Select Emoji</DrawerTitle>
+              <DrawerDescription className="sr-only">
+                Choose an emoji to customize
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex justify-center overflow-auto p-4 pt-0">
+              <EmojiPicker onEmojiSelect={handleEmojiSelectAndClose} />
+            </div>
+          </DrawerContent>
+        </Drawer>
 
         <div className="grid w-full grid-cols-4 gap-2">
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Random Colors"
-                variant="outline"
-                className="w-full"
-                onClick={handleRandomColors}
-              >
-                <PaletteIcon className="size-5" aria-hidden="true" />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Random Colors"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleRandomColors}
+                >
+                  <PaletteIcon className="size-5" aria-hidden="true" />
+                </Button>
+              }
+            />
             <TooltipContent>Random Colors</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Reset Colors"
-                variant="outline"
-                className="w-full"
-                onClick={handleReset}
-              >
-                <ArrowCounterClockwiseIcon
-                  className="size-5"
-                  aria-hidden="true"
-                />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Reset Colors"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleReset}
+                >
+                  <ArrowCounterClockwiseIcon
+                    className="size-5"
+                    aria-hidden="true"
+                  />
+                </Button>
+              }
+            />
             <TooltipContent>Reset Colors</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Save Image"
-                variant="outline"
-                className="w-full"
-                onClick={handleCopyImage}
-              >
-                <DownloadSimpleIcon className="size-5" aria-hidden="true" />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Save Image"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleCopyImage}
+                >
+                  <DownloadSimpleIcon className="size-5" aria-hidden="true" />
+                </Button>
+              }
+            />
             <TooltipContent>Save Image</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                aria-label="Share"
-                variant="outline"
-                className="w-full"
-                onClick={handleShare}
-              >
-                <ShareNetworkIcon className="size-5" aria-hidden="true" />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Share"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleShare}
+                >
+                  <ShareNetworkIcon className="size-5" aria-hidden="true" />
+                </Button>
+              }
+            />
             <TooltipContent>Share</TooltipContent>
           </Tooltip>
         </div>

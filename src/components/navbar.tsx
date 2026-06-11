@@ -1,6 +1,6 @@
+import { GithubLogoIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 
-import { GithubIcon } from "@/components/icon";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,44 +31,40 @@ export default function Navbar() {
           <NavigationMenuList className="gap-2">
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
                 className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
-              >
-                <Link to="/">
-                  <span>Create</span>
-                </Link>
-              </NavigationMenuLink>
+                render={
+                  <Link to="/">
+                    <span>Create</span>
+                  </Link>
+                }
+              />
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
                 className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
-              >
-                <Link to="/showcase">Showcase</Link>
-              </NavigationMenuLink>
+                render={<Link to="/showcase">Showcase</Link>}
+              />
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
                 className={`${navigationMenuTriggerStyle()} [&.active]:bg-accent`}
-              >
-                <Link to="/about">About</Link>
-              </NavigationMenuLink>
+                render={<Link to="/about">About</Link>}
+              />
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
-                asChild
                 className={navigationMenuTriggerStyle()}
-              >
-                <a
-                  href={GITHUB_REPO_URL}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <GithubIcon aria-hidden="true" />
-                  rutopio/EmojiSalon
-                </a>
-              </NavigationMenuLink>
+                render={
+                  <a
+                    href={GITHUB_REPO_URL}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <GithubLogoIcon aria-hidden="true" />
+                    rutopio/EmojiSalon
+                  </a>
+                }
+              />
             </NavigationMenuItem>
             <NavigationMenuItem>
               <ThemeToggle />
@@ -102,12 +98,17 @@ export default function Navbar() {
             aria-label="rutopio/EmojiSalon"
             size="icon"
             variant="ghost"
-            asChild
-          >
-            <a href={GITHUB_REPO_URL} target="_blank" rel="noreferrer noopener">
-              <GithubIcon aria-hidden="true" />
-            </a>
-          </Button>
+            nativeButton={false}
+            render={
+              <a
+                href={GITHUB_REPO_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <GithubLogoIcon aria-hidden="true" />
+              </a>
+            }
+          />
           <ThemeToggle />
         </div>
       </nav>

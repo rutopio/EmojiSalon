@@ -1,7 +1,5 @@
 // https://www.jollyui.dev/docs/components/color
 
-"use client";
-
 import type {
   ColorAreaProps as AriaColorAreaProps,
   ColorSwatchPickerItemProps as AriaColorSwatchPickerItemProps,

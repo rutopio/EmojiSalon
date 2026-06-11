@@ -67,16 +67,19 @@ function ShowcasePage() {
             Explore creative emoji color variations
           </p>
           <div>
-            <Button asChild>
-              <a
-                href={GITHUB_ISSUE_BASE_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                <MagicWandIcon className="mr-2 size-4" aria-hidden="true" />
-                Submit Your Own
-              </a>
-            </Button>
+            <Button
+              nativeButton={false}
+              render={
+                <a
+                  href={GITHUB_ISSUE_BASE_URL}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <MagicWandIcon className="mr-2 size-4" aria-hidden="true" />
+                  Submit Your Own
+                </a>
+              }
+            />
           </div>
         </div>
 

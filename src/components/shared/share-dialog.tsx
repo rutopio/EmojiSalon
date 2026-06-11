@@ -9,13 +9,12 @@ import {
   ClipboardIcon,
   CodeIcon,
   FacebookLogoIcon,
+  GithubLogoIcon,
   LinkIcon,
   ThreadsLogoIcon,
   XLogoIcon,
 } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-
-import { GithubIcon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -179,17 +178,18 @@ export default function ShareDialog({
                 aria-label="Submit to showcase"
                 variant="outline"
                 className="w-full"
-                asChild
-              >
-                <a
-                  href={GITHUB_ISSUE_BASE_URL}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <GithubIcon aria-hidden="true" />
-                  Submit Showcase
-                </a>
-              </Button>
+                nativeButton={false}
+                render={
+                  <a
+                    href={GITHUB_ISSUE_BASE_URL}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <GithubLogoIcon aria-hidden="true" />
+                    Submit Showcase
+                  </a>
+                }
+              />
             )}
           </div>
         </DialogContent>
