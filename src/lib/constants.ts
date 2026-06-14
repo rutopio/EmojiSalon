@@ -133,9 +133,9 @@ export const THREADS_SHARE_BASE_URL = "https://www.threads.net/intent/post";
  * Base URL for GitHub issue submission template.
  */
 export const GITHUB_ISSUE_BASE_URL =
-  "https://github.com/rutopio/EmojiSalon/issues/new?template=submit-showcase.yml";
+  "https://github.com/rutopio/emoji-salon/issues/new?template=submit-showcase.yml";
 
 /**
  * Base URL for GitHub repository.
  */
-export const GITHUB_REPO_URL = "https://github.com/rutopio/EmojiSalon";
+export const GITHUB_REPO_URL = "https://github.com/rutopio/emoji-salon";

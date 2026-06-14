@@ -5,7 +5,7 @@
 > use. Rendering is based on Twemoji SVG data.
 
 Site: https://emojisalon.pages.dev
-Source: https://github.com/rutopio/EmojiSalon
+Source: https://github.com/rutopio/emoji-salon
 License: CC-BY 4.0 (graphics, via Twemoji) / MIT (code)
 
 ## What it does

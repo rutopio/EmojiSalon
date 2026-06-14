@@ -284,7 +284,7 @@ function AboutPage() {
             <p className="text-pretty text-muted-foreground leading-relaxed">
               EmojiSalon is open source and available on{" "}
               <a
-                href="https://github.com/rutopio/EmojiSalon"
+                href="https://github.com/rutopio/emoji-salon"
                 target="_blank"
                 rel="noreferrer noopener"
                 className="underline underline-offset-4 hover:text-foreground"

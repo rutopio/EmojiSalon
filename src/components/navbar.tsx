@@ -61,7 +61,7 @@ export default function Navbar() {
                     rel="noreferrer noopener"
                   >
                     <GithubLogoIcon aria-hidden="true" />
-                    rutopio/EmojiSalon
+                    rutopio/emoji-salon
                   </a>
                 }
               />
@@ -95,7 +95,7 @@ export default function Navbar() {
             About
           </Link>
           <Button
-            aria-label="rutopio/EmojiSalon"
+            aria-label="rutopio/emoji-salon"
             size="icon"
             variant="ghost"
             nativeButton={false}

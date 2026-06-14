@@ -94,7 +94,7 @@ Most current emoji designs do not consider these accessibility needs. EmojiSalon
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/rutopio/EmojiSalon.git
+   git clone https://github.com/rutopio/emoji-salon.git
    cd EmojiSalon
    ```
 
