@@ -4,17 +4,17 @@
 
 🔗 Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev) 🔗
 
-![pnpm](https://img.shields.io/badge/pnpm-v10.8.2-F69220?style=flat-square&logo=pnpm&logoColor=white)
-![Node](https://img.shields.io/badge/Node.js-v20.19.6-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-v11-F69220?style=flat-square&logo=pnpm&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-v24-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 ![License: CC_BY_4.0(Graphics)_/_MIT(Code)](<https://img.shields.io/badge/License-CC_BY_4.0(Graphics)_/_MIT(Code)-yellow.svg>)
 
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat-square&logo=typescript)
-![React](https://img.shields.io/badge/React-19.2.3-blue?style=flat-square&logo=react)
-![TanStack Router](https://img.shields.io/badge/TanStack_Router-1.169.1-black?style=flat-square&logo=tanstack)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-blue?style=flat-square&logo=typescript)
+![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
+![TanStack Router](https://img.shields.io/badge/TanStack_Router-1-black?style=flat-square&logo=tanstack)
 
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-38bdf8?style=flat-square&logo=tailwind-css)
-![ShadCN](https://img.shields.io/badge/shadcn%2Fui-4.11.0-000000?style=flat-square&logo=shadcnui&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-7.3.2-9135FF?style=flat-square&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwind-css)
+![ShadCN](https://img.shields.io/badge/shadcn%2Fui-4-000000?style=flat-square&logo=shadcnui&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-9135FF?style=flat-square&logo=vite&logoColor=white)
 
 Host on ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-F38020?logo=cloudflarepages&logoColor=fff&style=flat-square)
 

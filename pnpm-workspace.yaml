@@ -1,0 +1,21 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+
+verifyDepsBeforeRun: false
+
+overrides:
+  brace-expansion: ">=5.0.6"
+  hono: ">=4.12.26"
+  ip-address: ">=10.2.0"
+  qs: ">=6.15.2"
+  seroval: ">=1.5.4"
+  ws: ">=8.21.0"
+  # Transitive-only advisories; direct parents already latest, upstream unpatched.
+  js-yaml: ">=4.1.2"
+  esbuild: ">=0.28.1"
+  "@babel/core": ">=7.29.1"
+
+minimumReleaseAgeExclude:
+  - '@cloudflare/workers-types@4.20260621.1'

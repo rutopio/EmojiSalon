@@ -1,8 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import viteReact from "@vitejs/plugin-react";
+import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 import type { EmojiData } from "./src/lib/render-emoji-svg";
 import { renderOgSvg } from "./src/lib/render-og-image";
@@ -48,18 +49,8 @@ export default defineConfig({
   plugins: [
     ogImagePlugin(),
     tanstackRouter(),
-    viteReact({
-      babel: {
-        plugins: [
-          [
-            "babel-plugin-react-compiler",
-            {
-              target: "19",
-            },
-          ],
-        ],
-      },
-    }),
+    viteReact(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
 });

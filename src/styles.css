@@ -3,96 +3,13 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@font-face {
-  font-family: "Albert Sans";
-  src: url("/font/AlbertSans-VariableFont_wght.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* Self-hosted via @fontsource (variable, with latin + latin-ext subsets). */
+@import "@fontsource-variable/albert-sans";
+@import "@fontsource-variable/albert-sans/wght-italic.css";
+@import "@fontsource-variable/host-grotesk";
+@import "@fontsource-variable/host-grotesk/wght-italic.css";
 
-@font-face {
-  font-family: "Albert Sans";
-  src: url("/font/AlbertSans-VariableFont_wght-latin-ext.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
-    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Albert Sans";
-  src: url("/font/AlbertSans-Italic-VariableFont_wght.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Albert Sans";
-  src: url("/font/AlbertSans-Italic-VariableFont_wght-latin-ext.woff2")
-    format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
-    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/font/HostGrotesk-VariableFont_wght.woff2") format("woff2");
-  font-weight: 300 800;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/font/HostGrotesk-VariableFont_wght-latin-ext.woff2") format("woff2");
-  font-weight: 300 800;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
-    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/font/HostGrotesk-Italic-VariableFont_wght.woff2") format("woff2");
-  font-weight: 300 800;
-  font-style: italic;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
-    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Host Grotesk";
-  src: url("/font/HostGrotesk-Italic-VariableFont_wght-latin-ext.woff2")
-    format("woff2");
-  font-weight: 300 800;
-  font-style: italic;
-  font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
-    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
+/* Paper Mono is not on @fontsource — keep self-hosted woff2. */
 @font-face {
   font-family: "Paper Mono";
   src: url("/font/PaperMono[wght].woff2") format("woff2");
@@ -166,8 +83,7 @@
   --sidebar-accent-foreground: oklch(0 0 0);
   --sidebar-border: oklch(0.94 0 0);
   --sidebar-ring: oklch(0 0 0);
-  --font-sans: "Albert Sans", sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: "Albert Sans Variable", sans-serif;
   --font-mono: "Paper Mono", ui-monospace, monospace;
   --radius: 0.5rem;
   --shadow-x: 0px;
@@ -226,8 +142,7 @@
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.32 0 0);
   --sidebar-ring: oklch(0.72 0 0);
-  --font-sans: "Albert Sans", sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: "Albert Sans Variable", sans-serif;
   --font-mono: "Paper Mono", ui-monospace, monospace;
   --radius: 0.5rem;
   --shadow-x: 0px;
@@ -287,8 +202,7 @@
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
-  --font-title-sans: "Host Grotesk";
+  --font-title-sans: "Host Grotesk Variable";
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -324,6 +238,16 @@
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
