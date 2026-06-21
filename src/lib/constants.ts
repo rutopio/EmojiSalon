@@ -112,7 +112,7 @@ export const DEFAULT_EMOJIS = [
  * Canonical site URL for metadata (OG tags, canonical links, etc.).
  * Used at build/SSR time where window.location is unavailable.
  */
-export const SITE_URL = "https://emojisalon.pages.dev";
+export const SITE_URL = "https://emojisalon.chingru.com";
 
 /**
  * Base URL for Twitter/X share intent.

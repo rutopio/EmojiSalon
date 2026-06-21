@@ -4,7 +4,7 @@
 > layer, and download your creation as SVG or PNG for personal or commercial
 > use. Rendering is based on Twemoji SVG data.
 
-Site: https://emojisalon.pages.dev
+Site: https://emojisalon.chingru.com
 Source: https://github.com/rutopio/emoji-salon
 License: CC-BY 4.0 (graphics, via Twemoji) / MIT (code)
 
@@ -36,9 +36,9 @@ service.
 
 ## Pages
 
-- [Home / playground](https://emojisalon.pages.dev/): Select and recolor emoji.
-- [Showcase](https://emojisalon.pages.dev/showcase): Example custom emoji and use cases.
-- [About](https://emojisalon.pages.dev/about): Background, accessibility notes, and credits.
+- [Home / playground](https://emojisalon.chingru.com/): Select and recolor emoji.
+- [Showcase](https://emojisalon.chingru.com/showcase): Example custom emoji and use cases.
+- [About](https://emojisalon.chingru.com/about): Background, accessibility notes, and credits.
 
 ## Credits and licensing
 

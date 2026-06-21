@@ -16,6 +16,12 @@ overrides:
   js-yaml: ">=4.1.2"
   esbuild: ">=0.28.1"
   "@babel/core": ">=7.29.1"
+  # @tanstack/router-plugin still calls Babel 7's Scope#references (removed in
+  # Babel 8). It and its babel-dead-code-elimination dep must stay on Babel 7,
+  # while @rolldown/plugin-babel (react plugin) needs Babel 8 — so pin Babel 7
+  # only inside the tanstack subtree, not globally.
+  "@tanstack/router-plugin>@babel/core": "^7.29.1"
+  "babel-dead-code-elimination>@babel/traverse": "^7.29.1"
 
 minimumReleaseAgeExclude:
   - '@cloudflare/workers-types@4.20260621.1'

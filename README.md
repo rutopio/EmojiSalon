@@ -2,7 +2,7 @@
 
 # EmojiSalon - Coloring Your Emoji
 
-🔗 Playground: [https://emojisalon.pages.dev](https://emojisalon.pages.dev) 🔗
+🔗 Playground: [https://emojisalon.chingru.com](https://emojisalon.chingru.com) 🔗
 
 ![pnpm](https://img.shields.io/badge/pnpm-v11-F69220?style=flat-square&logo=pnpm&logoColor=white)
 ![Node](https://img.shields.io/badge/Node.js-v24-339933?style=flat-square&logo=nodedotjs&logoColor=white)
@@ -30,7 +30,7 @@ EmojiSalon uses [Twemoji](https://github.com/jdecked/twemoji) SVG data for emoji
 
 ## Usage
 
-Live Page: [https://emojisalon.pages.dev/showcase](https://emojisalon.pages.dev/showcase)
+Live Page: [https://emojisalon.chingru.com/showcase](https://emojisalon.chingru.com/showcase)
 
 ### Extend Emoji & For Fun
 

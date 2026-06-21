@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://emojisalon.pages.dev/sitemap.xml
+Sitemap: https://emojisalon.chingru.com/sitemap.xml
