@@ -139,3 +139,12 @@ export const GITHUB_ISSUE_BASE_URL =
  * Base URL for GitHub repository.
  */
 export const GITHUB_REPO_URL = "https://github.com/rutopio/emoji-salon";
+
+/**
+ * Canvas export geometry, shared by the editor and showcase image renderers.
+ * The emoji is drawn at `CANVAS_BASE_SIZE`, upscaled by `CANVAS_SCALE_FACTOR`
+ * for a crisp raster, with `CANVAS_IMAGE_PADDING` device pixels of margin.
+ */
+export const CANVAS_BASE_SIZE = 256;
+export const CANVAS_SCALE_FACTOR = 10;
+export const CANVAS_IMAGE_PADDING = 50;

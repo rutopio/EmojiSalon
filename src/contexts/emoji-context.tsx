@@ -14,7 +14,11 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-
+import {
+  CANVAS_BASE_SIZE,
+  CANVAS_IMAGE_PADDING,
+  CANVAS_SCALE_FACTOR,
+} from "@/lib/constants";
 import {
   emojiToUnicode,
   fetchEmojiData,
@@ -241,6 +245,10 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
         } else {
           setCustomizedPaletteColors([...opColors]);
         }
+      } else {
+        // fetchEmojiData already logged the cause; surface it to the user so a
+        // broken URL palette or missing asset doesn't just silently do nothing.
+        toast.error("Couldn't load this emoji. Please try another one.");
       }
     },
     [updateURL]
@@ -454,9 +462,9 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
       const svgData = generateSVGData();
       if (!svgData) return;
 
-      const imagePadding = 50;
-      const scaleFactor = 10;
-      const baseSize = 256;
+      const imagePadding = CANVAS_IMAGE_PADDING;
+      const scaleFactor = CANVAS_SCALE_FACTOR;
+      const baseSize = CANVAS_BASE_SIZE;
 
       canvas.width = baseSize * scaleFactor + imagePadding;
       canvas.height = baseSize * scaleFactor + imagePadding;
@@ -490,11 +498,14 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
           );
         } else if (action === CANVAS_ACTION.COPY) {
           canvas.toBlob((blob) => {
-            if (blob) {
-              navigator.clipboard.write([
-                new ClipboardItem({ "image/png": blob }),
-              ]);
+            if (!blob) {
+              toast.error("Failed to copy image.");
+              return;
             }
+            navigator.clipboard
+              .write([new ClipboardItem({ "image/png": blob })])
+              .then(() => toast.success("Image copied to clipboard."))
+              .catch(() => toast.error("Failed to copy image."));
           });
         } else if (action === CANVAS_ACTION.SHARE) {
           const dataUrl = canvas.toDataURL();
@@ -505,8 +516,15 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
               lastModified: Date.now(),
             }),
           ];
-          const shareData = { files: filesArray };
-          navigator.share(shareData);
+          try {
+            await navigator.share({ files: filesArray });
+            toast.success("Image shared.");
+          } catch (err) {
+            // AbortError = user cancelled the share sheet; not a failure.
+            if (!(err instanceof Error) || err.name !== "AbortError") {
+              toast.error("Failed to share image.");
+            }
+          }
         } else if (action === CANVAS_ACTION.GENERATE_PREVIEW) {
           setResultImageSrc(canvas.toDataURL("image/png"));
         }
@@ -529,7 +547,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
         return;
       }
       updateCanvas(CANVAS_ACTION.DOWNLOAD, format);
-      toast.success("Image downloading....", {
+      toast.success("Image downloading...", {
         description: `${emojiToUnicode(currentEmoji)}-EmojiSalon.${format}`,
       });
     },
@@ -541,12 +559,13 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
    * Uses Web Share API if available, otherwise falls back to clipboard API.
    */
   const handleCopyImage = useCallback(() => {
+    // The success/error toast is fired by updateCanvas once the async
+    // clipboard write / share settles, so we don't toast optimistically here.
     if (typeof navigator.canShare === "function") {
       updateCanvas(CANVAS_ACTION.SHARE);
     } else {
       updateCanvas(CANVAS_ACTION.COPY);
     }
-    toast.success("Image copied to clipboard.");
   }, [updateCanvas]);
 
   /**

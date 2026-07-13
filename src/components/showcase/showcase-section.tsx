@@ -27,6 +27,11 @@ import ShowcaseShareModal from "@/components/showcase/showcase-share-modal";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useEmojiSVG, useVariantSVG } from "@/hooks/use-emoji-svg";
+import {
+  CANVAS_BASE_SIZE,
+  CANVAS_IMAGE_PADDING,
+  CANVAS_SCALE_FACTOR,
+} from "@/lib/constants";
 import { triggerDownload, unicodeToEmoji } from "@/lib/emoji-utils";
 import { downloadSVG } from "@/lib/share-utils";
 
@@ -131,9 +136,9 @@ export default function ShowcaseSection({
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      const imagePadding = 50;
-      const scaleFactor = 10;
-      const baseSize = 256;
+      const imagePadding = CANVAS_IMAGE_PADDING;
+      const scaleFactor = CANVAS_SCALE_FACTOR;
+      const baseSize = CANVAS_BASE_SIZE;
 
       canvas.width = baseSize * scaleFactor + imagePadding;
       canvas.height = baseSize * scaleFactor + imagePadding;
