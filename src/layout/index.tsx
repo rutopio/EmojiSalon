@@ -10,8 +10,8 @@ interface PageLayoutProps {
 
 export default function PageLayout({
   children,
-  outerClassName = "min-h-dvh",
-  innerClassName = "flex min-h-dvh flex-col",
+  outerClassName = "h-full",
+  innerClassName = "flex min-h-full flex-col",
 }: PageLayoutProps) {
   return (
     <div className={outerClassName}>
