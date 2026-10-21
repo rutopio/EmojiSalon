@@ -248,7 +248,7 @@ export function EmojiProvider({ children }: EmojiProviderProps) {
       } else {
         // fetchEmojiData already logged the cause; surface it to the user so a
         // broken URL palette or missing asset doesn't just silently do nothing.
-        toast.error("Couldn't load this emoji. Please try another one.");
+        toast.error("Could not load this emoji. Please try another one.");
       }
     },
     [updateURL]
